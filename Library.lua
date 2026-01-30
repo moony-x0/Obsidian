@@ -6682,8 +6682,8 @@ function Library:CreateWindow(WindowInfo)
             local GroupboxLabel
             local GroupboxContainer
             local GroupboxList
-            local ChevronButton
-            local MinimizeButton
+            local ChevronIcon
+            local HeaderButton
 
             do
                 GroupboxHolder = New("Frame", {
@@ -6715,27 +6715,29 @@ function Library:CreateWindow(WindowInfo)
                     })
                 end
 
-                ChevronButton = New("TextButton", {
-                    AnchorPoint = Vector2.new(1, 0.5),
+                -- Chevron icon for collapse indicator
+                local ChevronIconData = Library:GetIcon("chevron-down")
+                ChevronIcon = ChevronIconData and New("ImageLabel", {
+                    Name = "ReplicatedStorage",
+                    Image = ChevronIconData.Url,
+                    ImageColor3 = "FontColor",
+                    ImageRectOffset = ChevronIconData.ImageRectOffset,
+                    ImageRectSize = ChevronIconData.ImageRectSize,
+                    AnchorPoint = Vector2.new(1, 0),
+                    Position = UDim2.new(1, -12, 0, 8),
+                    Size = UDim2.fromOffset(18, 18),
+                    Visible = Library.GroupboxesCollapsible,
+                    Parent = GroupboxHolder,
+                }) or nil
+
+                HeaderButton = New("TextButton", {
+                    Name = "Workspace",
                     BackgroundTransparency = 1,
-                    Position = UDim2.new(1, -8, 0.5, 0),
-                    Size = UDim2.fromOffset(16, 16),
+                    Size = UDim2.new(1, 0, 0, 34),
                     Text = "",
+                    Active = Library.GroupboxesCollapsible,
                     Parent = GroupboxHolder,
                 })
-                local ChevronIcon = Library:GetIcon("chevron-down")
-                if ChevronIcon then
-                    New("ImageLabel", {
-                        Image = ChevronIcon.Url,
-                        ImageColor3 = "FontColor",
-                        ImageRectOffset = ChevronIcon.ImageRectOffset,
-                        ImageRectSize = ChevronIcon.ImageRectSize,
-                        ImageTransparency = 0.5,
-                        Size = UDim2.fromScale(1, 1),
-                        SizeConstraint = Enum.SizeConstraint.RelativeYY,
-                        Parent = ChevronButton,
-                    })
-                end
 
                 GroupboxLabel = New("TextLabel", {
                     BackgroundTransparency = 1,
@@ -6751,28 +6753,6 @@ function Library:CreateWindow(WindowInfo)
                     PaddingRight = UDim.new(0, 12),
                     Parent = GroupboxLabel,
                 })
-
-                MinimizeButton = New("TextButton", {
-                    AnchorPoint = Vector2.new(1, 0.5),
-                    BackgroundTransparency = 1,
-                    Position = UDim2.new(1, -28, 0.5, 0),
-                    Size = UDim2.fromOffset(16, 16),
-                    Text = "",
-                    Parent = GroupboxHolder,
-                })
-                local MinimizeIcon = Library:GetIcon("minus")
-                if MinimizeIcon then
-                    New("ImageLabel", {
-                        Image = MinimizeIcon.Url,
-                        ImageColor3 = "FontColor",
-                        ImageRectOffset = MinimizeIcon.ImageRectOffset,
-                        ImageRectSize = MinimizeIcon.ImageRectSize,
-                        ImageTransparency = 0.5,
-                        Size = UDim2.fromScale(1, 1),
-                        SizeConstraint = Enum.SizeConstraint.RelativeYY,
-                        Parent = MinimizeButton,
-                    })
-                end
 
                 GroupboxContainer = New("Frame", {
                     BackgroundTransparency = 1,
@@ -6801,35 +6781,39 @@ function Library:CreateWindow(WindowInfo)
                 Tab = Tab,
                 DependencyBoxes = {},
                 Elements = {},
-                Minimized = false,
+                Collapsed = false,
+                HeaderButton = HeaderButton,
+                Chevron = ChevronIcon,
             }
 
             function Groupbox:Resize()
-                if Groupbox.Minimized then
+                GroupboxHolder.Size = UDim2.new(1, 0, 0, (GroupboxList.AbsoluteContentSize.Y / Library.DPIScale) + 49)
+            end
+
+            function Groupbox:SetCollapsed(state)
+                Groupbox.Collapsed = state
+                Groupbox.Container.Visible = not state
+                if Groupbox.Chevron then
+                    TweenService:Create(Groupbox.Chevron, Library.TweenInfo, {
+                        Rotation = state and 180 or 0,
+                        ImageTransparency = 0.2,
+                    }):Play()
+                end
+                if state then
                     GroupboxHolder.Size = UDim2.new(1, 0, 0, 34)
                 else
-                    GroupboxHolder.Size = UDim2.new(1, 0, 0, (GroupboxList.AbsoluteContentSize.Y / Library.DPIScale) + 49)
+                    Groupbox:Resize()
                 end
             end
 
-            function Groupbox:ToggleMinimize()
-                Groupbox.Minimized = not Groupbox.Minimized
-                GroupboxContainer.Visible = not Groupbox.Minimized
-                Groupbox:Resize()
-                
-                local PlusIcon = Library:GetIcon("plus")
-                if MinimizeButton and MinimizeButton:FindFirstChildOfClass("ImageLabel") then
-                    if Groupbox.Minimized then
-                        MinimizeButton:FindFirstChildOfClass("ImageLabel").Image = PlusIcon and PlusIcon.Url or ""
-                    else
-                        local MinusIcon = Library:GetIcon("minus")
-                        MinimizeButton:FindFirstChildOfClass("ImageLabel").Image = MinusIcon and MinusIcon.Url or ""
-                    end
+            HeaderButton.MouseButton1Click:Connect(function()
+                if not Library.GroupboxesCollapsible then
+                    return
                 end
-            end
-
-            MinimizeButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
-            ChevronButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
+                if Groupbox.SetCollapsed then
+                    Groupbox:SetCollapsed(not Groupbox.Collapsed)
+                end
+            end)
 
             setmetatable(Groupbox, BaseGroupbox)
 
@@ -7601,6 +7585,25 @@ Library:GiveSignal(Players.PlayerRemoving:Connect(OnPlayerChange))
 
 Library:GiveSignal(Teams.ChildAdded:Connect(OnTeamChange))
 Library:GiveSignal(Teams.ChildRemoved:Connect(OnTeamChange))
+
+function Library:SetGroupboxesCollapsible(state)
+    Library.GroupboxesCollapsible = state
+    for _, Tab in pairs(Library.Tabs) do
+        if Tab.Groupboxes then
+            for _, gb in pairs(Tab.Groupboxes) do
+                if gb.HeaderButton then
+                    gb.HeaderButton.Active = state
+                end
+                if gb.Chevron then
+                    gb.Chevron.Visible = state
+                end
+                if not state and gb.Collapsed and gb.SetCollapsed then
+                    gb:SetCollapsed(false)
+                end
+            end
+        end
+    end
+end 
 
 getgenv().Library = Library
 return Library
