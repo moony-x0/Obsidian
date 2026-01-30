@@ -2246,6 +2246,7 @@ do
                 Text = Mode,
                 TextSize = 14,
                 TextTransparency = 0.5,
+                TextWrapped = true,
                 Parent = MenuTable.Menu,
             })
 
@@ -2801,6 +2802,7 @@ do
                     Size = UDim2.new(1, 0, 0, 21),
                     Text = Text,
                     TextSize = 14,
+                    TextWrapped = true,
                     Parent = ContextMenu.Menu,
                 })
 
@@ -4516,46 +4518,148 @@ do
             local Values = Dropdown.Values
             local DisabledValues = Dropdown.DisabledValues
 
-            for Button, _ in Buttons do
-                Button:Destroy()
-            end
-            table.clear(Buttons)
-
-            local Count = 0
-            for _, Value in Values do
-                if SearchBox and not tostring(Value):lower():match(SearchBox.Text:lower()) then
-                    continue
-                end
-
-                Count += 1
-                local IsDisabled = table.find(DisabledValues, Value)
-                local Table = {}
-
-                local Button = New("TextButton", {
-                    BackgroundColor3 = "MainColor",
                     BackgroundTransparency = 1,
-                    LayoutOrder = IsDisabled and 1 or 0,
-                    Size = UDim2.new(1, 0, 0, 21),
-                    Text = tostring(Value),
+                    PlaceholderText = "Search...",
+                    Position = UDim2.fromOffset(-8, 0),
+                    Size = UDim2.new(1, -12, 1, 0),
                     TextSize = 14,
-                    TextTransparency = 0.5,
                     TextXAlignment = Enum.TextXAlignment.Left,
-                    Parent = MenuTable.Menu,
+                    Visible = false,
+                    Parent = Display,
                 })
                 New("UIPadding", {
-                    PaddingLeft = UDim.new(0, 7),
-                    PaddingRight = UDim.new(0, 7),
-                    Parent = Button,
+                    PaddingLeft = UDim.new(0, 8),
+                    Parent = SearchBox,
                 })
+            end
 
-                local Selected
-                if Info.Multi then
-                    Selected = Dropdown.Value[Value]
-                else
-                    Selected = Dropdown.Value == Value
+            local MenuTable = Library:AddContextMenu(
+                Display,
+                function()
+                    return UDim2.fromOffset(Display.AbsoluteSize.X / Library.DPIScale, 0)
+                end,
+                function()
+                    return { 0.5, Display.AbsoluteSize.Y + 1.5 }
+                end,
+                2,
+                function(Active: boolean)
+                    Display.TextTransparency = (Active and SearchBox) and 1 or 0
+                    ArrowImage.ImageTransparency = Active and 0 or 0.5
+                    ArrowImage.Rotation = Active and 180 or 0
+                    if SearchBox then
+                        SearchBox.Text = ""
+                        SearchBox.Visible = Active
+                    end
+                end
+            )
+            Dropdown.Menu = MenuTable
+
+            function Dropdown:RecalculateListSize(Count)
+                local Y = math.clamp((Count or GetTableSize(Dropdown.Values)) * 21, 0, Info.MaxVisibleDropdownItems * 21)
+
+                MenuTable:SetSize(function()
+                    return UDim2.fromOffset(Display.AbsoluteSize.X / Library.DPIScale, Y)
+                end)
+            end
+
+            function Dropdown:UpdateColors()
+                if Library.Unloaded then
+                    return
                 end
 
-                function Table:UpdateButton()
+                Label.TextTransparency = Dropdown.Disabled and 0.8 or 0
+                Display.TextTransparency = Dropdown.Disabled and 0.8 or 0
+                ArrowImage.ImageTransparency = Dropdown.Disabled and 0.8 or MenuTable.Active and 0 or 0.5
+            end
+
+            function Dropdown:Display()
+                if Library.Unloaded then
+                    return
+                end
+
+                local Str = ""
+
+                if Info.Multi then
+                    for _, Value in Dropdown.Values do
+                        if Dropdown.Value[Value] then
+                            Str = Str
+                                .. (Info.FormatDisplayValue and tostring(Info.FormatDisplayValue(Value)) or tostring(Value))
+                                .. ", "
+                        end
+                    end
+
+                    Str = Str:sub(1, #Str - 2)
+                else
+                    Str = Dropdown.Value and tostring(Dropdown.Value) or ""
+                    if Str ~= "" and Info.FormatDisplayValue then
+                        Str = tostring(Info.FormatDisplayValue(Str))
+                    end
+                end
+
+                if #Str > 25 then
+                    Str = Str:sub(1, 22) .. "..."
+                end
+
+                Display.Text = (Str == "" and "---" or Str)
+            end
+
+            function Dropdown:OnChanged(Func)
+                Dropdown.Changed = Func
+            end
+
+            function Dropdown:GetActiveValues()
+                if Info.Multi then
+                    local Table = {}
+
+                    for Value, _ in Dropdown.Value do
+                        table.insert(Table, Value)
+                    end
+
+                    return Table
+                end
+
+                return Dropdown.Value and 1 or 0
+            end
+
+            local Buttons = {}
+            function Dropdown:BuildDropdownList()
+                local Values = Dropdown.Values
+                local DisabledValues = Dropdown.DisabledValues
+
+                for Button, _ in Buttons do
+                    Button:Destroy()
+                end
+                table.clear(Buttons)
+
+                local Count = 0
+                for _, Value in Values do
+                    if SearchBox and not tostring(Value):lower():match(SearchBox.Text:lower()) then
+                        continue
+                    end
+
+                    Count += 1
+                    local IsDisabled = table.find(DisabledValues, Value)
+                    local Table = {}
+
+                    local Button = New("TextButton", {
+                        BackgroundColor3 = "MainColor",
+                        BackgroundTransparency = 1,
+                        LayoutOrder = IsDisabled and 1 or 0,
+                        Size = UDim2.new(1, 0, 0, 21),
+                        Text = tostring(Value),
+                        TextSize = 14,
+                        TextTransparency = 0.5,
+                        TextWrapped = true,
+                        TextXAlignment = Enum.TextXAlignment.Left,
+                        Parent = MenuTable.Menu,
+                    })
+                    New("UIPadding", {
+                        PaddingLeft = UDim.new(0, 7),
+                        PaddingRight = UDim.new(0, 7),
+                        Parent = Button,
+                    })
+
+                    local Selected
                     if Info.Multi then
                         Selected = Dropdown.Value[Value]
                     else
