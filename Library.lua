@@ -1,4 +1,4 @@
---// RAW SERVICE CAPTURE (Must be unobfuscated - place before obfuscation)
+
 local RawServices = {}
 RawServices.CoreGui = game:GetService("CoreGui")
 RawServices.Players = game:GetService("Players")
@@ -3957,7 +3957,7 @@ do
             Size = UDim2.new(1, 0, 0, 21),
             Text = Input.Value,
             TextEditable = not Input.Disabled,
-            TextScaled = true,
+            TextSize = 14,
             TextXAlignment = Enum.TextXAlignment.Left,
             Parent = Holder,
         })
@@ -5992,7 +5992,7 @@ function Library:CreateWindow(WindowInfo)
                 BackgroundTransparency = 1,
                 Size = WindowInfo.IconSize,
                 Text = WindowInfo.Title:sub(1, 1),
-                TextScaled = true,
+                TextSize = 16,
                 Visible = false,
                 Parent = TitleHolder,
             })
@@ -6082,7 +6082,7 @@ function Library:CreateWindow(WindowInfo)
             BackgroundColor3 = "MainColor",
             PlaceholderText = "Search",
             Size = WindowInfo.SearchbarSize,
-            TextScaled = true,
+            TextSize = 14,
             Visible = not (WindowInfo.DisableSearch or false),
             Parent = RightWrapper,
         })
