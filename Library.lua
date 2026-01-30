@@ -6680,9 +6680,10 @@ function Library:CreateWindow(WindowInfo)
 
             local GroupboxHolder
             local GroupboxLabel
-
             local GroupboxContainer
             local GroupboxList
+            local ChevronButton
+            local MinimizeButton
 
             do
                 GroupboxHolder = New("Frame", {
@@ -6714,7 +6715,7 @@ function Library:CreateWindow(WindowInfo)
                     })
                 end
 
-                local ChevronButton = New("TextButton", {
+                ChevronButton = New("TextButton", {
                     AnchorPoint = Vector2.new(1, 0.5),
                     BackgroundTransparency = 1,
                     Position = UDim2.new(1, -8, 0.5, 0),
@@ -6723,10 +6724,8 @@ function Library:CreateWindow(WindowInfo)
                     Parent = GroupboxHolder,
                 })
                 local ChevronIcon = Library:GetIcon("chevron-down")
-                local ChevronUpIcon = Library:GetIcon("chevron-up")
-                local ChevronImage
                 if ChevronIcon then
-                    ChevronImage = New("ImageLabel", {
+                    New("ImageLabel", {
                         Image = ChevronIcon.Url,
                         ImageColor3 = "FontColor",
                         ImageRectOffset = ChevronIcon.ImageRectOffset,
@@ -6753,10 +6752,10 @@ function Library:CreateWindow(WindowInfo)
                     Parent = GroupboxLabel,
                 })
 
-                local MinimizeButton = New("TextButton", {
+                MinimizeButton = New("TextButton", {
                     AnchorPoint = Vector2.new(1, 0.5),
                     BackgroundTransparency = 1,
-                    Position = UDim2.new(1, -8, 0.5, 0),
+                    Position = UDim2.new(1, -28, 0.5, 0),
                     Size = UDim2.fromOffset(16, 16),
                     Text = "",
                     Parent = GroupboxHolder,
@@ -6799,7 +6798,6 @@ function Library:CreateWindow(WindowInfo)
                 BoxHolder = BoxHolder,
                 Holder = GroupboxHolder,
                 Container = GroupboxContainer,
-
                 Tab = Tab,
                 DependencyBoxes = {},
                 Elements = {},
@@ -6824,36 +6822,14 @@ function Library:CreateWindow(WindowInfo)
                     if Groupbox.Minimized then
                         MinimizeButton:FindFirstChildOfClass("ImageLabel").Image = PlusIcon and PlusIcon.Url or ""
                     else
-                        MinimizeButton:FindFirstChildOfClass("ImageLabel").Image = MinimizeIcon and MinimizeIcon.Url or ""
+                        local MinusIcon = Library:GetIcon("minus")
+                        MinimizeButton:FindFirstChildOfClass("ImageLabel").Image = MinusIcon and MinusIcon.Url or ""
                     end
                 end
             end
 
             MinimizeButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
-
-            -- Connect chevron button to minimize functionality and add icon updates
-            if ChevronButton then
-                -- Update chevron icon when minimize state changes
-                local function UpdateChevronIcon()
-                    if ChevronImage then
-                        if Groupbox.Minimized then
-                            ChevronImage.Image = ChevronUpIcon and ChevronUpIcon.Url or ChevronIcon.Url
-                        else
-                            ChevronImage.Image = ChevronIcon.Url
-                        end
-                    end
-                end
-                
-                -- Override the ToggleMinimize function to update chevron
-                local OriginalToggleMinimize = Groupbox.ToggleMinimize
-                Groupbox.ToggleMinimize = function()
-                    OriginalToggleMinimize()
-                    UpdateChevronIcon()
-                end
-                
-                -- Connect chevron button to minimize functionality
-                ChevronButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
-            end
+            ChevronButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
 
             setmetatable(Groupbox, BaseGroupbox)
 
