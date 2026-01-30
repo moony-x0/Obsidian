@@ -6787,20 +6787,20 @@ function Library:CreateWindow(WindowInfo)
             }
 
             function Groupbox:Resize()
-                GroupboxHolder.Size = UDim2.new(1, 0, 0, (GroupboxList.AbsoluteContentSize.Y / Library.DPIScale) + 49)
+                GroupboxHolder.Size = UDim2.new(1, 0, 0, (GroupboxList.AbsoluteContentSize.Y / Library.DPIScale) + 34)
             end
 
-            function Groupbox:SetCollapsed(state)
+            function Groupbox:SetCollapsed(state: boolean)
                 Groupbox.Collapsed = state
                 Groupbox.Container.Visible = not state
                 if Groupbox.Chevron then
                     TweenService:Create(Groupbox.Chevron, Library.TweenInfo, {
                         Rotation = state and 180 or 0,
-                        ImageTransparency = state and 0.2 or 0.5,
+                        ImageTransparency = 0.2,
                     }):Play()
                 end
                 if state then
-                    GroupboxHolder.Size = UDim2.new(1, 0, 0, 34)
+                    GroupboxHolder.Size = UDim2.new(1, 0, 0, 34 * Library.DPIScale)
                 else
                     Groupbox:Resize()
                 end
