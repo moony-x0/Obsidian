@@ -6714,6 +6714,48 @@ function Library:CreateWindow(WindowInfo)
                     })
                 end
 
+                local ChevronButton = New("TextButton", {
+                    AnchorPoint = Vector2.new(1, 0.5),
+                    BackgroundTransparency = 1,
+                    Position = UDim2.new(1, -8, 0.5, 0),
+                    Size = UDim2.fromOffset(16, 16),
+                    Text = "",
+                    Parent = GroupboxHolder,
+                })
+                local ChevronIcon = Library:GetIcon("chevron-down")
+                local ChevronUpIcon = Library:GetIcon("chevron-up")
+                if ChevronIcon then
+                    local ChevronImage = New("ImageLabel", {
+                        Image = ChevronIcon.Url,
+                        ImageColor3 = "FontColor",
+                        ImageRectOffset = ChevronIcon.ImageRectOffset,
+                        ImageRectSize = ChevronIcon.ImageRectSize,
+                        ImageTransparency = 0.5,
+                        Size = UDim2.fromScale(1, 1),
+                        SizeConstraint = Enum.SizeConstraint.RelativeYY,
+                        Parent = ChevronButton,
+                    })
+                    
+                    -- Update chevron icon when minimize state changes
+                    local function UpdateChevronIcon()
+                        if Groupbox.Minimized then
+                            ChevronImage.Image = ChevronUpIcon and ChevronUpIcon.Url or ChevronIcon.Url
+                        else
+                            ChevronImage.Image = ChevronIcon.Url
+                        end
+                    end
+                    
+                    -- Override the ToggleMinimize function to update chevron
+                    local OriginalToggleMinimize = Groupbox.ToggleMinimize
+                    Groupbox.ToggleMinimize = function()
+                        OriginalToggleMinimize()
+                        UpdateChevronIcon()
+                    end
+                    
+                    -- Connect chevron button to minimize functionality
+                    ChevronButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
+                end
+
                 GroupboxLabel = New("TextLabel", {
                     BackgroundTransparency = 1,
                     Position = UDim2.fromOffset(BoxIcon and 24 or 0, 0),
@@ -6816,7 +6858,8 @@ function Library:CreateWindow(WindowInfo)
         end
 
         function Tab:AddLeftGroupbox(Name, IconName)
-            return Tab:AddGroupbox({ Side = 1, Name = Name, IconName = IconName })
+            local LeftGroupBox = Tab:AddGroupbox({ Side = 1, Name = Name, IconName = IconName })
+            return LeftGroupBox
         end
 
         function Tab:AddRightGroupbox(Name, IconName)
