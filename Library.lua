@@ -1,24 +1,7621 @@
---[[
+--// RAW SERVICE CAPTURE (Must be unobfuscated - place before obfuscation)
+local RawServices = {}
+RawServices.CoreGui = game:GetService("CoreGui")
+RawServices.Players = game:GetService("Players")
+RawServices.RunService = game:GetService("RunService")
+RawServices.SoundService = game:GetService("SoundService")
+RawServices.UserInputService = game:GetService("UserInputService")
+RawServices.TextService = game:GetService("TextService")
+RawServices.Teams = game:GetService("Teams")
+RawServices.TweenService = game:GetService("TweenService")
+_G.RawServices = RawServices
 
-        @@@@@@@@@@@@                     @@@@@@@@@@@@
-        @@@@@@@@@@@@@@                 @@@@@@@@@@@@@@
-        @@@@@@@@   @@@@@@@@         @@@@@@@@   @@@@@@@@
-        @@@@@@@@     @@@@@@@@     @@@@@@@@     @@@@@@@@
-        @@@@@@@@       @@@@@@@@ @@@@@@@@       @@@@@@@@
-        @@@@@@@@         @@@@@@@@@@@@@@         @@@@@@@@
-        @@@@@@@@           @@@@@@@@@@@           @@@@@@@@
-        @@@@@@@@             @@@@@@@             @@@@@@@@
-        @@@@@@@@               @@@               @@@@@@@@
-        @@@@@@@@                                 @@@@@@@@
-        @@@@@@@@                                 @@@@@@@@
-        @@@@@@@@                                 @@@@@@@@
+local cloneref = (cloneref or clonereference or function(instance: any)
+    return instance
+end)
+local CoreGui: CoreGui = cloneref(game:GetService("CoreGui"))
+local Players: Players = cloneref(game:GetService("Players"))
+local RunService: RunService = cloneref(game:GetService("RunService"))
+local SoundService: SoundService = cloneref(game:GetService("SoundService"))
+local UserInputService: UserInputService = cloneref(game:GetService("UserInputService"))
+local TextService: TextService = cloneref(game:GetService("TextService"))
+local Teams: Teams = cloneref(game:GetService("Teams"))
+local TweenService: TweenService = cloneref(game:GetService("TweenService"))
 
-        NOTICE:
-        This source file is protected and read-only by design.
-        Any direct changes may result in instability or failure.
+local getgenv = getgenv or function()
+    return shared
+end
+local setclipboard = setclipboard or nil
+local protectgui = protectgui or (syn and syn.protect_gui) or function() end
+local gethui = gethui or function()
+    return CoreGui
+end
 
-        Copyright © 2026. All rights reserved.
+local LocalPlayer = Players.LocalPlayer or Players.PlayerAdded:Wait()
+local Mouse = cloneref(LocalPlayer:GetMouse())
 
-]]
+local Labels = {}
+local Buttons = {}
+local Toggles = {}
+local Options = {}
+local Tooltips = {}
 
-return(function(...)local I,H,S=table,string,bit local K,a,P,Q,W,U,V,_,N,O,J=H.byte,H.char,H.sub,I.concat,I.insert,math.ldexp,getfenv and getfenv()or _ENV,setmetatable,select,unpack or I.unpack,tonumber;local M=(function(T)local H,W,L,J,K,O,R=1,function(L)local H=""for J=1,#L,1 do H=H..a(K(L,J)-(7))end return J(H,36)end,"","",{},256,{}for H=0,O-1 do R[H]=a(H)end;local function M()local L=W(P(T,H,H))H=H+1;local J=W(P(T,H,H+L-1))H=H+L;return J end;L=a(M())K[1]=L;while H<#T do local H=M()if R[H]then J=R[H]else J=L..P(L,1,1)end;R[O]=L..P(J,1,1)K[#K+1],L,O=J,J,O+1 end;return I.concat(K)end)("8O9:Q9:P9:P9:Q9:K9>=9:P98W8O8J8Y98S8I8U9:Q9:L9>H8W8]8Q8Y9:Q9:?9>H98S8Y8H98@8Y8J8?8U8[9>W9>@9>=98H8P8]8>9>_8K9>X9>H98?8I8N9>^9>`9?79>W9:=9>H98@8O9?L8X9?N9>a9?89:Q9:99>H98>8K9>_98Q8N8L8I9>]9>_9?Y9>W9:@9>H98=8Y8=9@:9?O9?Z9:M9@?8Y9>U9?H9?R9>=98=8@8Y8Y9?M9@;9?P9:Q9:N9>H8_98S9:Q9@>9>=98?8]8@9?X9?P9?H9:H9>H8[8P8O8N9>_8Y8V9:Q9:;9H?9HH9HJ9>L8V9HK8N9?Z9?:9:P8W9>\\9HZ8N8?9:Q9@R9:P9?_8H9H@8U8L8Z8O8]8J8X9?I9>=8L8J8O8H8Y8[8H8W9>O9:Q9:O9>H8K8>8N9@`9>H9IJ9IL9IN8H8_9IQ9>P9:J9>S9>\\8T9IR9@a9:P98L8O8[8]8P9?<9?>9>_9IY9?;9?=9??8J98Y8X8X8Y9I@9>R9>=98<8]8U8H9:Q9H>9>=9>[8H98M9?U9?_9:Q98Q9>H8T8H8H8L8K98^99@99@8J9H999?8W9J[9J:8Z8I9?_8J8[9HI9IM8N8H99?9KV8Q99@9JT8U9>a8X9K\\8K9HI8O99@98K8Z8K8U8X8U8]8N9KK9HL8K99@8T9@O8X9LN8Q9JZ9LK9:Q9:89@?9KL8N8K8L9I>9@W8[8>9@@9@I8I9>L9J]9?J8O8Z9HH8=98Q8X9:N9>999`9=^99W9=I9<99;O98V9>Q9>H98H8]8H8T9:Q99O9>H9L=9L?9LH9LJ99@8]8K9I79LN98=9LZ9L\\9L^9HV9La9@H8H9M98Y99?8L8N8W9IS9?]98?98L9:Q99V9>H9Ma9N899@9N:9LJ9N<9>L9N>9M79NH9>L9NK9NM9@[9>H9MH9:O9:Q9:>9?S9MV9M99MV8U9HI98M8]8L9@\\9:P9>99;X9=W9:Z9;798Y9:Q99U9M[9L>9L@9LI9LK9NV9>\\9LN98@9O?9KL8H9OI8N9OK8L9Na9NN99\\9NU9N79O^99@9O`9N_9OH9OJ9OL9P=9M;9>=9JR8X98Y9PH9J\\9J^9:P9J`9PU9I79O<9>H98T8O8@8N9HH8]9PT9PV9HN9P^8Y9@<9JJ8H8V9>K8Q9PQ9:P98Q8K9K78Z8U8P8Y9>=9:Q9:<9O98K98?9M=9M?98R9J?9KS9JU9>>9:Q9:I9?S8[9>L9@W9>N9>P9>Y9>=9>^9I>8[8T9N^9><9>H9R79?S9@O9KU8T8U9O79H`98S9HH8Z9JH9RH9RR9P]9>=98L9Ma9@:9RI9RK8]8Z9RO9PR9IO9K`8Y98=9S99MS9@S9S99?H9R?9:P9S@8Z98V9@98H9HI9?H9QW9>=98T8Y8L9@W9JT9N>98V8O8=8Y9@Q9>H98O8Y8>9QQ8N8X98R9KL9>V9?[9T89T:9T<8X9>J9KY9LU9JL9HO9>=9T99T;9RT8X98=8O8W8W9QS9?H9O=9>=98J9IL8U8V9?79PM9L[9R]9SN9TY9T[8Y9TT9TL9SI9:P98U8N8I9QK9HX9TT9>J9JT9H_9?J8U8W9K=9TN8H9IK8P9S;9SN9@U9@W9?a9QI9NO9>=9HJ8@9:N9=J9=M9V>9V>9<Q98[9JM9UK9Ma9RT8W98@8H8>9QS9UJ98I8I9Q99QV9>H98U9VL9NM98T8U9>L9S=9HI9V89:P98K9@99VW9T_9Ta8V9La9U_8N9Ua8O9ON9>H9:P9;\\9VI9HX9TX9TZ9QS9I@9PX98>9Q79I=9JT9I@9J79R^9S98Y8P9?H9HX9SQ9K>9ST9>?9@?9U>9T\\9X99>=98K8L9P89X89SM9T`9P89W=98@9L@9>W9@M9H79UV9K=9TI9R@8T9P`98W9KS9SS8Q9XY8J9L98J9U<9Q]9KU8Y98W9LP8[8S9I<8=9:Q99]9?S9XW8@9WP9U?9T?9>U8Y9?a9UH9TV9T]9>H9XK9U78>98K8N98U8J9IK9X`9TR9>I9LJ8H98T9KL8W9Y79?89I@9HX9XN8W8N9JH9YT9>=9WU9Q89?W9UV9ZH9W^9W:9W78J9UV9RT9JH98M9RT9XN8;9?99>H98;9I]9>K99;9WJ9>H8798X9[79OO8?98X9X=9:P9ZX9?M8U9Z[9QL98T98H98Q98@9J@9QS9[;9:P9:`9VI99a9>Z9IK8I9I;9S_9Sa9>J8P9?=9K@8U9M>9?Q9>H9>J8J9HR9H89LH9KS9[S9:99[>9H`9QN98L9XS8H98=9LP9TH9WZ9:P9[P9\\Q9>W9SV9:P98V8]9Y<8W9[Y9T=9[^9>K9:Q9\\S9\\`8J99<9[?8V9IK8Q98?98S98V9[S99?9[>9R89>=9OK9RT9]99[S98a9[>9J<98Y8[9?89KY9]Q9WK9:P98X8_9[:9][98X98>9]_9WK9;L8O9\\J9M[9@98P9RT9Y98O9HH8J9[S98T9]L9>H9Q]9]Y9^I9\\a9JW9:P9^P9PW9>H9]=8O8Q9UL9UN9UJ9UR9>W9PX98?9JU9]Z9][98Q9^N9SW9I>8S9_99][9>>9SM98<9RS9IM9]99QL9_79KO8K9UZ8>9]79R99JH9Sa9UT9>=98Q9LT9HZ9OK9ZH9HZ9X`9PX9QN9VO8I9LH9>;9H`9TX8I9RJ9UL9S99WR9_Y9[@9K88Y9`H9\\89MI9_H8N9[>9XQ9:P8L9[Q9U\\9PX9Q@9QI8J9UO9>H98Y9T=9IK9L@9Va98Q98K98@9:Q9`U9YN9TH9\\X9S^9I?9>_9ZZ8Y98H8U9S`9U\\9SM9_[8]9HZ9R_8Z9W]9:Q99^9>H9\\Z9\\\\9\\^9TW9N;9L]9N\\9L`9a=9O99_\\9>W99_9>H8J8Z8=9O]9P88X9KI99@99999>99:99:98`99=99>99;99:99;9VJ9aS9HZ9Wa9SS9IX9\\X98Y9@98O:87[9HI9_N9Y_9[P9U[9^?9NM9a?9>W9]M9SN9N@9aV9aX9PX9^V98R9\\[9^`9UU9RJ9RL9SM9N^9]99];:88U9N@:8879IX9WO:88Z9S_9:Q9::9MT9?=9?89XW8P9JT8J:88W9UJ9RL9H`98>98Q9\\M9_R9R_8>9?U9J\\:88H9?T8J8H98K9aJ9X`9J<:89M:89O:89U:89<9QL:89I9VO9IK8S9\\W9`_8L8L8P8>:89_8O:89a9K79US9\\S9aI:89\\9\\S98<9TV9P`:8799@S9J[9VR9PX9T`99T98=:8:R9>W9\\S9Q]9I\\9X`:88H:8:U:8:[9IM9_a9MT8O9L?9XH9IX9`U98>9V\\8Q:87W9SM9^Y8Q98K8V8V9I79[S99\\9[>9^T9aL9[;9>99=^9^89>H9<H9>79[>9`79KV9[I9Z[9[S98Z:8;\\9`_:87`98@9YJ9_U9>=98W9@W:8:a9U]9_79L?8;9`I9>W9T^9\\T9RQ9RJ9RY8J9aL9U]:8;J9[P9_W:88`9>H9QP9QR8Y:88[8K9XN9US9^T98L9HL9J\\99`9?]9WV9Y<9K79Q_9_K:8<]9X?9@W9LW9VX9ZH9\\8:8<a8Y:8<S:8<J9[J9>W9?\\9>=9`O9QS9>J8Q9L]9S=9O79[W9SW8U8K:8<M:8=[:8=]9P89NM98@9ZH8L9XU9\\T9XO:8<S:8>:9\\[9IM9I@:88a9]N9]P9KW9TP8J:8:M8X9MW9[S8L9[>9\\X9[H:8=Q:8<S:8>V:8>X9_H8\\9[>9LX9R@:8>J9I>:8>L9IO:8>`8T9[S98P9[>9P?:8?;9JT:8>K9^I9[`9?_9\\P9>L8K:89:9`Q9][9;L9VI9aZ:8<>9^Z:8>;:8?@9]V9P88?9U::8<=9U=9WQ9Z\\9SW9HL8]8I8P9^W:8<>9JH8P9RY9Y<9[?9Y:9LJ9HZ9I@9`U98?:8>78S9_T9PX9V\\:8>89`P9[?98;:8>79\\79VR9`U9?a9@8:8@I9^U9RT:8>79LP9Z=9YU9UN9>_9?7:8>H98W9QS9I>9N^9YY9Q]8[9KS9VJ9JJ:8999^I:89\\9SM98Y9[_9P`98U:8=\\9VP9IH9UK:8H^8>:8<J9>\\9Va99I:8I<:8@998@9^?:89\\9IT:8>Q9IX:8II9[@8]8=9[S98::8<89H79?U9T=9VM:8@998H9HS9aO:8I>8I:8;M:8IZ:8@Y9IK8L8X9P`9IX9\\S98;9JH8I9_X9Y_:8@Z:8<M8X:8J;8P:8J=9?H9`U98M:8@@9P89:Q:87=9]N:8IN:8@^9L?9\\89Z88O:8Ia:8J898Q9IM8Q8K9[S99T:8IR9:P:8@^8Y8@8L9>K9J\\9\\S9L=8R9I]:8@998W9YO9KL:8:P9>I9HQ:88@:8<99SS:8HQ:8HS9J<9?a:8:a:8>M9S>:8@998P8Y9\\N9[S8U9^<9@S9a`9N=:8789`U9_N9SM9_79IO:8;L:8;N:8I:9^T9Z[9IK9_O9I]:8<U:89Q9[Q9S?8>9SZ9Va98R9J[:8KO:8@^9JT9>;9\\S9J>:8JZ9JU9[?9JJ8>:8IV:8J:9^I:8HH9U<:89I9MU9N79MW9[Y9UW9QL9?a9_R9LJ9?89[S98`9_<9:P9TT9aN9Y<9JL9^T9T`9HJ:8>H9SX8V:8@?:8@H:8:@9U78U9?@9UJ:8:@9XP:8<[8O9JT9?H9\\S:8HZ8@9?>9?H9^T98P:8HW9ZR98@9IW8[9YL9QS9VO9MV:8:7:8<>8T:8@Q9_8:8@K:8@M8S:8@O9^?:8MV9I@9J<9]9:8MU:89a9X`:8:I9IL9X[9Va9_7:8@S9>H:8=I9IM9UJ98T9_>9:Q:8=`9:P98>:8Ia:8NV9SX9SZ9T=9L_8>9S^9S`9T79ZK:8OT9IM9R[9RJ9U<9PS9TX9_P:8>79_S9:Q9:79?J8Y8Q8O8?8Y9T?9^Z:8P;9_R8J9_T9YH:8O^8X:8NV9]98K9?^9VM:8PO:8P=9J<9>^9Z79[N:8<X9VR9SM98S9S>9Z?9ZP:8<Z9_Z8K:8JJ9L@9XY9_R9^Z98Q:8;^9[?9J`:8QL9V`:8<O9J`:8QI9X[:8QP9IX9PX:8Q@:8PU:8OL:8MX9YO9QL9M\\9OZ9LJ9`K:8@Z:8::9?>:89[9>_9[;98`9=W:8L79:P:8I9:89T9?M9L]9Pa:8P>9Q=8K9]X:8PU9KY9_7:8PI9>a9O79HX9TN9HJ9IO:8KO:8:@9JH9VJ9``9RJ9>K98H8O9RT:8K?9>H9879?a9JT:8IO9][:8R>9<H:8IW9N=9J\\:8=W9\\Y9\\[8S9\\]:8IT9TM9^R9]:9[S99R:8;X9WK:8SY9:P99=:8R?9[S999:8S[98X:8S^9_H99\\9<H9[;9<H8J9`T9>H8H:8<M:8@99RT9KT9J\\9HX:89^:8LR:8=M9>=:8NM9ZT8;:8>S8P:8HZ9ZO9>V9KY:8La9Q99LH9O79^T:8;>8U9QK9\\X:8RI9X]9X_:8QV:8HK:8NY9NM9Y99M9:8U<:8QM:8=<:8NX:8NZ:8U;9>K:8QV:8<U9Y_9J`98V9>\\:8:a9_N9\\X9J`9\\M9UW:8UW:8SU9Q<9J_9>\\:8ON8J:8O;9_N9RV9>\\9TT:89_:8IV:8QR9>\\9N^9S^9?V9?H:8SN:8=@9?_9QN98K:8PK8J:88?9`K9O`9HT:8KL9[_:8N]9U<9OK:89a9Z89aT9>T9\\8:8V[8]:89a:8=T:8<L:8Va:88H:8V\\9^H:8VR9QL:8W>9\\M:8MZ:8HY9JS9W88H:88=:88Q9PR9JS98V9?=8N:8N^9J<:8W>:8WN:8WP:8Q=9:P9PS:8V^9TZ:8<M:88K9U\\:8P?:8WR8X:8W_:8V`9QS:88[:8>H:8W^9Z9:8X=8Y98M9@W8I:8H`:8P^:8JV:8@`9\\99R@9>\\9JY:8:a9LT:8V89aY9RP8H:8XV9>_:8XX8S:8XQ9QQ9^?:8H_9Y_9PS9UY9N@:8XL9UM:8H`:8H89@9:8UU9>T9IX:8<O:87_9X[9OH8[:8<U9RM9:P98:9`K:8:J9>_:89>9PX9N^:8;T9_H99H9]T9@N9@I98<9KL:8:9:8L`:88H:8M>:8T]:8V?9MT:8Z=9NM9S^9X79QK9J<9MU9JS9VM:8=98V9J\\9H`:8ZM:8T^8W:8@U:8U\\:8H`:8ZT9VM9TX:8>@:8?L9PY9>\\:8IX:8L_:89S8>:8@P:8U@9ZN9Z@:8R^:8SN98Y9L>:8M;9IM:8S8:8;:9P9:8H`:8P98O9^I9P8:8>@9PX9YY9ZL9WW:8@9:8[V9VV9`U9RJ9IN:8N^9SM:8[\\8?9IK8N99I9[Z9ZR:8RU8Y99I9M^8W9HI9JH99I:87W:8IL:89a9_T9^T:8\\<9U<:8P^:8QV:8:@:8@@:8XS:8W]9JS:8MT9?7:8O;:8OP9\\::8SU9>^8M:8J=9HV9U@9T::8K=:8S:9]<9]>98P98@98;:8U_:8\\W:8ST9^J:8O:9JL9HX8_8_9TV9@H:8H`:8]O9ZH9>V9`X:8[N9JS9V\\9Ka9JL9PX9PS:8X79U]9PS:8X?9]U9JS9Y::8[]9Y>:8]`9JS:8NS:8WQ:8]I:8YH:89P9`_9JS:8I?9XO:89W:8^K:8X;:8I`:8J7:8RM:8^8:8JI:8N7:8K<:8K>9QL9PS:87Y:8^@9PS:8LZ8Y9>;:8[?9JS:8Z<:8M@8T:8MI9MX:8_7:8X;9SY9S[:8OY:8O[:8\\\\:8X::8OV:8_H9N>98S9[Y9[[9Y?9Z>9>\\9^V:8\\Q9>\\9YV9XM9XO:8@9:8_Y9_T9H`98W9>L:8NV:8:M9T=:8:O9SM9Y:9QR9PT9JS:8L`:8__9RS:89;:8RT:8PJ:8L`:8Z^:8P^:8_P9?U:8_R9[]:8?P9OL:8JW9VR9HX9\\M8Z9KL:8PQ8O9_H9][9[79:Z9>H9[798;9RN9RN:8YS:8@9:8?U9L^8X9WK:8IL9:798P:8a:9>H:8`a9>=:8a8:8aL:8`^:8aQ:8K9:8aS:8aR:8IL9:P99N:8aR:8aN9:P:8aP9QU9WK9PX9QL:8>79QI:89;9JL9SM9LT:89a:978:89\\9`U9L\\:8Y89:Q:8YS99@:8YS9>>9`U:8TH:8Va9\\S9>L:8\\P9\\S9I:9JZ9X^9WK99H9>H:8aJ:8a\\9>>9>H9:J9;Y:97]9>@:8YS9:L9[>9>=:9889:P:97\\9@\\9WJ:97`:987:97^9>=:98:9RM:98=:98M9>=9H>9RM:8a9:8a^9>=99T8\\9O89>=9IT9:79;^9:P9>R9^T9:P:87=9@\\9>R9@\\:98\\9:P9IT9`U9:J9=::97^9QW9><9><:98P9:P:99I:98^:98;9:P:8=<9><:97\\9>R9\\S99T9>79MS9>R9?::8XN9@M9[798=9:P9J79[78a9MS9J7:99S:8aK9>R9PX9:P:99\\:97]9>H98^9MS9@\\9J7:99L99L:97^:97\\9R8:97M:8XN9>Y:8aW:8XN9@>:9:>8W9:P9>Y9>Y9@a9=L9:P9R8:98@:99`:99@9R899P:97^:99K:99P:9;;:9:;:9:`:9:H9>=:9:T:99<9WK:9:W9:P:9:Y:9:[:9;Q9@a9=`9RO9@\\9RM:8XN9R8:9:V9?I9PX:99;9@>:98`:9:Z9IT9R89@>9:J9:H9MS9P?9><:998:99P:9<<9>=:8`a9IT:8a]:98K:8a\\9\\X9O;9`U9>_9Y]:8a=9UZ:8M99^X9QJ9MV:8JR9`_9PV99T99Q8M99T9JH:8_a8X8>99T9@H:8P<:8N?9P@:8TL:8@99VP9SZ8O9HM9\\S9UM8Q9aW9X`9NT:8IS9M>9S_9P[9>\\9MH99T8Q9XZ99T9aW:9<_99T:9=L:9=N9_O9Q[9S_9MH9UJ9MU9MW9Y@9OX9M]9O[99@:8HR:8QJ8Q8_:87I9LN99Q9?H:8IL98>9NQ:98Y9QM9I@:8<O9P_9Pa9ZM:9=T8H9WK:9:O9>H:8aY:98`9>=9MX:98_:9>^9];9>R9@M:99J:99O9RM:9?<:9?>9>=9?R:9;@:999:97[:8aK9@M:8IL:99W:8799@M9>R:99;9J79`U:9:?9[?9>H9=H9:P9@M9HX:9;O:98^:8a::99T:99`:9?M:9?\\9:P:9?^:8XN:9::9WK:9:_:99]:97]99N9>7:9@:9LX9><9H>:99L:9@M9R^:8KO9>H99[:879:8YS:9?U:9;H9>H:9:8:99U:98K:9>_9_H9QW9`U9>R9:99;;:9@:9>Y:9;@9J7:9?P:99X9J7:9:M:98>:98]9>@9H`:9?X:9:>9>=:87=9J79H>9@\\:9H8:9@::9<89:P:9HT9@M9O=9@\\99=:8=<9@M9HO9RM87:9?`9>=9XQ:9@^:8YS:9?Q:9?89SV:9:@9][:9@=:9;L:9@Z:9:9:98K:98T:9<L9:L:8a`9WJ:9>89\\S:8PP:9<U9>=9`\\9LT9J\\9\\X:87?:87H9PV9L@:87L:9>N:9=`:9=R9M@9I@9Y_9HZ9I89XZ9^Z:87I:8KO9`W:8@K:9>99MV8T9WK99Q9WK:8aY:97M:9>a:97J:9<L:98I9><:9?@:98L:99P:9?@:99L:98=9:P9;::9;<9WK:8`a:9<=:9JO:9<L9K<:9JS:9I;:99X:9;V:97^:98I9@\\:9H_9>H:99L:9KI:9?Q:9K>9RM:8`a:9;79>=:98?:9;I:9KM:97]:98[:98]9IT9^T:9I<:97^9XQ:997:9?`:99::8aK9IT9\\S:99?:9;L:87=:9?=:99L:9L;:9?H9:P99R:9:P:9Ka:9@;:9@9:9@\\:98V:99X:9?@9J^98S:9;L:9?S:9;8:9;L9NT:9L<:99P:9LW:9L?:9LH9><:9L99>R9OW:9LX9RM:9L`:9L[:98K:8XN:9989>H:9HT:9?=9ON:9KP:9;I:8aT:98U9>>9HX:8]H:9J;:9>H:8YO9Q;:88H8@9ZT9IM9U89VR:97U8K:9MW9>W:8>P9:P8Q:8>79L?9NM99T8V9?L9V_9U;9^T:9>::9JL:97J9`U:9JH9[_:8YS9`U9U]:9MT9J[9HL:8<]:9JJ:9>;9^T9>T9TH9HX98P9K>8L9J`9Va:9>Q98L9WK9SM:97\\:9MK:8aX:9K99:P:9?Q:9M?:98>:8aK9@\\:9?P:98X:9;79JW:9@^9WK:9K[:9?;9>=:9?[:9M<9>H:9HN:98S:8aS:8aY:9KR:9O>:9JT:97a9@\\:9H;:9KJ:99P:9O\\:9KS:98H:9OZ:9;Q:989:9O^:9LI:9KV:97_:9P7:9O\\:9JX9RM:9O\\:99L9O=9RM:9@U9[;:99;:9KY9WK98>:9P<:9>^:9MI:9JR:9KQ9>=:8aY9IT:9K<:9:K:9@:9:P:9@U:9JW9>=:9:8:99=:97^99N9];9><9aZ:9L]:9L?:9Q=:9L?:9LZ:97\\9IT:9H>:9P\\9XQ:9:_:9<J:97]:98I9IT:9LZ:9P@9>=:9QT:9@U:9PZ9WK:9J^:9?89?]:9;L:8aI:9LJ9HX9:J98Q9UJ:9?=9:P9=a9RM9[7:9:J:9QP9JW:9:@:9;Z:9HH:9Q]:9?O9WK:9IM:8YS9:N9WJ:8]H9SX9Q?9?=9QH9QJ9VJ9J`9`[9QJ9WK9\\S9:P:97Z:8aR:9J_:98V:8a^:9K7:8a::9;7:8SN:9S79WK:97M9\\S:8I>:8[\\9TH:88H9^V9_N9`U9TX:8]>:8]@9]8:8SU9];9HX:8;J:9SQ9[S9]\\9WK:8<O9:P9QT9_H99T9_H9><:9S`:8`_:9O:9_H:8aW:8aO:97]:8X9:9PP:9S8:9Q^:9P]:98L:8aR:9P`:9T8:99a:9@89>H:9L7:9T;:9Ra:9O9:8`^:97M:9RO:9TT:9O7:9TX:9TY:9TW:8aU:9TV:9RN:9T^:9Sa:9T`:9O7:8aR:9T]:9U9:9T_9Z]:9Ta9][:9U;:9TU:9U7:9U>:9U<:9UJ9>=:9T[:9TT:9UH:9JQ:9U=:9UN:9U?:9S?:9U8:9UI:9U@:9UW:9S@9RN9\\S9\\U:8PH8Y9O;9^T:8NI9\\<:9<S9ZT9O79\\S:9IW:9<X99:9R99\\V99T:8JJ:8J=:9<\\:9<^:8>799T9JT9IJ9IN:8NV8X99H99T:8::9@O9?_99T9Q_:9VM99T:8TK9IM9Q999?9WK997:97_:99@:9TK:9La:9W<9>=:9J^:9R::9<H:97^9[7:9JP9_H9MX:9WH:9L99><:9:R:97^:99L:9WR:99L99[:9@]:97]:9P[:9;79RM9MX:9W[:8aX:9@K9@\\:9WW:9K7:9WV:9WX:9K>:9LN9O8:9X;:9PY:9<L:9?Q:9QK:98K9MX:9XI:9H`:9;I:8II:8aY:9X;:9O::9K=:9WY:9O:9=?:9XT9ON:9XP:9X@:9XS:9X;:9W]:9MI:9MH:9WK:97]9[7:9X]:98H:99@9@\\:9S`:9W=:9T::9;=9RM99>:9WX:9QY:9X<:9XL:9JR:9XI9@\\:9@J:9;L:9YH:9X8:99P:9YR:9O=:9TI:9KR9<?:9?`:9KZ:9TK:9ON:8X99@M:9R^9>=:9Y`9>H9>@9[S:99Z:9TS:9O7:9YJ:9T::9TI:97M:9YN:9WI:9QP:9PT:9Z>:9XH:9;L:9W\\9NO:8aW:9<I:9MI:9UO9U]:8MK9L[:8TH:8]79Va9V:9U<98V9TV:8<M98U:8PK:8T[9^T9YY9?Z9^T:8TH8K:8N^9`U9JT9JO:8KO:9Za:8<@9UJ9JY:8LX9HX9SX:8PP8O8>9WJ:8IL:9=?:8LT:8^`9HM9PX:9N99HV:8;;9UJ:8LW9>L9WK99Z:9K8:9JQ:9WP:9?`:9Y=9>R:9Y?9>=9?\\:9;@:9WH:9O89[S:9:_:9K7:9YO:9@K9><:9O\\:9<>:9PH:9WS:99P9[W9RM:9WL9][9MR:8?I:9JS:9T=:9\\;:9\\H:9\\U9RM:9\\`:99L:9\\W:9PX:9S>:98W:9K;:9II:9QX:9K9:9:89><:9QY:99L9YH:9\\X:9]<:98X:9?=:8II:9]@9][:9]I:9ZO:9UT:9O7:9RR9SM:8@Z:8;^:8RZ9J\\9^T:9[`:9S^:98Q:9K8:9S_:98X:9UV9:P:9;T:9T=9RM9==:8aQ:9T89WK9[7:9SY:8a7:9TU:97M:8JS:9YV:9ZM:99X:9ZI:99;9>R:8aW:9QO:9Xa:9O::98X9^T:99U:9R8:9SH:9:H:9R<:9T=9>H:9^a:9II:9HO:9?`:9TO:97\\9@M9`U:9?Q:9_?:9TP:9IH:8YS:9R79X9:9O<:9R;9RM:98`:9_9:8aW9:9:879:98=:9T8:9RM9>@:9_X:9@::9:>:9@H:9Y;:9Ya:9;L:88H:9@8:9XQ:9@::9^L:8YS9:O:9SH:8<O9?^9?`9@79@998=:9[X9UJ9^\\9QK9H`:8VN:8<^9SR9HI:9YR9`K:9`Q:88[:87W:9SO9?U9RJ:9\\79>H99T9@_:9RR:98>:98Z:9KT:9a8:9QY:9T8:9XI:9TR:97]:9L>:9KY:99P:9L>:9Q::9JS:99N:98_:99P:99N:9KU:8a^:9QJ:9KT:9^S:9]V:9ZN:9Q89:J9<Y:97]:99N:9aH9RM:9aM:9aI:97^:9aQ:9P;:9ZK:9XR:9ZQ:9aa:9aU:9TR:9aY:97]:9Q@:9a]9>=:9Q@:9L=:98K9NR9[S:9PM:9K9:9X_:9UZ:8a79^T:8]H:9`@8J:8^I:8NU:8Q[:8=N9^]9`U:8YJ9RT9ZR9QN9QZ:9J7:8KU9?_:8a@9>H:8?::9];9[S:8XN:9T<:9?X:9\\>9WK:9K^:9?L:9K@9:P:88a:9P99RM::8Q::7::9`a:9aS9WJ:9aW::7<::7;:9L7:9aZ9@\\:9a\\:9L?:99N:9\\K:9XZ:9X=:9YZ:99P::8T9J=:9>S:9@T9O8:97M::7R:9UK:9<L9:N:9`>9?]9KT:8^I:9`K:8LU9^T:9`N:8V[9`M9K7:8PK:8TZ9J\\:9`Z9`?9MX9Y_::7W::7Y:8TH:8OL9]8:8U?9HZ9WK:8?[:9O:9@_:8a<:9a7:9^Y:9TH:9W^:9T8:9;7:9a>9><:9?J:97]:99L:::O:9O;:9?a:9OX::8X:9X[::8Z:9OI:99`:9aZ:99S:9WJ:9L?:8P?:9T7:99X:9NK:9YV:9PW:9KU9@\\9@M::;::9@89:J:9Q@:9@Q:9\\S9>=:9@Q::9=:9UR:9@U:9\\J:9Ja:9ZT:8aQ:8KO::7V::9O:9`I9>]::9a9>W::9S:9=L:8KO::7_:8J99\\::::9:8NW9QM9QY:9=a8=::8:9Q`:9@T:9K8::8@9Va9>H:8XN::8K9>H::8M:9QQ:9Y::9LK:9Y=:98O:99P:9]M::8U:::T:9;L:::V::7;:::`::8[:99`9aZ9@\\:99R:9;L:99L::<^::77:9;@::79::8Y::<Y:9XI:99U::<\\:99Q:97^::7I::=?:9\\?:98a:9X:::98:9;7:9?S::<R::7M::9>9>=::7P::9H:::H:9]W::9K9WJ:9^L9[S9[U9WK:88H:99;:9\\J:9M;9_H:9J^:9T@:9L?:9?@99T:9PK:::]:9<99O8::8K::;I:9\\<:9WI:9S:::=W:8a<::7U:8<O:8M7:8N]::7Z::;Y::7\\9`^9JN9?>:9IU9Y`:8]78P:9S[:9W::9TQ:9J_:99L:9]K:99P:9WR:::S:9aR:::U:9`^:::W::<Y:::L::<[:97^:9\\R:9L?:9P?:9UO:9]=:9899>=:9;T:9K7:9OT:9MK:9>S:8KO:9IX:8P79H`8^:9>N99J99L99?99I99M::?[:9;;9>H:9_@:9]P:9?a:9KX:9MI89::=@9WK:9N?9_H:9ZU9SM:8@99O]:89S:9`;:8Z^9?a:8@7:8I@99T9a^9VM:9=]9UN:9=N99?9UJ:9IX9MX9`U8V9HH9\\a9PX:87\\::@X9JL:9IS:9<T:9V<:9<V9`]:9<X9WJ99Q::@Z:8YS8V:9`]:9OW:9XT9>=9:;9;Z:::P::>`:99P::<J9NR::8I:9]@:9@W:98]:9^V9WK:9:8:9M<9><:9aK9><:9KI::>I:9KI:9KS:9KZ:::W9XQ::8H9_H::@>:9O?::@@:9PU:9KS9\\S:9aS9HX::8Y9H>:9^U:9@Y:9;J:9@V:97[:98]9J79SM9HY:9YZ:9_J:9@S:9OO:9LS9WK9=]::=R9:P:9JL9[S:9UO9:N:9NL:8Q8:8Z`9JO:8N8:97O:8TI9^T9U89T=:8@9:97S:8`L9UJ9X_9J\\:9^M9QU:8Q\\9TH9`U9HH9@U8J9WK9H`::=7:9^Z::999ON:9:_:9;7:9Y;:9aU:9?=:9]=:9ZI9:P:9^X:9;79:J9:S:97]:9WR::=H:9WR::9=::7O::9@:9J`::=V:9MJ::9K:8Z^:9O8:9JQ::?N:9S7:9\\M:9^Y:98I9>=::9<:9L?::8T:9O`::?=::99:8II::I?:97M:9I:::8L::HS:9:L:9P7::K^:99L::K`:9LJ::<W::=<::IT::<J::IT:9@H:9IJ:9Q8:9;@::;9::I=::IT:9Z>9:N98Z:9I7::H]::>@:98K::;P:9<K:8a<:9[V9PX9J`9@@9@P:8KO:97P9VR9^T::JR:9RP9RN::JV:8N;9>=::JY9>_::>]:9X<:9`a:9]=::K89>=::K7:9^Y:9ZN::K;:98X::K=::K?:9QQ98U::KJ::@?:9WT:9\\a9>=:9P?::7N9_H::=T::KQ:9PW::KS:9RP::IY8;:9UR:9^I:9T^:9;7:8X9::>L:9T8:9]Q:9^J:8`_::LZ::8I:9]U:9YJ:8a[::L`9WK:9NL9\\X:8_M:8OX9S]9[\\:9=<:8PT:8NV9U]:8Oa9RS9RU9?]:8O_8Y::O9:8XO:8<Q9RK9N@9WK:8UL:9];::KW:::a:9S7:9J^::II:9QU::<O::J_:9?V:9:H:9@U:98R::L\\:9HQ:9K?:9<::99K:::]:99L::<J:9\\Y::L7::NP:9\\;:9KI::=J:9KI:9@P:9WX::KW::@:::O^:9O8:9T<::8Y9XQ::NU:9IL::;R9\\X:9`;9PX98U9QS::9Y:8NK9@?:9`L:9[P9K`:8^N:8K\\:8HW:8]M9Z]:8@_9\\89QU:89Q8I9SP:9`S9IX9^T9RL::JX9P`9JL9`U::?W:9?79a[9Ma8Y::=[98[9Qa::N[:8_@::N]9L`:8O[9Sa9WK8?::IV::HO::7::8IL9ON:9Q[:9TJ:99L:9PR:9PL9QL:9X<9R89>@9IT:9aK9R8::>=:9aN9RM::>=:9?Q::R<:9@::9H\\:9;H9J79?:::OX:9IN:99P98I::Ma9:P98\\::8Z::RM9H>:9L99R8::8T::=J::8T:99L::RY::R9:9`7:9O:99P9?I9>@9R8:9T8:9:\\:9;Q9>H9>Y:9;7::S@:9;R::J\\:9TU9>Y9?R:9:L::N7:9P^::HT:9PL::RW:9M8:9?Q9>Y9>@:9H@:99@9>Y99W::SV9>=::S`::=J:9M8:9P^9RO::8R9>=99S::8Z::S[9:P9?R::RO9>Y::RQ::7:::TH9H>::SZ:9;Q::S?::ST::SH::SJ::MV::TT9:P9J<::TI::SP::T[::SS:9;Q99;::RT9RM::T`::<Y::TO::TN:9;Q:9H@:97a9>Y::U8:9O]::U7:98K:9@U::KM:9L?:9V@::U9:9LK::TP:99X::SH::TJ:8=<::TL:9LK::TQ9>@9@M:9HT::UV9R8:98I9R898^::Ta9>=::U`:9T7:9HZ:97]9T^::RS::T=9:P::RV::<Y::RM::U]:97a9R898J::Ua9:P::VM::VH:9LK::TS:9;H9R8::IY:9:a:97]:9T89R8:9<79WK9@>:9UR::V[::T^::VL::VN::VP::7:::RM::U=:9;H::W8::OS::W8::RL:9LK9@M::RO::U]9:P9HO::><:9^Y9O=:99L98H::RZ::WH:8S\\:8=<::WK::RR9M;:9_L:97a9H>:99_::V>::W]:9L?::R8:9L?98<::O\\9NO::>H:9L?::8K:9ZN9>=9SV::Q`:9@a:99P8S::UJ::R:::W9:9LK::W;9R88_::VN::XR::=J8]::XL::OY::OS:9:Z:9]N::S::9?X::TH::<H9IY:9^O:9;H9@>9ON99I:9^Y9]M::V=:9P=:9?_8R::VN::Y@::=J::XK::=J8Q::X99IT987::O_:99P::YP::=;::@8::WL8]:9JS8M::YQ9RM::YY::=J::J[9RM9NR:9>`::T;::LO:9HT:9TR9JW::9I::>M:8a7::@K::PS::PU:8<@::N`9:P:8NM:9799X`9HX:8Xa:9MX:8T@:9[X:9=I9[?9I<9^I9@O9IX::Q9::Q;9X7::Q=::QM9K99\\S:8W:9QT:97J::QS:8OW9S\\::QV::N_9WK999::P8:8aL::OQ:9_::99L:9\\8::<Y::OV:9K`:9LK::I<9M;:9RM::K>:9LK:9;7:9YP9>@:9O\\::=O:9\\T::=J::RK:99X::UY:9;L:9L99>@::P;:9L?:9KI::T;:9J\\:9HW:9H9:9H=::UW:9H?:9@:::W;9J7::[L::UH9>=::\\L:9?Q::OV:9_Z98`9X9:9RM:8=W::\\?:9_Z:9_`:9Y_:9Z?:9H@::UW:98<::\\I:9Z?9>@::R=:9HW:9_`9IT::S\\::O]:9]V::>I:9a;::@::9^7:9^<:9JS:9K>::?::97]::RO:9]J:9;H::]L9R?::[I:8IL:99L:9YU::T;:9Y`:9?Q::[_:9L7:99@9>@99M::Sa9:P::]^::R9:9@>::OS::Y::9]N:9?^::IT9H>:9?W:9;T:9Z9::XL::^8:99`:97a9J799=::VN::^N::=J:9YU:99L99<::X99><::T?:9YS9RM::^W::Z=9QU:9^P:8H`:8`P9[Z9Y>9Sa::PR9VX::ZH9KY::PW9@S::PY9P^::P[:8:K9>H::ZL:89\\::ZO::Pa9QS::Q89?S::Q::8X?::Q>9N@:8KO::MM9X`::QJ9MV:8P79^T9\\Z9?_::QP::QR9Q=::[::8_I::N_:8@9::Za9U]:8O[::_J:8]\\9@?9S9::^a::_<9SN9SK:8YV::Q<::`=:8:]9`_9S=:8PK9SO9UJ:8<;9P`9WK:97L:9Ya:9W;:9]V::=J:9YJ:9UO::T;9[;::X>:98K::XH::\\M:9R;:9:P:98]:9HR::L7::RM:8II:9J^:9:]::a9::XV::R99Y_:9X<9QW::WP:8aX9];9QW::<^::[Z9>=::<a:99X::aO:9@8::RO9QW9>@9J^:9@U::\\::9L?8a::RW::M]::<Y::aY::VJ:99M9UK::VN:;79::=S9ZR:98V::S<9?\\9O=9>Y:9T89?\\9?\\::TZ9?\\::SL:9\\@::]8:9HL:::_9_H9?\\:8P?::T^9?\\:9M8::T9::RW9MZ::<Y:;7L::XO:99@9?\\:9JN:9Y=:;8<:9L?:;7a:;7H::8a:9L?::]a::7::;889O=::RO9?\\::a]:;8L9:P9O=::S?:;7K::]8:;7N:;7U:;7Q9WK:;7S::VX:;8Y::T[:97[:9TU:;7Z:9QQ:;7U::^T:9Y=:;9::9L?::V8:;8R:;8T:;8R:;8P:9LU9?\\98`::]_:;9L::=J:;9>::T;:;8I:99L98]::8Z:;88::S?:99X:;7P:;8S::WU::]8:;8Q:9?Q:;889J7:9HT:;9I9QW:9L99QW98V::]_:;:;::=J98W:9aa9O=9H>9H>9TR::a_::VN:;77:;7::;9Z::TL:99@9QW9K;:9Y=:;:T:9L?::YS::7:::aY:;7N9a<9QW9QW::TZ9QW:;7T:;7=9QW:9HL::K^9>H9QW:88a::T^9QW98?::]_:;;@::=J:;:X:9?Q::aY::S\\:;:R:8aT:9Y=:8a9:;;J::8Z::aY::^M:8=<::a\\:;7=::WN:;:I::WL:9L?8`:;;T:;9Z:;;V:;7=:;8Q::T;::a`:98I9HO8\\::VN:;<=::XU::RW8[::X9::V[::^X9>=::V]::XN9>@:8=W::aH::TY::a9::QZ::aL9][:;;L:;9Z::S\\:97a9QW::YK::a9:;<]:99L::YM:;<V::V>8K:9WX9\\X::X_:;88::X_:;;::87=:;;<:9:H::Y::;;[9SV:;:L:9_L:99@9HO:;<U::RW:;=Q:99L8=:;<J9:P::HL:;<L:;=W:97^9:;99:9O88<:97^:9@O:99P:;=_::=J:9Ha:9T7:98X::RM:8>P:9;T::VW::R9:9XQ::W@9>@:8P?9:;::YW9@\\:9\\P:9?_:99L:;>P:99L9>8::=Q::IY:;7H:9P?::\\=:9;H::[X:99`:9<:::]:::YZ::\\^::YT::;J:9W?:9?`::XI9RM99K:9JS:99;::a=:;;;::IS:9X<::TH:8UL:9J^9@>9H`::>a:9JS99T:9XV9R89HO::K99VW9HO::a@::]8:9M]:99L9;>::XL::OL:9X<9[W9LX9>R:9YP9[W::KZ::aU::[T::=J9=I::8Z:;?a::aZ:8=<9[W:;<8:9@U::<^::OS9;?::RW:98]::<Y:;@H:;7<9[W:;@R::a9:;@W::T;:8OQ:9X<9aZ9LX:;8X9:P9aZ9aZ::TZ::=>:9__:;@`:;H;:9HL:9<@9][9aZ9P?::T^9aZ9<[::VN:;HK::<Y:;@]:;89:;H;9<]::]_:;HR::=J:;HM:;7H:9]:::OS:::[::7::;HO:;8N:8=<9aZ:;9]:99X:;HO:;8U:8XZ9aZ:;@_:;@a:;<S9>H:;H9:9Z?:;I<:;H=:9TU:;H@:;98:;H;9<O::]_:;IN::=J:9YY:;HN9:P9LX:;9W:;I9:;HP9aZ9<H::]_:;IZ:;IQ::XL:;HX:9L?9<>::8Z:;I7:;H[:;H;:;H]:;H;:;H`:8XZ9LX:;9`:9H9:;H_9:P9[W:98I9[W9;`::VN:;JN:9ZP9aZ:;?T:9O:9O=:;I<9TR:9Ha:;JS:8?[:;@M::VN:;@P:;@S:;IT::U<:97a9[W9;K::VN:;K8:;J^:;@^:9Z?9[W9[W::TZ9[W:;:a:;K>:;8_:9_;:9UR9[W:9K^9WZ:;K7:;K9:;@@:;J_:;;N:;JJ9:P9;Q::]_:;KX::=J:;K:::7::;@H:;;a:;@K:;7=::J8:8\\\\:;JS::WN:;KJ:;JW:9;H9HO9[W:99L9;I:;KS:;J?:;9[:;K`::a^9:Q:;@N:9LU:8=<:;?]:9Y=:;LR:9L?9;<::X99QW9=S:;>`9:P:;LY:;:O9HO:;<Q:;?Z::a9:97J::R9:;?_:;K]:;KT::^K:;KV9:_::VN:;M>::=J9:]:;?^::VN9:U:9XJ:;L8:;;\\9:P8::;H;:8`^:87=::8>9>H:;H>:::;9:P:;HH9WK:;KJ:::<:;L=:;KV9>H:;LO:98I:8UL:9\\]:9L?9Qa:9L?:;M7:9L?9O;:9L]:9<:9QW9;7:;LZ:;NJ:;N@9?I9=W:;LZ:;NO:9;W9?I:9`7:;?M:;KK:99L99R:;?Q::aX:;9Z9[W:;=\\9O89:=:9JS9HO:::Q:9\\]9NR:9S=:;7H:9\\`:9\\@:9H9:;;X9?\\:;N]9@\\9:::;N`::K_:9JS:;NW:;?Q:;:H:9?_:;:K::KP::aN:9LK9aZ::7?9QW99]:9JS::WP::<R:;?Q:98X::aY:;>>9VW:9K>:;ON:;:O9>@:;OV:;<[:9L@:;N9:;P8:;:Y:;OU:9JR9QW9R89QW:9aK9QW:;NX:;=Y:;PO::J_::aY:8JS:9;T:;:`::X99>Y::]<::>I::]<::UX:9a7:;>M9O899L:9JS:;=a9RM:;P`::=J99M:;O89VJ::9?:;<N:;O=:9;Q9>@:9<8:;>^9:P9=Z:;LZ:;QM:9KO::KR::J;:8SN::^^:8_Q::`H9QL::PT:9U_::_;::P]::ZM:8@]::_M:8:Y::ZR:9=H9HM9HX::ZV:8HM::ZY::_P::Z[:87\\9UJ::_\\::;a::N\\::[;:8OZ::`8::Z`9Sa:8=U::`;9S_::`N9Qa:8YZ::`@::`8::Q>::`K9H`:88[::`N:8]`::`Q9S?9S99WK9>:::>^:9a8:9Y=::`]:9^H::OO:98U::]S::a9:;9>::\\P:9`::;?9:;<8:9L?::SY:99X9@>:9:U:9YV9?R:9_@:99X:;7M:9I7:9:_::SR:9@I:9@K9?R:9\\`:9:M:99P:9]8:99P::aW9UT9>Y:99U:97a9?R:;LO::<`::RW:;HX:9@U:::O:;Q@:9;^::T[:9?Q:;SO::XO:97a9@>::T::;SL::8Z:;TM::TP::\\S9?R:;T8::]8:;<S9>R9?R:9T8:;TM::\\X:;<S:9:X:9Z?:;TW::\\]::T[9?R:9H7:;<M:9?`9?R::>?9J7:9WR::>I::?9::\\H9@M9]M:9J^:;SK:99L::[?::R9::TZ::7::;U8:;T9::T[99K::VN:;UY::=J::^::;7H:;Q?:9L?::]V:8aY:9HL::IT:;SU9>H:9;T:;SX:;US:9JT:99@9@>:;UR::RW:;VI:99L:9W9:;NM9J7:9WL::>I:9WL:9]=::OV9R?:9;T:9TO::[M:9HU:;9[:9HH:;U?::]<:9@>::>I:9@>::]L9T^:;S>::OS:;>:::7:::OV9TR:;UO:9?_::OS:;=9::<Y:;TM::Q_::T[:8<O:99L:;;^:;87:;7=:98[:8aK:88a:;SS:8RN9QW9JW:9:_:;;=:;SY::8P9J=:9K?:9L?:9N^::=J98K::8Z:88a:;WW:9LU:88a::WR:9Y=:;X=:;7H::K^:;9a:9?`:88a:;9^:;<7:;M<9?\\:;WO::a9:;XP:;XL9QW:;TU:8<Z:;X::8=W9?\\9>R:;XK:;7U:;;X:;7O::]8::TP::K]:;XM:9T8:88a:88a:;U<::]8:;XZ:;>]9IY:;7@::>I:;7@:;TL::TR:;?99?R:;WM:99P:8`]::R9:;O::9?Q:;X9:9_<:99@:88a::XZ::RW:;YX::T;:;O<:9L?:;<]:9O8:9M]::X_:8P?:;=;:9;T:;WZ:;YQ:9OY::]88N::VN:;Z>::=J:;YP:9L?::Y\\:;Y>9@>::aK:::P:99P:;ZN:;YJ9>Y9QW::RO:;TJ:;V\\9_U:;:=:;ZO9RM:;ZY:;SH::UZ:9LU9J78>::]_:;Za::=J::@>:;VX:;Z^:;VS:9@8:;VU9_U::]K:;UL:;<S::RO:;V[:;Y>9><::QQ:;=Y:;[O::^[9>>::OL::O@9S7:89@9>Z9RX9RZ::OH:89?::`K9\\S:9=@:9[Y::M<:8TI9`78K9TT::`S:97U9L[9>_9J\\:8<O9R_9_R::O9:;\\;9>H:97V9V]:8JM9>H::_V:97M::O8::OH9VM:98Z:;R\\:8?a:;R^8Z9>>:9`;9H`9_79]=9Sa8T:8=Q::`I:9[=:9[?9>H9JT9HT9X`::>_9QU9SM:;\\J::_T:88H:8?`9S>::`S:8;S9YJ9WK:;=;:9OV:;<W:99X:9^;:9WL:9_L:::<:9@>::=J::^8::`^:;]S:9OL:;]U::JT:;VP:97_:::<::\\8:9KK:9WX:9_7::J_:8aH::?P:9R=::PO:9O7:9YY:9PT9[;:9HT:9KN::X?:9PU::PJ:;]T::7;:9:L:99@9IT::OY::=J::OY:99L99Y:9YI:;^S:9a=:;?9:9ON::OS::\\L:97\\:9@O:9;M9RO:9?^:9:_::a=:9YO9];9H>::\\L:;@<::\\O:99X9H>::S\\:;M<9H>:;I_:9]9::RW:;_8:8aK::^>::L7:;;[:99[:9;U:;_;::X^:9Pa9M;:9O\\::>?9IT:::O::>I:::O:99L99@:;^]:;]_::7;::R\\:;^V:9L@::]_:9L\\:9L?:;`<::=8::L[:9O8:9>`:9OM:;W?::M[:9\\O:9;L:;8K:;@<:;8K:;`;::78:9TJ::8Y:;_Z:9?L:9PT:9?W::7::9_I9J^:9Q7:9@::;`N:9`7::<I:9MI:9R?:97]:;@<:;VM:9];::XX::IT::RM:;V;9M;:9K>:;_a9:P:;9<::>I:;9<::K<::?I9>=98\\9NO::N=:;`_::NY:9_::9KJ:9^Y:9OV9>R98T:97^:9;^:99P:<79:9]N:9>`::RO:;T[:;9Z:;`P9][:<7@:;OQ:;[R:<7J:;`>:9?8::L?:9?`:;:V::OS:;:V:99L989:9WX:;`Q:99X:9I=:9LU9>R::W8::=J::W8:<7W:<7Y:;^S:<7\\:;`R::W;9>R:<7X::V>:<8>:9];:<7?:8=<:<7H9T^:9OK9>H:<7L:;:J:<7N:<8M9>=99=9879MS:;S[9WK::Ya:9I8:;<W:<8Z:9@H9WZ9@M:;<?::RW:<8`:99L:;[8::LN:9MI:99_:9LT:9PX9];9@M:;>U9><:;Y::99P:<9H:9];:;`a:9_H:9@::;?Y::TM::OS:;=Q:97\\:;TX::X_9@>:9`7:9:_::SK:;W[9>Y:;Z@:9@::99L:<9^:99L:;=Q::TQ::WK:9L99>Y:;=Q::=J:<9T:8aK9>Y:;WU::SH:;_Z:;TJ::X_9?R:9`7:9:8::SQ::X99@M::@H::>I::@H:;>T:9WX:<9N:9LO:9@::;:8:97a:<9@::VN:<9L:9_>:;`\\:<:Z:9?]::IT:9RK:9];::^<::]Y:9LK9SV:9:8:<;99RM:9J^:9_I::9?:9Y`:97\\::S>:;_;:;_::9:I9X99@\\9R8:99L9=J:9WX9?R:9;Z9O=::TZ:8XN:;?X::L=9?R:;?U:9LU9?R9=T::]_:<<:::=J:<;X:9L]:<:]:;L[::VN:;L\\:9L?9=P:9M::879::TZ:8aY:9S\\::7:9O=9O=:;:8:;H79:P9=M:97^:;O[9RM:<<X:<<=::^I:9JT:9<:9>@9=]:;LZ:<=7::^;:;^S::\\a::<M:9LK9=>::]_:<=?::=J9<M:9K?:99@9J79=9::]_:<=N::=J9<Z:9WX:<;=::[^:<;?:9LU9>@9<a::]_:<=Y:<=Q:<=S:<=;:<=V:9]=:<=<:8X9::^@:9XT:99L9<N:<=K:9@::;HZ::=J:;HZ:<>::<<M::\\<:;_9:;J_:9X<:;;[:8=<:9_M:88H::]O9:P8@:8aR:9_9:9?^:9_9::^?:;aP:98K:;R79_H:8aY::^<::RO:;8Q:;Na:99P9<I:<=]9][:8aY:9HN:9?Q:;=K:;>Z:;8Q9J^::J;:8a<9^a8Y9_Q9_S:<8X:9K8::PK::7=:98K:9Ha:9QY9ON:9UO9:O:9RR:<?L:<?N:8PQ:8aW:98`:9XY:;`>:::J:9XV:9K>:<?W:8aQ9:N::M7:8P@:<?\\9_T:;[^::ZS:9[Z9^X:9N::8;;9WK:9WW:9PT::ON:9]>:<;J:9PS:9L?:;H>:9IH:9?W:;W>9PX:99L:9Q@:9O8:;U_:9?X:;U89>H:9:_::Y8:<==9@>::R_::K_:9P;:;SX::X_:;V:::MT::T]:9@I9];9?R::7H:9Q?:9K?:<7X9?R:9]::<7;9RM:;HX:8XN:<@`9QU9UT:9S::9Ha9>R9R8:;ZW::TM:;=Y:98=::>?::O^:;=Y::<J:9ZU9J<9[L:8P`:8LR:8IP9[>9HX:8>]:;RO9\\X:89U9ZU9ZP:<IJ9[K:9U]:8LR:;\\O9R@:8TP::Q>:9`L:8I_:8JZ:8^S9IX::8>:8L?9JH:8HR:9RV8Y:89K9>]:;RO:8<O:8_Y9U9:8;;::ZJ::Za:9^89>=9<L:9PU:9a<:::]:8=W:9K>:8aW:9^L::PK:9a::;`O:;`Q:9Y\\:9K9::LM:<JN:9YW:;^=:::I:;aH:;^?:9^\\9WK::9<:<>^:<=^:98=:9HT::\\\\::];9O8::I8::\\9::=L:97M::>8::L[:9X9::<Y:;_O9>@:9aK9>@:9X7:;>Q:99P:<KQ:<=`:9@89]M:<>8:;aQ:9<:9@\\:9Q@::>I:<@\\:<?`::L7:9;7::]R::<_::a9::^Z:<KU9J7:9;S:<;T::X99@\\:9M8::>I::T:::J;:9SH:<@H:;Qa:8TQ:8RH98V989:88;9I:8H:8RY9I]:8[M:8U9:<LQ:<LS9X@:8Q;:8R^::JI:97Q:;\\L:;\\=:89S9[?:<L]9W^9WK::8>:9KS:9:S9NO:97M::MU::K@:99@:9Q>:9Y=:9@>::LI:9Q99];:<;U:;LZ:9WU:99P:;<N:9aK:;OI::M_::9;:;`[:9KZ988::7;:9?W:<JU::I[:9R^:9P`::>_:9JW::L_::7S:8aO:<LL:;Q`:;[`::H;:9V;9NN::_X9I89MX9PX:9I[:9J?:9^P9IK:9J7::HI9K\\9M`9PV99@99Q98[9L@98]:8>H:9I[9MW::@X:87L:;[_:;9T9>H:8PS:9YV::=`::J7::KZ::[V:;>P:;V^:9L?:<MN:9\\V:9aa::]@:9;L:9PO:;`O:9a@:9QQ:97a:::N::VN:;`::9a`:;>;:;N9:9KW::I_::<K::@?:;^U:97^:9L>::=J:9L>::KX:9a8:<OO:9R^:<OQ::>I:9L>::;L::N::9]>:8aM:::]::9J::>N9RN9SM9ZM:9IT:8T_9>S:8Q]:9NW:9NY:9N[::XR:9>a:9NY9KH9KJ9KL8@9KN9KP::Q:9Q_9KU9KW:8<@9K[9^Z9K^:8K^9Ka9L89L:99@:8JK8[9XO99I:<NR9M?:8\\>9V]9I]9LL:8;N9LO9LQ9LS9LU99@9L99M99?899?:8JK::XV9>H::=^:8aK:9MK:97\\::NN::PH:<ON::@<:98`:9?[:<>R:8TR:97M9ON98M9RM:97M:9JL:8`^::`^:9RR:9NH:8]W::M89>\\:9>Z9WK::aM:<K_::`Y::HS:9\\=:;^I:9<L:<M>:<?Q::98::K=:;a>:97M:9LR:9M<::][:97]:::O::=J:;TH::`^:9ZS::NX:8aO:<>Q:9M]9QN:8QY:8QT:8QK:8QM9HX:8QO:8QM:9>P8J9U\\9\\X:8^\\:8L?:89T:8;M9P\\::ZO9Z_8J:87W:8LK9>_9>;:8<O:<SY:8LO:;RO9]8:9J=:;<a:;MX::HN:9`9::L::9@?:9^Y:<O^9@\\:;<N::=J:;Q?:<RX:9O::;IZ::MS:;a`:9UR:9OQ::NQ:<?P9>H:;HX:;PV:9TK9:99IX::II:::\\:<O[:9Z?:9XI:;9`:9T=::H\\:9T?:;`\\:<JS:<U<:98J9IT::^N:97]9H>:9`7::N=::J;:9NL:<LM:;[`:<L_::ZQ9V9::H9:8;7:9UN9JH9L@:8NV:8aW:;UY::HN:9Z>::8J:9K9:;`T:9W_::[`:;LZ::^8::Z<:9?X::79:9J]:;?:::a9:;8@::T;:9HN:9:Q:9K9:9;K:9R^:9:_::VW:;_@9RO::8T::=H::9<::Y=::OS::^Z:<VN:<M?:;_]::[T:<VS:<V:9R8:9L>:<P=::RW:9QT:8aY::S:99T99X::VT:;`O:;<N:9R^9?R::^<:9;H:<H>:8a^:;UH:;`O:;`K:;L7:9WR:;VO9];9R8:;`K:;@<:<WR:;W::<9R:<VY:;_P::KV::a9:9WL:99L:;8@:99L:;8K:;aR:;UI:9L?::KM:<N;:<PK:9TQ:9SH:<?[:8P<:<?]:89?::_T:<US::ZT:9[[:<@L9P9:9^L:9W8::<>:;^S:9W^:;L7:9W^:9L9::SS:<MM:98K:<T^:;_;::8I::a8::OS99J::XW:9WM:;_[::S]:;M^:9Y=::P=:99P:;7X:;?R:;989ON:<W]:<X7::RW:;8>:9YP9J7:;8>::=H:;8>:9O8::UL::X]:9LK:<@a:9;H::K@::VK9:P::\\L:;_7::RW::T8:9YV:<9V::IT9@>:;_=:9;Q::[V:88X9:P:;8>:;@<:<YU:9Ha::SS::S\\:<7X9>@:;8>:<;V:99P:<YU:9;K:9?^:97J::?J:9?X:;>\\9[8:;W^::WX:;aL:9L99H>:<Y9:9Y=:<Z`:9L?:97Z:;NM:9;a:<MS:;^]9[7:;a>9[7:<V9:;N]9J7::U@::=H::U@:99L::UN:9];:<?R::<X9>=:<?U:<PJ:<UQ9RN9`7:9ZX:8MN9>W:8IL:9Z\\9\\S9MU9N\\:8S;9>=:8S=:8OX9Y?:<RQ:9JI::JT9>>9\\S:<\\8:8S?:8SK:<[`:9R]:<JH:<?;:9]<::OO:9K7:::S:9?=:9HT:9S9:<7N::S`:<TI::=M:::H::I?9][:<MI:9:H:9X?9][:9XK:9_::9QR:;9Z::V>::>=:;^R::L;:;`O:9JR:9Q\\::LP:9MI:;a::9JW:9X?:97M::RY::LO::YU9[S::LS:<U:::@?9WZ9IT:;^\\::V>:<]V::Q]:9WS:;M<9IT:;MW:99L:9<@:;^[:;`[:99>:9R8::7U:9^`:;^H:9_8:<RK9WK:9;T:9QP:;QP:<UP:<@;:9MM:<\\;:9NJ:<[^:8SL9VJ9J>9[Q:8M79JL9H`:9[N8H9Y7:8`<:89;9U]:<^S8J9R=::@[:9JK9UJ9J:9HZ:9`<:9U\\:<N?:<XP:<@K:9[]:8[M:<^N:<\\J:;M`:<\\L:;S7:;a;::RW:<]J:8aS998:8aR:9J^9_H:<R8:9K9:<TS:;@=:;aa:;>P:;`8:9L?:<OV:9]7::P?:9Sa:9]>9ON:8XN:9MK:<MO:9]N:8`^:;^7:;Q@:<R?::N>:;M[:9@9:9XQ:9_M:9[V:9II:9_9:97M:<>T:8`^:9_99][:9:J::?@::8O:;TH:<_[::8Z9^T:<7R:<7H::V>:<_\\::aV:<88:9P[:9?89IT:9]=:9?8:9?T::IW:9TJ:<;O:9TP::7::<=<9?::87=:9Z;:9HS:9H9:<U=:;[R9:N:8a<:<^L::>\\:9M=::Y>9><::\\<:9J[::=L:9I@::<@:<8H:9]H::L]::?S:<R]:9OX:<]<:<V@:;a>:9]T:<a]::8?9_H:<\\Z:9K8::H\\:9IJ::H_:<aN:8a<:8X9:8RH:8PH:8`L:8PM9]?:<?M:<XK:;Za::YU:<@P:;<W:<R::;NR::NT:9JS:;S:::?T:9SH::_L:8`V:9S^::`T:;RO:8;=:8;?:8;H9^X9]>:8LH:8;O9_H:8S`:9N_:9\\9:<7K::<^:9S:::P7:<\\W:9KZ98M:9^Y9@M:<U?::IM:9TK:9Z7:9M<:9HS:8a^:9ZK:<I;:8aS9ZR:8U::8UI:8UP:8QM:8V@:<LU:<T?:8U=9\\S::@M9J\\9K;9_Z:87;:9=W:9=Y:9=[8]99T::@R9L@99T::889M?:9<_:9<[9>K:9=\\:=9M8X99T:9N]99T:=9T:=9K:=9V99T:<QI9XO:9V^:8;^::@Z:=7^:8XR9Qa:8H7:87;:9N\\:<SV::7a:87;:<SZ:=8=:8I::<T::=:H:<T<9Z[9WK:;^\\:9Ya:<OS:<_L::OS:9?@:9YP:9JV::]_:9JZ::?8:<aX:9`^:9OH:::H:9;T:<XX:;]]:<JK:=:^::OR:<S7::L=:=8W:9^Q:;`O:<[?::Q[:<;L:;_^:<]Q:<];:<8N:8=<:9TR9?::<]K::L7:9?L9R8::Z9:;>Q:<[P::98:9?L9>Y:=;U:<9V:=;Q:9X<:9?L9@>:=;U:<:L:<[V9QU:=9;9PH:<M8:<XO9HM:=88:8U7:87W9\\X:8Ta:8;@:9=98=9SZ9IO9JU::@Z:8;S:8=U::MO:98>:;LY:9XQ:<U?:9Z::9TU:9QP:9YO:9a8:98=::=H:9J\\::HW:<P@:9Z>::IR:98`::H^::>J::97:;8[:9H9::;;:<R\\:9RP9H`9`K9\\L9\\N9\\P:9U_9\\H:8T;:8`^9[>:9SS9^J:9SU:=8;:8PN9]H:<^_:9>;:8[[9?=:8=\\:;N998?9[;9^::8S[:8a;9>Z:;N9:;:;9>H:9>]:=;W:;`>:9YL:9L9:<]Q::=J:=:Z9RM:9WR:<OO:9Oa:9_a::VN:<MT::[[:9HI:<JZ9:P9;U:9^Y:;WR:<L8:9YK::I_:9@7:99V:<7[:9?`:9_Z:<:Z:9@N:9O::9<O:9@:9]M::Y::9_I:99::<a;:9N`:9HJ:;?I:<aI::[U:9YV::\\Z:9X<:9_I:=?79_U9><9@>99T9O;::\\\\:=?=::;>:9T>:=?J:=?I:9?_:9`7:87=9@M::a=:97\\::\\\\:9X<:<K;:<a?:97^:;T\\9O;:<=<:=?Y:<=<:=?@:9?_:=?]::VZ9WK:9?[:<WP9>H::Ia::8I:9JL::8I:<?X:<>Q:9`Z:9SQ:8KK:9ST:8]<9^Z:=@Y:8\\O:<^`:8IL9LT:8S@:8`^9V<9V?9V@9VI:=@a9RT::_^:;8`:98V9<R:9XT:<RH::HS:9Y^:9a9:9@:::[S:9_`9WJ:8X99>@:9Y[:9LK::[_:8X9::R\\:9`^9>=:9;Y:<YY::\\^::VW:=HY::L[:9T8:;;[::IQ:=H\\::IS::SM:9Z;:9OR::SI:;a^:8`^:;`a:9UY:8aO::7U:=@X:8]?:=@Z:==U:=@\\8Q:9SX:==R:=8H:98V9<\\:=HK::NQ:9M<:=HN::8X:<8\\:;a_:9TO9][::]7:9TH:;_::98`:=?a9_H:=IJ:9^;:8a\\:<>Q::PS:9=L::9Q::>T:8=X::;[9UP9T:9^_:8LY:8J<::QO9][9>998X:8S[9<H9]^:9V::8IV9^T9RJ9I>9UJ98J9YO::OK:<K`:9J_::8W::L7:;^_::7?:<MX::]O:<`9::<T::O^:;N]:;UM:<[<::R`:::X:<]Z99N98Y:97]::8T:;S]::8S:9P;9@\\::IO:::W::UQ:<M@:9I7::IH:;a_::J9:<XW:97^9]M:<V>:;QR:<[W9O9:<[Y:9ZZ:<[\\:8K;:<LO::M9:88^:8VK:<[_::M;::_S9@I9_O9?7::OI9@I9Qa:9]_9KW:=7a9[K9`U:8?@:9NM9>K8S9N<9?Z:8<O9X]:<[`:8KL9>V:8KN9H`:8K::8^X:89S:8YR9>H9899[S:=JV:8RN:8U`9\\O:=LI9T=8K9PU:8NQ:;N998:9WK:8Z^9:7:9WW:9TM:=I^:99:::]9:=J<:9^Y:8=W:9LT9><:<UL:9_I:<UI:<;9:=8X:9_\\:<V;:9@8:9aM::8`:9P;::IX::L7::\\\\:=?U::\\H9J7:;T\\:=NL:;9Z99T:;@P::\\\\:;L^:9H9:=KK9WZ:8aY::]X:98X::\\\\:9I>::[R::L=::O[:;?V:;_O9O=:<?>:9@8:8=W:9PR:=J7:;[R9:M::7U:8[?:8[H:8JK:8[J:8;99J[:8[M9H`:8[@9L9:=OI::O>:;RO:8YS989:=MR9WK:<W?:=>\\::K;:=>`:<\\P:<:Z::II:;SH:<U;:;U?:;MY:9K\\:<@U::8Z:9@H:<a7::\\H:9XI:<;>:=7?::Y::=@;9:J:;Ra:9HY:;W^:9PJ::RW:9<@:<9O:9M<:=O_:9_<:=Oa:9<@:;@<:=PP:=O]:9?`:=PS9>R:=P?:9I7:=PH:9@8::S\\:;SR:=P7:9Q>:<]^::RW::<S::9=:=IJ:9P_::7Q:;SI:<X@:98Z:<>Q:=<=9QL:9[\\:9N;:;[a:8Va9^T:8=]:8N^9\\S:=<M9`X::QP:8@99?L:=QS:9SY9[>:8YS9IX:=I?::JU:8T@9Ma:;]:9>=:;]<::QI9>H:9<Q9\\a:9[@:8=R8I9NN:88H9UZ:88P:8N]:=Q\\9U<:8_]9YY9Y[:9<R9\\S:8_]:=K7::HN:9WH:<\\Q:9T>:9OX:9Q_:=>[:<]Y:9Q8:<V79WK:99;:=?O::I^:=R`:9^7:::?:<W_:;`>:9?=:;KU::I7::]_:<Y@9RM:;7X:=S>:=:]:9]>9J^:=7=:9IJ::]O:;QP:<J[:9ZU:<\\V:;M<:=?9::V>::OY:9aS:<M?:<]N:<V9:9aK:;^W:;LZ:;^Z:=:[:<a^:9@W:9LJ:9QL::LM:9@7:9?W:9:@:9_L:9^^:8a:9RM:<`O9_H9MR:<WL98R9UJ::_I9Va:;?V::H\\:<Y=9>R:<O`:9L?:<P>::Q`:98`:8`a:;a]:9@7:9QL:9?8:;_Z:=HQ:9@X9PX:<;>:<[;9:P::@>:=I>:9>a:<]=:<`?:=IL:<PM:=L;:8H9:8YJ:8Qa:8RX9HI:9]]::^^:8Q:9ZO:8R^9\\K::;V:8[::8@R9WJ::7U9Y_:8KL9KY:8W_9Z;:8L`9`Z:=OK:9[^:8RX::;`:8H?:8?\\8N:=UT:=7T9>>::9^::;U:8H9::>S:9`M::;[:8IL9UL9I@:88H:<LV:=<O9I@:9]Z:8>7:9]\\9I]:=MT9WK:;Q;:9S_:9U7::NM:=HO:9?=:9T7:<\\T:9a>:=S<::RW:=T9:=>M:==H:<@N:9UR9:P:<_P:9O7:;]S:=>P:;KL::a9:<P>:=WN::L7:<?P::K\\::=K::V>:=WR:<\\=:9]=:=IH:9^=::HO:<_R9_H:=WL::;Q:9O7:9=P::OM:=7<:<O=:::]:<7R9><:<]::9L?:<]::;]W::>^:9WQ::]_:=>S::HP:<_^::<W:=W9:=SY:;;\\::V>::\\:::?M:;S<:9:H:<_P:<`>:9WL:;WU:9_O:=XZ:;`O::;N:9K9:=X_:=>_:<OY::J_:9L<:99`:9R8:<`K:8II:<`Q9WK:=TN:9R^:=TN:9?^:<P<9>=:=X_:9?^:9ZU:==J9WO9X;:8L`:=U_9Ya:=V79>K9Z<:<\\I:9[L:=VU:=US9I]:8L`:=VY:8RP:=Y_:8R[:=V::8[L9V`:=<?:8;@:9Z[:=L?:=OT:8KO:8Pa:;Q_9X>:<S\\:8I::8YS:=MS9>H:9N^:=7U:9R]:=:S::LO::O`::RW::KM:=XJ:9X<:=XR:9\\;:9WR::=J:=XN9:P:=Q<:<`<:9LU:=X?::]_::RH:<YH:<_^:9P[:9O<:9JU:9a7::V>:;7X:9]L:<_^:8IL:=[I:=Q<:9L?:=[8::@?:=Z\\:<]S:<MK9:P:<[7::=J:<[7::T;:9UR:=X_:<?_:=P8:<RY9><:<Z7::=J:<Z7:<X9:<_^:=X]:<]Z:9\\;:9;?::RW:=\\@:=\\;:9]N:=:X:98V:<R:9XQ::?Q:=W^:9S>:=WK:=[`:<8Q:<]Z:=:R:97^98O::VN:=\\Y:=\\K:<a>:9?X:9\\L:=X=:=[::;aS::]_:;9<:99L:=\\[::7::9_L:9UN9O8:<WL:9_O:9T=:9;\\:=<]:=H[:9TI:9:>:<H\\:=]L:9?8::VS:9?8::IY:=KK:9TH:9_I::VS:9_I:=?U:9_`:=XL::YU:=S9:<KV:=]L::\\\\:;T\\:9_`:=NH:9Z8:=I<::\\^:9HK::\\`:9LK:=]Z:9?_:<OT:=^::;SK:9;L::^H:<JY::\\?:=UK9>>9OW::9?:<WL:9J^:;;[::R;:9XT:9]=:=@M:9:L:9R8:<I<:;W?:=TN9][:9_9:98`:=TN:97M:<>X9WK:9_9:9R^:<`M:=_;:98N:=_?::]H9>=9?H:;<K::=]:9X@:=I;:=H]9>H:<H8:9TH9@>:;TJ:;T]:;<S:=^[9P]:9?=9R?:9_S:=YI:8aS:=^a:=_]:9a8:<^<::\\^:=`7:;W?9>=:=TN:9_R:9??:=_H:9K9:=_<:=@N:;<S:9S\\:<UN:8aL:9UO:=O>:=UM9_Z::;V:=UP:88\\:8\\]:=VH:8KJ:8Q8:=UV:8[=9U\\:=UY:8H9:=U[9JU:=U]:=L:9?;:=V;:8[M:=<R9[K:=V=:8NZ:=V?9>I:=Z9::JS:<8Z9QU:=VL:9`H:=VN::;X:=VP9^]:=VR::JM:=Y^:=`V:=VW:8H`:9][:=a@9WK:<O:::]`::NI:=Va:8a^:=I]:9J_:=W::9J_:=W<:=^H:=W>:=ZY:=WH::9?:8`^:=Wa:<]<:;^=:=WV:<]]:9<?:;^<:9aT:97M:99U::`Z:9@Q::=J:9@Q:=Q::<`::9KT:9^::=7T:=W]:9X;:=W_9][:=Wa:<SI::7J:=8I:<aY:=\\_:9\\N:=\\a:;]Z:<OI:>7<:=]<:8aL:=X_:<]<:<R?:=RZ9ON:=X_9[7:=Xa:97M:=[^::[@:9a8::KX::O^:<`J:8a::=Y@:=WJ:=`<:=_`:9TJ:=WW::<V:=YO:=\\T:=^P:8W\\:;Q]:=7_:=Y\\:8T[:=aS:9]]:=Ya::_?:=Z8:=aT:8H::8[K:=OL9V`:=a:::MK:8OR:=89:=Z@8@:;N9:=OU9`U:=ZK:==Z::@]9HP9>U:8>@:8K@:=ZN:8TM:8<[9ZY:;RO9^T:<_79>W:=ZP:8VU8]:8VW:8N\\:8SP:9PQ:>7`::[@:9?=:9\\;:9?@:=>K::RW:;TH:=Z[:=XS:<`V:::Q:=[?:>:@:<==9><:<KQ::=J:<KQ:=[\\:=W`:<PJ:=X::=[O:=:S:<Y_:9L?:<Y_:9WL:9QL::P9:>:^::VN:>:a:=[T:=Y;:=\\V:=\\P:>7Z:=\\R:=X_:8aW:=;7::>L:9\\;:=\\8:9L?:=\\::99P::W_:<W_:98`::=a:<\\[:=\\`:=[I:>;S:9L?::W_::]L9XQ:<H8:=IJ:=]H::IK:=]K:9TH:9XI:=]N:<a>:9T8:=]Q:9Z?:=]S:::@9@M9J<:9_[9@M:9HL:=@9::\\[:=]_:9TN:9@8:=O7:;>a:;?I:=@;:=^J:=]L:<=<::WM:=^<:9;H:=Ha:><J:9^79H>:;=;:=J;9[7:><N:><Q:<U<:>=::9;Q:=HT:;I=:=^>:=^=:=I?:99V:><_::]8:=I8:9?_:><S:9;H9><:9S=:;;[:9`7:;aN:9Z?:=@M:><Z:<W@:;97::SN:9TH::SH:;=;:<ZY:;^?:9T=:=^N:;a_9@\\9PX9WZ9@\\:;X?::=J:;X?:99L:>;S:9XY::IO:=;9:;W\\:<7J:9:>:==;:<I:::;R:=X9::]W::>7:=HW:;_X:=^X:98X:;;[:=_X::@K:9TP:=^_:=`?:=`=:=aI9>=:=_>:=`9:=_=:=_@9IU:;__:9K9:;aL:>=M9H>:8aW:<9[:>=\\:9;Q:=P\\::TX:=_X:<S=:9@Y:>?7:=`;:;]?:>>a9RM:>?9:=`8:>?R:9TK:=`9:>>_:>8Z:=_8:=`?:8aW:9?[:<:Q:=I?:8a`:;[R9:L9Y_::=Z9_H9[U9[S:8?Y:8KO:8VT9]U9HV9XW8J:8S8:8];:<S^9IO9Z`:>9O:=RO:8SN9a\\:8SQ9a^:8YY:8;8:=Z<:8;<9?]:>9N:88H:8<W:<IV9?S:<T=:8Z?:<_H9>=:9R`:=>?::@@:;^T:<][:=:T::>::>7;:9a^:>8\\:9KR::H[:<R]:98]:<N898W9NO:<_N:<]N::QL::8N:99@:;Y=:9Y=::9<:;X::=HS:>HP:9;I:9@X:8aW:>HR:9@\\:9]N::LQ:=>U:<;;:;XM:<8Z:<>K:=Y9:;_Y::XN:9QP::TQ:=T7::=K9H>:<9[:9HT::[_:=KZ::OY:=;T:9H9:<;P::IQ:;_V:>=?:=O89H>:=NN9RO:>IJ::UR:9;L9J^:87=:>IN:97]:>IP:9;Q:>IW:9?_:><J:;_M:9?_:>I\\:<;V::VX:>I_:9:=:9_;:>J8:<aK:9LK:;OP:>J:::\\::=?`:=?M9:P:8`a:>I::=^P9:O::@K9a>9T@9@=9`_:>@K:8S7:8S9:8T[:>@P9SS:<S`9UJ:8LL:8^a::QM9a]:8SS:89>9H`:8WZ9^@9_N:=Z;:>9I::Z]:8?;:<IQ:8S<:8S>:8]R:<_@:8<@:=V]:9ZL9][::IR:97M:9@`:97_:;W;::K[:<=L:>79:;^Y:=N@:9_::;SH:9HH:9HX:;98::RO:=N7:>K_:=KW:;>Z:<;99J7:;SH:>>9:>LJ:9?_:>LL::\\H:<MR:98I9J7:=SM:::^::RW:9@Q:;SH:=XL:>L=::WK:>L=:9P?:87=:9Q8:9M@:>HL:;[R:>JZ:=`a:8OR9[O9UZ:8:>:>9L:8V:9^=:8WO:>KL:8U^:88H9\\P:8\\Z9HJ9N7:=QX:<\\?:>KT:=H89]`:>98:8^J9_=:8V89_@9>H9:X::QQ:<_I:;a`:9PN:;S89_H:<J_:<UL:9?L:<UK:<JV::WI:=8U:9LK:8=W:>JL:=HL:;a]:;a_:::@:<]N:>>`9>R:=Ma::M^:>NQ9>R9>Y:>NQ::OV:=M^:>79:<N9:9MI:>NK:<8Z::8I:=7?:9UM9:N:8a`:>J\\:8Q]:::<:>@V:8SR9?V9NY9L[9aa:8OY:=QX:>9K:8KO:=<J:87W:>@_9]>:=ZK:9`;:>KV9KY:;8[9WK99W:<aZ:8X9:>NN:9TJ:>N<:;SI:9a>:<L<:;LZ:;<N:=@8:<;79_U::\\\\:99;:<=<:>HM:9?_:=YM:9@8::a=:>L=:9@\\:>L=::XX::@>:=S;::J8:>NL:>JY:;[T:9V79I>9IX:=\\Y9X>9OY9M^8N98^:8WY9^>9^@:9V^8K:9VP9SY9V^:9VT:9VV:9VX::QN:9V[:9VZ:8Q_:>PX98^9PS:>KK9HJ:9V^:9ZX9LQ::@Z:>O89TH:>@U:8SP:>O<9\\_:=@[:88H:8V79_?:8U^:>KN:9[^:=Z>:=8::9IV:=8<:>9[:9SY:8SJ:>OJ:=L>9V;:>@=98[9\\H:==S:>KS:<\\9:>MW9`K:>QI9^H9^J::_89ZK98Q9\\;9HR9`K:>RP9>_9\\>8U:8HS:8T`:8;?9WK:=8P::HN::LO:=S8:9MI:9;T:9?L:<7>:>KZ:>H^:8aW:;:8::YU:;[K:<VI9:7:>9\\::IO:><[:=I::=?^:=HH:=@M:=Ia:<Y[:;TY:=@;:>=>::IO::J[:<=<9@>:=Ha9H`:8X9::R@:=HH:>?a:::@9@>:<<Q:=^?:>J9::\\>:;QH:;>Z9J7:<;_:<K::;7=9RM:=?L:=I`:8aY:;`a:>H`:;]Q:=H^::WI:8=<:=HU::]8:>S?9M;:>SH:9?_:;;[:>SY:;KK:8X9:>S\\:=I?:>IO::\\^::O[:=Ha:>SS:>TT:;<S:>TV:>SX::ST::=^:;U=:>U8::T[::X\\:>I[:>Sa:9LK:;PX:<?@:;;\\9IT:>J::;X:::=K:=N9:9LU:9H[::]_::^P:9L?:;:V:;N]:88a:;aT:9L?:=]9:99P:<7T:=NX:>S8:9LK:=7K:;7=9PX::[O9R8::OL::W@::V[:99;9>Y:9M]::WN:<H89@R:87=::V_:;>Z9H>:;IU:>VM:;7=9JW:9:8::O[:9]N:<;N:=?J:>Ua:;XT:9^M:<VN:>V;:99X:=@M:>SV:98]:>V?:;_;:=_R:9_;:>VL:9HT:>VN:9;H:>W;:;7=::PM9_U::XX:9IH:>;U::\\T:>:>:=^O:>@9:9JN::_O9@S:88J9W\\9U\\:8YM:87`:9IX9?7:8<U::;Z9^]9WJ989:8YU:>QQ:>K@9?V:89>9aH:>QR:>@X:8U^:>OJ:>Q\\:8H`:8;J:=:J8H:>RM9:P:>9H:8;;:8;P:8;R:8Y`:8H::8Y[:8=U9]J:>R>:<\\7:>MT9[S99P:>XU:>XK:<^O9WT:>RO9>K:>RQ:8__:>X_:>RT9Q9:>RV::`I:=<J:>9O9U]:8Z<:8ZN9O7::>P:8Z@8W:8ZI:8O?:8ZL:>YJ:8ZP:>XI9_H99L:8R@:8ZZ9NM:8ZW9XT9SM:>YU8W:8Z\\:=QP:<UV9:P:8TK:;\\>:9SI9_W9W_9?]9[O:8TP:8WL8X:>RJ:8W7:8V]:8XI:8TI9`U:8]_:8_T:=ML:=LN:;]H9>\\::ZP:=JS::?T:=LM:9>[:>?S:===:9M=:==?:9S7:<?J9RN:=:9::Q7:>ZW:<TS:;^N:>Z[:<@;:<Q^:;^P9[S:<\\^::Q[:<]N:<<X9`U:>SJ:>WN:>=<:;H:::\\\\:;Y;:<8]:8S\\:=I^:>LU:9_`:=U<:=^8:><\\::\\^:9N`:9^7::IY:9HP:9?_:>JO:>LK:9YV::O[:98V:=8P:=?X:::@:>=H:::@:>U?9][:=N_:;TY:><I:=O9:=NU:<]8:;9[:9H^:;7=:>L?:;L`:9O8::^J9:99=_:9@::8P?:9R^:>La:<T[:=HH9@M:;MU:9_`:9T=:>=>:8OQ:9T8:<=<9aZ:=Ha:;>W:>SO:9TH:=@M:8UL:87=:<;P:>JO9J7:>TN:>T9:9a7:8II::QZ:>I8:>\\X:9KR:<8Z:9^P:>K^:>I>::\\^:>\\_:><[:>]7:>[Y:>SL:;KK:=^:::VW::\\V:=P7:;>K:>9\\:>]V:>>U:>]X:=@K:>]Z:9\\8:>SN:>]]:9_`9YH:;>K:>]U:=:]:>^8:>\\;:=I@:>TV:>^<9WK:>]?:>SP::SU:>^H:9LK:>\\_:=8P:>\\a:>^L:>[X:<WM9_H:>^Q:>]^:<W?:;<P:>T7:8P?:8II9S::>]N:>OX9:P:=:Q:><?:9?`:>>R:>I::><K9:P:=SX:=\\]:>\\9:9Z?:8a_:8a::8=W:=I::8aW:>[`:9^7:<^9:<7J::8X:9^[:9?`:=^R:9IH:8aW:9@[:9@8:>S7:>_X:99Y:;`I:9?X:>WN:<ZX:;a_:<W]9:P:>_^::OY:>[7::T?:9L7:<^8:=TL:>?T:=_a:;>Z9@\\:9;;:9^]9MS:=XR:9_P:>`N:>[7:9JN::Z;:;QQ:<@;:<@O9_I:>XP:8X?:>W`:>@W:>KH:=@[:>X9:>Wa:>QT9^J9QL:>XL:8[M:>X>:8;I:>Q_:8LI:>YQ9][:8;Q9QL:>XR:8;`9_H99=:>XZ:<\\@9@H:>XX:>XZ:<[_:9[L:>X]:>RS9X`:>Xa9\\<:>Y89\\?:>Y;:8;?:>@S:9U::<UU:=ZL:>Y_:<M7:<[a9\\T:<IS9[?:8TO:8<Y:>Z=:>Z?:9M]:9`W::Q<99>:8HL:8\\Z:8@O:=a@:>Z@8Y:8X<:8TI:8:I::Q<:<M9:8VH9N@:9`a9QU9H`:8VV9Y9:>:<9Y<:<\\K:9PT:9^9:;\\R:=7;:<aa:<]H9RM:=7[:9K9:<>Q:=97:8VI:8SS::ZJ:9U^9TH:=LT9KY9[S:>aR:<XM:=LN:>X=:>@]:=<@:>X?:>aI:=8>9_H98X:=S7:<XV:9OL:>>K:;NR:<]N:>TH:;^S:=??:;a7:<9P:>I;:;`O:<S9:9@8:9XO:==<:;>Z:9ON:>S7:=T<:9@::=KX:9?R:9?_:=?V:;[@::]P:=@?:=>Q:>UO:=?M:9HT:9@\\9XQ::J;:<799>H9<::=UJ:>>`:>]P:>__:>^\\:>S<::\\^::II:=Ha:9_@:>=K:>[R:;>[:>S[:=H^:>TZ:>U@:>TO9H>:<>`:>SK:?:R::aI:9O8:;aL:>\\R:9LK9?R:9_]:>JU:>\\\\:=HH9>@:>S_:>V8:::@:;PK:=]L:=@M:>=Z:>Va9][:>W8:=_V9@>9TR:>VK:=_W:>VP9HO:>IT:>J@:9P]:>VS:>79:<]7:<Z7::OS:>;Q9RM:;8K:>Oa:=7K:>L;:<>L:<K7::<W:<=<:8UL:<?<:>U_9R8:;@[9QW:>>[::U[::T[9XQ:9?[:>J8:>=I:8aL:>U^:>_a::\\\\:8?[:8XN:;_W:9IJ:>VT:>K_9@M:87=:;[=9J79P?:9_M:>@8:8II:=TN9[7:9_9:?<[:9_Q::OZ:>NY:?<I:=SO::\\\\:8PS:?<M:>8Z:9;X:>8Z:9@U:;>Y:>`>9_U:9O\\:?9\\:<Y^::\\I:=TK:9_O:?<Z:=`?9`U:?=J:9WW:>LL:=NZ:9?`:<@O:?=::97M:?;P::XX:=T_:=X7:9IN:9W79QU:>QO:8<N:8KS:9J>9P8:8YQ:>9_::>U:9>S:>W^:8>H:>O;:>X;:=IQ:>a9:>`a:>X7:>QY:>@Z:>KO:>OK:>9N:>aH9^Z:>XH:>XN:=LV:>ZS:9Sa:>MS:<\\9:>aV:>RH:>aZ:>Y7:>a\\:8\\]:>a^8J:>RU:>RW:?8Y9QK:>R9:>Y]:?7;:>Y`:=<<9_V9X<:8TN:>Z;:?7J:8^P:>Z?9PX:8WI9^@9[S98Y:=>89[U9U]9N^:8]_:>O::>X::8SS:>O>9N[:8OY:?8V:>XQ9N@:8Y\\9][9]K:8]H9N^989:8TX9Z@::9Y9UJ:>YP:>Y>98Q:>YZ:8HT:>YO:8=:9[S:>YS9`K:>YZ:>YW:>aK9>H9>9:??T:8;U98Y:8SJ:89H:89J:8P<:89Y9W99HX:>YZ9[S99X9[>:>YI:>Y@:>YK:8O>9^Z:8ZY:>YJ:>Y\\:8<O:8W>:?7W:>Z_9>=9<X:?8a::Q[:<Ua:<<X9^T:?:J:=HQ:>_I:;H::9_I:;Y;:9?L:>N>:<VI:?HU:=`::>_I9R8:8X9:=^9:>_M:>[Z:?9Q:>U@:9Z;:=8R:9?N:?H_:=8P:=]W:::@:=NM:?:^:>][:<8Z:=^M:9TK9@>:>TM:9?`9O=9TR:?9;:8YS:?:X9>R:>K]:9^M:>NK:9T<:>_;:;O::9TJ:=MZ:9@8:?;Y:>[U9LX:>=>:;V8:>[\\:=]L:;;[:8>P:>[[:>P@:>\\I:88a:;J@:<:[:9:H9S::<]Q:<U?:>V;:<JS:;@[:;a]:><=:9?`:;M]:>TI:9_`:>]R:>?W:>=Q::\\^:<X_:?I;:=I?:<`K:;^R:>_a:9XI:8?L:9:@:9:7:>HS:<[=:=SO:9XI:?=9:8799[7:>S;:>\\]:>9\\:>[T:>>U:?Ha:9^7:>U<9R8:>^O:>]\\:>J9:9_`:<=a::\\^:=U<:>ST:9LK:?J::9^7:>`\\:>U7:?:L:>U<9@>:>`\\:=^::<H8:>T<:<Z;:=;J:?:;:;^R:=S7:>HN:=OX:;^P:99>:>\\K:>_<::SU:>Oa:?K[:=?Z:?K^:9LK:?K`:?KR:>]Z:>U<9>Y:?KU:9_`:>IO:>\\I:9HV:>L=:9LZ:>\\N::S`:9S`:>Oa:9QL::\\\\9OW:?;Z:9LH:>L=9OW:?JL9@M:<T^:>L`:=QH:<8R:=>U9@M::T?:;?H9\\S:98[:>9\\:?J8:>>U:?LT:>\\<:?;7:<Z@:?:<:>^>:9@8:9;;:>^T:>^T:9O::>^W:?K]:>^L:?KS:?M[:>^=:?KW:9@8:<K7:>T<9QW:8II:>_^::^8:?MN:>R^:>K\\:<a>:>NP:<>O:?LO:9WW:>TQ:;SK:>\\`::VR:?N::>]Z9MZ:?N=:=N:::TM:?M`:?H_:?K\\9>@:?MX::SU:?:::<H]:?:L:?LV:;<S:=>>:?L;:>U@:>O^:>^`:=N=:9:H:>T?:<\\]:>8Z:?9@::]^:;?H9HX::[O:>SJ:?N7:>T`:?LT:?O;:?::9>Y:<U_:>_O:>T[:9LK:<Y99H>:>UM:9I7::QZ:<;I:=IH:=HH9J7:?MQ:>^P::YU:=Ha:?MV:;;[:?OX:>TW::ST:?O\\:?:N:=N:9>@:97Z::IQ9^W:?PI:9?_:?PK:?LY9:P:?PN:>]Y:?PP9:P:9;;:>SJ:?OU:98W:?OW:?MZ:?PX:?PZ:>^::?P\\:?;`:?PH:9`^:=8P:?PJ:?Q8:?:L:?Q::>JN:;TY9>@:;=J:>UJ:>UN:<;H::OT:9O8:>_H:98X:9_I:?=_:8XN::^H::X_:>?@:=WI:<YW:?QR::KM:?K<:;_;:>I<:9PR:=HQ:=^P:<@<::MI9>H:9V89IX98R:8OJ:8NV::H?:8V8:>P^:>P`:9VR9J@:8>N:>Q9:8HM:9VZ:9V\\:8`Y:8`[8>:>Q@:8]Y:>ZI9\\8:8X7:>QK9_R:>QM:?7[:>ZN:>ZV:=_I9:798N:;OS:::@:<V@:9T=:9`9::``:?S?:;a_:>OY:=7H:=IK:8a\\:9[V:>PR:9V9:?RH9JX:?RJ:8X_:?RM:9VQ:>Q7:?RQ:9VW:?RS8Y:>Q<:?S\\:?RV9I>:?RX:8XH:8V_:8Wa:>WT:?R^:9V`8X::@Z:>ZP8H:>ZR:>_O:9KR:?S;:=<W:9a89[S:<XX:<J[:9Z?::?@:<TW9_H:?SL:=J>9:N:?=_:=VK9R9:88<9VM:8VT::8>:8YN:?>99?7:=U`:8@7:8<`:>XS:==R:=aO9QK:>WV:8YO:?>::=M>9>=:8YU:8MX9HI:?>X9>H:??V:>``:>QS:8]J9>K::aR:>K?:?>L:>a;9\\a:;RY9>K:89<:>KI:>MI:8WP:8UX9a[:?UZ9aK:8=U9aN9aP9VJ:>YL:8QK:=:=:;`<9>=:<NO9PV:<Na9N@9NI9LN9>O9PJ9R::8?P:<QX:?VP9[_99I:9M_9JS9QS9PP:8`;9LJ:?U8:8<U:>a@:==W:8;K:>Q`:9U:::OL:88;:8?P9\\Z::7X:87;:89>:=7K:?W99[_:?W;:>MN9Y<:>MP::`I:8<U:=QL:<XQ:<_>9V`:8YZ:8JZ:8^\\:>8a:=:::<\\>:>R?:8S?:?>\\:>OR::9Z9^O:>J]:??>:8TJ:?7=:>Z7:??J:>Z::>9T:8N@:;R]:;Q[:89\\9^T:8Y>:=789J=:8P<:=?W:>H7:=`Z9`K:89I:<J8:?@_:9]^9M[:8OW:8KO:8HL:8;9:?7;:8^?:?Ra9aL9^T:8OQ:?XV9HH::Z_::`P:;\\X9Qa:?WO:<_=:=QO:>QZ:>a?:??;:>Q]:;=W:?8\\:8LJ9>H::@\\:8KO::@_:8[P9X`:=O@:=OP9@99aM:=a89V`:=OT:=QX:=ZP:=RO:>OJ:?7`:>:::?87:8VY:8SP:?WV:<L`:8?;:?XN:8Z^:9RZ:8I`:;\\>:8[9:=V>:<M::?7S:>9?:8YS:==J:?Y::9IV:<XR:?WR:?>O:>Q[:?Y?:?8[:?>T:>9[:>9U:?YM::@`:?YP9`_:=OH:?YS:>a>:?YV:=M?:?YX9>H98::=Q\\9WK:;9L::HN:=WM:9TU:9:_:?SI:9YP:=][:;ZZ:?[H:99L:9Y<:9];:<R7:8aK::PI:>8=:=:X::IL:=K8:>LI:?K8:=K;:>I`:=R_:9@Y:?MN:=LS:::]:;`R9R?::Y:::LM::[T::MS:9aS:=Y9:9XI:=;P:9K_:=;R:9?`:=KZ:9?89@a:?9;:9U@::IU:;?V:9_I9@R::Y::9?89XQ98>::X:9WK98P:;N9:>JO:>N7:99L:=X_:9O8:?[N:=\\V:?[Q:>\\T:9OX:=Y9:9;7:?\\<::=9:<?S:=KZ:9XI9]M:?MN:?[^9>=:?[`:=>[:<\\\\::[O:=W<:;`]:<a[::<W:9?8:?\\@:9?`:?\\I:?OO:<9O:><L:?]H::I[:?\\R:?\\T:=TT::MH:<\\S:9]V:=^P9:P::YY:=ZT:<XV:9_L:;HZ:<OH:99L:;]\\:8aQ:>:Q:=\\\\:=ZU:=@=:<OU:<_^:?97:<@R:;^@::?R:=X::>8N:9TU:>:N::]N:9P<:<_T:=[_::N=:<O>:<HJ:9JS:;`M:<9_:99P:?^]:<W_:=R]:?[U::<T:>LN:9aS:88H::8Y9R?:9@^::[Q:?\\H::7::9?89@R:?9;9[7:9N@:?[]:<;8:<7I:?\\P:<VI::[T:=<[:9YV:=]O:=;^:9?`:?_>:<9_::L7:=]Y:?9>:>\\L:>\\P:9MI:97J:<OH:?;Z9SV:=?>::\\_:8OR9MS:9?W:?\\V::=Y:;>Z:9Q>::>I:?RH:=\\\\:?_7:=H^::;=:>J<:=U>:?[Y:?_Z:<]?:;`R:=NK:>`7:?_K:=QH:?_^:?_Q:?]Y:<HH:?_U:9@7:?_<:=>`:>NT:<9M:=I7:?_P:?`W:9_I:?IU:9`8:=NI:?OK9:P:?`;:=?O:?\\S:;^a:<R@:?`H:9M>:?a?:?^a:<`H:;`O:=;]:?[Y:8=W:?]K:<V:9@\\::W8:;@<:<7a:>;R:<K@:?[T:;TY:97J:<@9:;M<9@\\:>;Z:>>@::RW:;;R:?8>:?a`:;7P:9H9:?J]::[O:?[P::97:9?W:?^Z:;`U9><:;:N:?^^9RM:@7R:99L:;\\Z:=\\\\:99V:<R::8>P:9X?:9?W:9@U:<]N:9]U::Oa:>;=:?^U:>_7:?^Q:<XV:9KZ:>>K:8=<::IR::TZ::<L:9Y;:>>K:;JK:>`K:=8Y:>?X:9MI:=TN:8aW:>8X:<O\\:=;=:?aP9LX:<@:::?T:<>Q:>Z^::_N:?WX:?Z8:8Q<:=Z7:=V[9IO:?XL9S<:;\\X:9[W:<LN:?WP:=QO:?Y\\:>:;:?Y_:?899>H:=^R:=X::<\\M:<`I:;HZ:9?@::>I:=>L:?[H:?]`:=[9:?^U:=8L:<\\N:9]>:9L7:=:S:>LV:99L:=SM:>:N99T:;OJ::NP::NO:?\\^:::]:?8=:8YS:<UL::]O:9I9:9S>:?^U:=I`:9W@:=Y7:9O9:<_T:9?^:9XY:9^W:=\\`::Ha:9Y>:<KR9RM:?[L:>;T:=SO:9?=:?]>:=>V:@7^9_H:@7`:>8<9Va:8@9:;]L:8PK:?X_:?XX9UJ:8=K:;Z>9>H:9HL:=8M:?\\_:<<?:;=`::VN::XX:@;?:>8R:9:H:>;@::RW:<TR:9O9:@;M:8II:@;O:=T;9RN:?SO:>H7:>KR9>=:;[_:<_<:?ZM:?WQ:@;<:;7U:;^L9][:>[7:9R::9XY:?9P:=77:>`S:<TL:?_U:9YP:<[;:=K?:=T::=XH:<<M:<Ua:97J:<?V:9LU9IT:;^::99P::\\::<TK:;Q@:<JO:<aN9=V::Y>9>R:;:?::V>:@<]:<;<:>U_:;aL:;7=:88H9HO:9aK:<`[::<_:99P:::O:<9U:?a:9?I:<:H::U;::UV:<:;:>T=::RW:99N:@=@::[Q::SH::;<:>I_::TH:9HT::VW9>Y:9YP9>R:9@Q:;Q7:;?8::=J::<S:@=Q::L7:@=S:@=K::;>::U>:=[7::VN::<S:99L:<W?:9;@:<Z9::TQ:@=J:@>J:>N@:9H99R89@M:>NU::WV:9;H:@>Q::Y7::T[::WJ:;9Z:?:Q:@>R9HO9QW:@=@:>V@:=8P::SH:8P?:8X99@>:<M=:9?I:<>L:=8H:;SX:8=W:=;T:9;Q:@>W:8=<9?R:@=Z:?PY:<MY:;?<::RW:9W7:99S:>V`:<\\a::S^9:P:?^]::=J:?^]:>V>:@?;:@=W:;KV9>Y:@=@:>]R:9;N:<[@:<Z=:?^[9>Y98a:97^9P?:99L:@@::;NR:>?I:<HX::?J:@=M:;9>:;9O:<<M:@@@:@?[:;I::8S\\98Z9RO9YH:;ZT:=I;:9\\8:9WW:<UL9R8:<W?:>_=:9P8:<aS:9;H9NT::IY:>^Q:>K^9HX:98`988:<?:::Q[9H>:>_K:;PJ:=^::@>W::VU:;9[::V[::UT:9;H:;OP:@?^:>W7:9MI:<9Z:;aa:<Z?98@:@@;:9L?:@HV:@@?:?_a9?I:9K7:98I9>Y:@HY::a9:@H`:@7<:@HZ9WJ:@@O:@?@:@>R:@@W:@HK9:P:@@[:9];:;>Y:@?[:@@`:9_;:@H7:9IH9HX:<a=:9^I:<;>9>@:=^R:?;`::<W:;;[:9LH:<YV:>U_9>Y:?P>:;7=:=^]:9HT9@>9NT9WZ:9?[::V[:=I?:9MM:;^P:9Qa:;9[9>@:9;;:9WW:>J::;8>:>J::>U^:?:R9MZ:9:O:?:R::]^:9:O:>J:::=>:9L^9:P:;ZI:;ZH::RW8I:9WX:<VM99T9RO:<Y99][:?<:::ST:@J7:?O]:?N>9>@9MZ::R\\:9R8:>@89?::@8P:=`?:<>W:?8H:=`?:>?V:=`@:=`>:?R>:<\\=:>J::;UY:@K>::WY:=[`:@KI:=`9:@KK:?:]:>`U:>?\\:@KR:>IU:9R_:>LP:@K?:=IY:@K\\9HX:>J::?QO:?<W::]=:>`M:?:M:=`H:;Q@9>@:9W79J^:8`a:?QZ:;[R9:J:<XI:8==9ZM:=V9:?ZP:8[M:8VM9`M:8VP:8VR:8VT:?X@:8XM:?X>:=R<:8<>:?X`:9]a:?P]:>:?:=[U:>:H:=:S:9P`:99L:9JW:>;L:<VO::J7::HY::L=::]O:=X>9:P::^Z:<VZ::8Z::MH::97:9Y9:?KW:9Y=:;S_::^Y:=:\\:98V:9JN:?TR:9TK:=a_:<a9:;a^:<TX:;SI:>>;:@MN::]_:@MO:<TS:9<\\:=>Y:<?P:@M^:?_S:<8Z:@Ma:>[O:97]::^Z::=J:@N;::=V::MR:;IL:=:`::HO:9ZU9\\X:89]9WV9Q9:8L`:?8L:=MM9LR:??`9QL:88N:88P:>aN:?@7:;RO:9MS:=L[:=L]:?>7:8<>9M9:=La:8KM::YW:=M::8^W:8K=:=M=:=OS:=M?:8X@:?Z[:=OJ:>@[:8Ja:8K89[M:??L::M>:@;Y:>9L:>OL:?ZS:?V`:>aJ9WK:@IY:?[M:;^S:9UV:9L9:@NI:<_M::RW:?^>:?[<:?8<:<TZ:@<;:?a`:?9K:9^R::7;:9OJ:?9L:;`R:?I>:?`<:?`[:=?R:;a8:?`[:@:Y::^J:?;Z:;7N:=NO9]M:@=J::\\Z:=NQ:=HP:;I=:>U^:;`>:=]a9>=:<=R:>L@9PY::YU:9]N:=<W:9LJ9Y_99T::QQ:9XI9QW:?JV:;U=::>_:9S<:9T=9O=::8I:97M:<I<:8@Y:8>7:8JH9QU9PX:8NM:8VR:8IV9Z>:=UW9ZQ9SM:9`Q9UL:8<H:=UR:?ZI:@Qa::9V:8`L:=VX:8N<9Q_:8=98]:@;7:9[P9Sa:>M>9_T:?7::?Wa:8TL:?X]9RN:@LW9Q_:@LY9>_:@L[:8<[:@L]:@QV:8@[9`J:=QL:<NH:=J[:>XP:?Ya::_N:97J:=YT:8@;9WS:@LU:=Z=:?ZR:?>S:@O]9P\\:=ZI:8SN::`U8@:<SO9X\\:=8_9^K:9S_:=>8:8Y^:=MR:?@P:?H::8P@:8OX:8<T9IM:8Z99JV:?RI9J[9_H::J[:?8;:<>]:9S>::7?:@P::>:K::=J:=\\@:?\\\\:9;I:=WV:;Y\\:99L:;O<:;]S:9O@:?8=:@MS:?a`:9XX:=R^::=K:?TM:9LU9>=:=\\@:@T>:>7L:;WU:;^?:=WV:=[Q:=[M:9;@:>?Y:=X::<VQ:9^M:<VT:@TW:=P8:99L:@T?:;]S:@T[::>_:=WV:9QT:9QH:<YO:9P;:@Ta:<W_:<Z<:?[?9];:@U;:=:X:@U=:@UL:@;V:@T8:?^R:<`;:=Q`:=X::=\\=::]O:=[I:>UT::OS:@U`:9WL:9L8:=:S:@U`:9L?:>UT::]U:<_^:@L::<aL:?L@:;]S9PX::RO:?KZ:@Oa:9QL:=_M:=WV:<T@::OS:@VR:@TM:9`^:@O`:9]X:=<Z:?:8:>8\\:9R^:?8_:9Y=:@V]:9L?:@VT:<\\=:=WV:=];::OS:@W9:@VU:=\\M:@TO:9XY::<W:<TV:9X?:98`:9^P:9QP:@P9:9M^::]_:@Va:?S9:?[O:>IY:<\\O:;8_:9V@:<TY:::K::V;:;^?:9?P:<JS9HO:<]T9:P:<8@::OS:<8@:<OO9\\X:<]7:@W`:9L?:<8@:99L:=MS:@?Q:9;L:9S=::Y::?TR:@WI:?[W9IT:@7[:9?`:=U7:9?`:@W]:>HX9:P:;ZN:;<@::=J:8a@:@X@:?IY::>^9>R::[7::RW:@X^::IR:>Ua:?]I:9T@9OU:@ML:;TY::ST::V^:=]L:<M<:>_N:>M_::NQ:@7L:;VI:@T@:@VK::OL9>@:8=`:>7[9WK:=Wa9][::`^:<N>:@;[:<@I:<LO98?:<LZ9R::<LT:=VV:9[^:<LY:<LR:@Y]:<L\\:@Q_:?W`:;\\<:9=>:@Q^:=`Z:;=9::8=:9@9:<O<:>87:>K`:>K^:<X]:=KM::H`:;>P:;<N::>I:<MV:@ZQ:@?M:;U=:@ZO::;8:=I7:<M]::=N:>=`:=]L:<U;:>]O::NQ::<J::NW:<N<:;\\[:>Z]::P`:=7_9_H::IY:;]^:=8I:;]X:@Q=:@P;:@UW:@Oa9WJ:@VL:<PJ:@YR9>H:@YT:@[9::IS:<M9:@Q_:8J`:>R;::=[9<K:@Z;:87>:=7M:@;7:>9::=Y`:@R?:8=a:>9>:=UT:@8Z:@M79>=:@VW98J:;N9:9TH:>`T:<\\T:?:::9PW:<U?::]T:8a^:9]::<:a::[Q:9_I:@:>::]X:=NO:;NR:>TO:<O\\:>UP:9L9:?MJ::]_:9a_9RM:;Sa::OV::\\J::=I::a9::<a:?=U:<;9::]I:;VW:98^99Y:9JS:?NL:=\\R:@W?:97_:;HZ:<LH:;TR:?`M:=XK:?LO:9Y=:<]X:99L:?;S:>;7:=;M:@;I:;UN:>;I:=\\R:9ZU::[?:;?H9^T:<UK:<8J:::]:<7L:9ZK:?IZ:>ZY:?`]:9_M:9NL::SI:>>]:=`9:@8Q:8aS:?=O:@KQ:>`N:@K\\:>?[:?<]:9O7:@8R:@8N:<^7:=?S:9S7:=__9?J9X9:>=J:9?_:9Q8:>??:=\\]:@=J9][:?<?:?P?:9O7:;_O:=J8:=^L:9Z?:;;[:9R^:@^`::I^:@_7:>P=:8aL:?QY:><<:>J?:=T7:9]=:@_>:=Y=9?I:@<X:<>S:<>U:@KL:@^M:;`O:?<>:=I@:@_J:<WO:9R8::]7::PI:@^X:@8N:=^`:@_W:@8N9^T9:9:9M<::RM:>=>9SM:?NW:;QI:>_O:9Z7:>JI:?N=:>7N:;^Q:<`8:9[V:@RP:@Z<:>Ya:9`?:@NX:8[<9ZP:@Z@:>?W:<R^:98V:@Z[::KR:<JR:9TI:<?^:9TU:?SL::J;9Y_:@[V:@Z?::QP:@[Z:@[\\:?V@:@[^:8KR:=V@:>9;:@\\79:P:=aW:?ZI:@`U9ZM:<M::8O]9\\T:?Y]:8VX:8@L:?Y`:@RL:9[R:8@X:@LR9WW9Q`:@S::=ZR9\\7:?RW:8aW::T`9YU:@\\@:9Z?:@\\I:9S>:8X9:@\\L:<JS:>?Y9><:@\\P:?I?:@\\R:@P_:?_`:@Q7:?L@:@_L:@WJ:?I;:<O^:@\\\\:9Y=:@\\^:<`^:;[;:@>::9@8:;T<:;S`:<OL9_U:@]<:;VV:<>9:@]@:<ML:@9K:>:S9J^:;W8:9L?:<]X:H7O:?=7:=]_:9HM:>8Z:?=Z::^U:@><:;=Y:=[S:9\\J:H8>:<YN:>VU:=7V:>P8::]P:>J?:@>P:;aM:H8L9_U:<WT::]<:;`K::>I:<WR:@;?:?^U:;?N:=X::>_a:=_Z:?^O::HO:@]W:8a;:9O<:?^U:?IT:;[R:8@9:8QN:9=U:8QM:8[[9Y;:8[^9H?9LP:8[a9HI:8\\9:8>@9\\X:8\\<:<QO9aT:8\\H8P:8\\J9Va:8\\M::@[:8`L:=:P:=S7:?S<:<\\=:9UY:@Ma:@W[:9^Y:<U8:>N\\::L>:=IZ:?TT:>L::?SI:H:I:>PO:=;=:?I[:H:M:H:@:9W^:>_;::Ya:H:R:9T=:=IJ::OR:?TQ:9XT:>_;:H:[:?\\=:9^M:=8V:H:N:H:H:>NM:>_L:H:K:9^M:<WL:9MK9:N:9@K:@QY9Z]:<U[:8QZ:@aI:8MS9T::8]L::`O:>WR9@I:8]_:>ZU:=JQ:8JK:8@<:@aM:8@>:8JP9U]:8M`9U8:8N8:8SN:8M\\:8M^9Ja:8N=:8Ma:8N89H`:8R89JO:9VK:H;Y:8^?::8<:8N9:8N=::;a:8NP9HV:8^?:=VO9PX:@aV:8VZ9\\X:=`^9TM:?88:8N^:=a<:8[;:8N_:8\\Z:8L`:<IW:8LU9`U:8IX9Sa::ZJ:=9<:8KO:8]_::LZ9TS:H;P:H<]8J99T8@9KP99T9MW:?S\\:8PI9JT99T99O:H=79N799O99T9J@8N:9=Z:?S\\9HI:8:;:9<_:8:99^?9JU:=9Z:H=X:8X78K:>QN:8N<:8N>:8@9:?XZ:8NL:8NN:@RP::JK9TV9Va98M98V99>:?U<:8M=:=VM:9`J:9`L:9`P9`M:88[:H>N:8IL:H>L:87W:H>T9Q_:9`X:H>K98V:<HK:@R@9?_:88[:9?::=ZR:8HZ:>9\\:H=>:8[9:H<L9[?:>YP:H?;9UJ98?:H?I9^a9\\N:H?I:>ZK98W9UZ9U\\:89X:8=:9UY9U[:8KO98?:H?Q:=:?:;\\]9\\N:H?V9^I:8@998L:8<;9U7:>MX9J=:8=::H@7:8ZQ::`9:H@<9J\\:8L>9\\N:H@?9Va::`S:H<R:8`U:<^Q:H9S:H;S8H:>`_:?UU:?UQ:89>:8W=9LU:>MH9>=:8YW:89=:=@[:>KJ:>P\\9HJ:?U_:H@Z:?Ua:8<T:?V89aO9W]:>OI:@OY:?>Q:?8Z:@SH:?>U9_H99;:8K8:>aO:?UM:>H;:>aW:<^O:=RU:9<W9U\\:??Z:>a:9a_9NZ:>O@9N>:?78:=H9:>aQ:99P9QU:@\\;:=J_8O:89I:8>H9YR:>QT9TO9^@9X`:?U>:?T`:?>;9[K:=ZI:>ON9^Z:>9T:8SN9N^:??]:HHY9L`:>@?9VI:?=a:8R_:>J`:>@M:>K7:H?<:8K9:<S_:87W:?Y=9V`:88::8=U9TN:8PP9LU:H@@:8P@:9RV9S>98::8YU:?>^:??7:>RR:?>_:??9:>aa:8U7:=RO:>X]:8:=:89a:?XV:8U^9aR:87;:8]_:=:<9aT:<[[9?]:=:?:8KW:?W=:>QU9^O9KW:H@a9QM:=:M:8L@:?ZU:<T7:8LM:=:L:HJX:<SZ:8<U:<SL:87;:HIP:8L::9[T:;7Y:8SJ::PZ:97H9?>:?Ra9RL:8<O:8XP::Pa9QR9J[9_T:89Q:8_X:HHS9[?9P_:?7Q:8@N:?7M:H>U:?7O:HK_:H<Y:=`U:=UT9\\S:;R[:H<R:H9R:8^<:8L]:@a]:@XY:@RQ:>Ya9Y_:HI:9TW:=YU9?H:8Y::8^9:<Q89@I:?XH9[S98K:>XO9]N:8XM9[S99::>XZ9>^9QS:=Z::8RO9W]:8KJ9\\S:8OS:H;M9QL9J`:=VO:88H9YY:H<V9[?:HMI:8N`:8N^9PX:8XP:=JR:8W\\:?7N::Z\\99;:HL9:=UU:8PK:?Z@9aR:=`R:<?M:8Qa:HMZ:8H9:=VS:8L`:8N@9JS9X8:==\\:?UL:>`\\:9NL:9`?:H>Q9\\O:9`L:>W[9QK9PX9UH9I=9I?9[?9UQ:H<L:>S::9`^:H8@:9:P:?SI:<J\\::]K:?SI:::M:;<S:;=Y:@;Q:<@Q:=``:;L7:9O<:@:Q:::O:;@<:;TH9NR::;M:<PH::>K:?=]:<PL:?=`:=R7:=QQ9^X:H>J:88H9QN9TT:9>W::;^9>=:??@:?S8:@M8:;?H:@UZ:9UR:H8S:99P:@:U:9@U:<;N:8aK::\\<:@IS:9:H:?=::<aY:@`L:@IM:>SO:98I::\\7::VN::\\::HO\\::VN:@>@:@<`:9I;:98X:<=<::L99RO:9?W:>]>:HP;::]\\:;H;:9Y=:<@\\:HP@::V>:HPI:<a=:9I;:8P?:<=<:98`:9HN:<Q_:=UJ:<;P:9U[::WZ:9@8:?;S:>;P::RW:?[L:;NW:H8N::X;:=ZX:=SU:HO?:>\\X:@9::<UT:HOI9[R:9U::H>I9T=9WK:?N[:<O;:@MH:@ZK:<Z>:9JS:@ZR:9L?:HN]:=X;:HQX:97]:;P^9IT:<TP:HQ\\::RW:<]::>8M::KQ::>L:<W_:;\\R:<_`:;7H:<TJ:<aZ:<VH:?aM:99L:@MO::RS:=S7:8aK::VW:=^W:@`L:9;K:<M?:?L>:<O\\:>VL::R]:@I@::]_:HPI:99L:9QW:@KV::OS:HO[::=R:?[K:<><9H>:@NM:9L?::^Z:99L:;8>:;aR::;H:9L?::;K:=L8::;R:8a`:HN>:=aL:H>R9SZ9O;::OL9QN:HMS:87\\:H=S::8;:8W\\9J`::<;9TW:88^9Y?:HNI9QL:HNL9I>:=VT9QX:HOO:8J8:HNO:=JO:H<L9WK::Y::=\\W:>N7::OS::?7:=`>::R9:9UR:<X?:H8;::MP:8aL:9WN:::]:=:W:HPT:?[I:HTX:HR?:@:W::@?::`a:>T>:<O]:=XS:H7]:@\\_:>:R:@W=:=Y<:<_W:9KQ9:X:=\\R:HTQ:99L:<[9:>8=::?;:<J]:HTS:;[H::99:9H@:9Q@:<]X::>I:@]T:99P:=[[:@9^:<R::=?R:8IL:>Ia:HT`:=\\?::]_:=\\I:99P:9:O:=\\\\:HPK:9]>:;WX:=\\`9:P:HU>::;O:>:[:HUH::XL:HTP:>:[:>8_:<RP:HQO:???:?7=:<RV:>TK:9UR:>;V:9QZ:=R^:99L:9O_:HO^::98:=@I::^=:<_U:;?I:9JR:=@M9WZ:9:8:HQ7:;Y>:=7H::>I:@[7:HVJ:9ZU:9[V:=QL:@`R:<La:8TL:9OL:@ZI:HQW9_H:@7O:<V::<aU:;LZ:9J\\:;8I:<PI:HR>:HWS::IT9[S:<KI:9^\\:99P:HPI::\\;:@T9:HP_:<NM:>LP:<W^::LH:<MZ:>7R::XL:<aV::=P:9;@:;?@:9O::8P?:;;[:8aW:<YW::ST:9Z7:>J8:97M::\\<::[a:HR\\:9Y=:HR^:9LY:<L?:HN[:HTY:;Q?:HTQ:>8_:9NL:HIN9N@:HKJ:877:HKL:HH\\:8?X9VI:HKH:HJX:HX_:>OH:>R;:?8`:@<7:9R]:=[W::8K::=J::8K:<aW:@X@::79:=>I:>L7:9L?:=S\\::@<:8IL:@<9:9II:@PH:=\\W9><:;9R:9aO::a;:>M8:HYP:9\\`::=J:9\\`:<OO:?=Q:>ZZ:=7?:>Z\\:=Qa:H@Q:@Z]:>ZX:@<W:>[8:H;@:8a<:@\\;:HZ?:>Za:>ZZ:9R:::J;:8a`:HHR::H?9U\\:?X<:@99:HI^:>@\\9ZK:?>R:?V_:HHI:HY7:9W8:<IH:@[<:?WW::\\N:?HP:HZH:@<:::Q\\:HV<:?]_:>`O:9PS:@]K:=[a:>=P:>HJ:9L?:HZ7:9LJ::[Q:9XI:=8R:>HN::IM:>H^:<P;::I_:<O^9IT:9]:::=J:H7K:=R^::PL:=>U:=UH:>R^:H[U:>\\W:>[7:9XI::97:8aW:HU>:9Z>:>[7:?Q\\:?R;:9U::@[T:HW>9YU:HK\\:@S;9U?:=a>:HK^:HMM:>TK:@T8:;`>:@P8::`Z:>:J:>HI:;][:>8<:@T@:97M:;?=:=RY:<\\T:?_M:9<L:9S=:9`9:9MK::NJ:@^N:9^>:9UM::L[9`K:=OO:8[I:=OR:HII:?Z_9_H:>M]:HIS:=_M9>H:HQU9[S::KW:<\\T:=aa:9O<:@:7::]O:H7?:@VZ:9X;:@[8:=QI:?:]9[L9Sa:HM9:8R[:?X@:H??:HHU:?UV:HHW:>O?:HKK:9`;:HX]9@I:HY<:HHZ:8L<:@La:HY?:HTR:;?9:H:\\:@M>:H7_::OV9RM:H87:<KY:=7Z:;LZ:9YJ:>:N:@TP:<`=:::H:H9@:;9[:=K?:>:\\:@]X:@UT:=X::@8<:9]>9WZ:@;U:H9L:9SH:H^89JT9O;:H^::?UQ:H^I:HIR:>R;:8>H:HIO:8L9:HX`:H]N:=^::@9I:9O9:@:<:HVJ:9WH:H_W::>9:@:?:8a^:=]^::?T:8a<:9U]:H]a:HOT:=[_:@P?:8aL:>7Y:H\\Z:8<O:@NW:@LS:9>U9>Z:?7\\9@I:8VJ:=MN:8R7:8>7:8R98>:H<@:@N_9KW:88O9?Z:8YZ:@O89[K:=ON:@OQ:H]I:>:7:@OO:H;V:?8X:HZZ:HH@:HZ\\:?Va9][:8SX:>R=:@O_:H[9:?_9:<><:==@:9Y=:@9Q:?L@:=;7::``:>>K:9:L:<7X:@=<:<S>:<`_:?\\>:=7?:?_L:9`^9<J:@P_:98`:=I`:><O::OV:=^::H:@:<=<:>LL:><[:9?^:>LI:@`a:98H:<8Z::<S:@=_:<:X::98:9_I:>UL:9H9:>JL:@:>:=T`:?I?:@`@:?a;:;JT:?a?:;T\\9O=::]79T^:>JT:=^M:I7J:9;H:?9^:<@;::8>:HK]:H`O:9[I:?UK:HI8:H_@:?XY:=YU:89?:<IX:>9=:8JH:8_W:?T@:HKV:8Y8:@a[:=MK:=VO:<O::@SM:8^?:88?9YQ9TK9YS:8NO:8NQ:H<P:=aN9`U:H`R:HMO:>ZQ:HMQ:HLI:@NY:HT::8XT8H9T`:HZT:HKR::_T9H`988:9>N8a:9<\\:>P_99L:9>N:;Q;:9V=:9<W:8ZR:>9=:H`P:H`R:>ZU9WK:=ZQ:H^N:@;M:H^T::]J:HU9:?\\_:<O^:=SZ:>7::=Z`:H\\Z:@;L:@WT::R>:9Q;::SU::O^:<KK:H9;:>:S9@M:HTW:=[L:>LW:>:W:=XP:>:S::W;:>:U::VN:>:X:H^^:@;M::WX:=7Y:=ST:=\\U::P@:=SP:<HH:>88::97::[Q:9;7:;7<9@\\:HUa::a9:I:^:HZ@:Ha?::R>:9W`9:P:<X8:;8?::=Q::KO:9`9:>[=:=>\\9IT::TL:97a9IT:@YL:9L?:@YL:9X?::LL:9;L:9<89aZ:I;L::]_:I;O:>M8:;aW:;`7:<]@:?=Y:?K>:9]N:H\\9:?[Y9O=:@X:::VN:<8@:<X[9:P98_::]_:I<<::=J:@V_:;^R:@TN:9XI:;OR:=IJ:<]I::RW:<7=:=;W:I<I:9;L:I<K:<a\\:=;K:9X?:I<Q9IT:@>\\:>H^:8SN:9]=:9_I:@XO:<=T9X9:>^T:?;`:;`>:?QH:@IZ:;`>:=@M:8II:9?[:=]U:9^7:?K7:I<V:?K@:@_<::T;:<N8:I<M:I;^:>L:::MY:?]_:=TI::L\\:=;K:9ZU:H`>:I88:@:`8P:8NI8>::`I::_J:H;W:8J=:HHa:8MZ:8W=:H<::H;_9X^:HST9QX:HSW9HI:HSY:8L`:9M]:HS\\9Q^::8;:?8M9Y?:HOM:;\\99T::HOP:H>O:=JN:H?>9US:H\\M9WR:8SZ:@M9:@;@:HWO:<_L:@9P:I9\\:;7H:HV>::>L:99L:;[Q:=SN:@M::<MP:9JS::S8:@==9RM:I?>:I?::?\\_:;@8:;>P::8T:;@<::Ra:99P::;K::7P9][:<V>:HYX:>H=:I;H:9TP:?aX:I<::>:V:9L?:>:X:I?R::N<:9MI:H[H:9PV:9XT:<MW:@:R:=HU:HOZ:@?O::=L:@TN:9;79J^:9@^:9Y7:>`7:HT_:=;=:I<::I:^::=J:I:^:HV@:@Q>:I=P::999]M:?aX:H[=::N=::Z<:I?8:I@>:=SO:<Ka:?_V:@WS:?`X:<]>:==<:@8H:@799:P:;9P:;9=:I@\\:@W=:I:[:<HH:<TV:HU>:I@Y::=V:I@[:?^H:>:S9T^:HXZ:9ZU:HZK::;_:=a=:HZM:9PU:HYV:@[L:<aO:@[;:@L`:H<]::8<:@^N:HZN:@L8::J;:<>Q:I=X:H<a:8?T:>Z99@S:=YU9I@9\\X:<^V:<^X:H<X9Qa:@9>:?Y^:@aW:8@N:H@M:@9@:HL::IH\\:8Na9_H:>WP:I9T:@WT::H`:I:7:99N::>I::8a:I9_:@9X:=XS:=X@:=PN:HV7:>:S:;@8:I:7::>=:;@<:<]::@M@9WK:?^U:=R`:=[999T9>::H_;:HZ?:<]R:;>_:;a`:HWJ::I[:8aW:<I8:9UV:=a_:>:H:IJN:<JL:>IL:?]?:?a7:9II:@:]:IHN:I?;:@ZP:97^:H8`:9M9:@TY:IJ`:H^_:?9Y:9ZU::OL:@a=:==R9[S9:H:8T?9II9`X:=?;:<UZ:H;X:I=a:H;Y9WU8S8N:HT=:I>89LH:I>:::ZJ:@;\\:=<>:HVM:H`N:HKP:H`Q:=JR:>OQ9H?9HI:?RP9Va99T99K:@J^:H_a:HLa:I9M9R@:@aU:H<X9ZR:H<V:H<S:@aX:IHT:H<[:HM;::O=::?O:HZ=::VO:?UL:9Ua:?>=:I>T9^_:>KX:@Oa:9JO:H;I::>J:HYK:I>_:<VH:>7>:<_Q:8aZ:H:=:;]S:>8@:<Y;:9UV:?[@:=XT:HTY:=SK:@=^:9YV:>`N:9?Q:<T[:@;?:;L7:9^;:H]\\:@Oa:IM?:<\\_:@TO:IMU:?]`:9]a:9KU:=OZ:=K[:=TV::@?:@\\Q:97_:=TK:=a^:@L?9[7:@^H::V7:?KJ:?N?:I;9:;<N:;@<:;<N:;^;:<=::@:;:>]I::TM:<@[:<><9@M:<H;:=K@:;T=:INM:@^<:;_O:<K]:<=]:INN::XO:;W?:<K7:<]<:HX?:<VN::IY:9;K:98`:<VR:@HT9RO::^Z:<HS::T>:<X^:H[J::X_:<Z99>I9RO:;_`:<Y]:@MO:HS>:;7`:IOH:<YW:8aY:;>Y:@>L9]M:>HR:@HJ::VQ::KM:;NO:;_?:?QM:9;H:9:>::\\<:?Ja9_H::UL::VY:<W@:=I?:9;79TR9O=:@V_:@=]:9SZ:>HK:;aL9:79<Q:@>U:>];:;M^::TV:9I;::TX:?KQ:;<S:;=;:=I;:<H8:>TX:;Ka::V\\:=_N:;T`:=\\]:>V^:>_O:<WT::W[:IPJ::a9:@V_:99L:I<O:>V7:HV\\:IP::>V]::RP:8<>9M;:;UK9M;:>`@:@K_:?:Z:@<`:98`9MX:HPM:<=W:8MS::]_:=];:99L:;X7:<=::IQR:I<`:9;L:<KU:;<P:;^@::^H:<=::9?W:?;`:9P[:>=S:<HH::^H:@TR:=HZ:@W=:?J?:@II::98:@>`:<Z::=\\]:<HV:?:M:9:8:>U?:9]N:IR@::J_:IRI:9O8:IOV:@=U:<>L:9;N:9R^:IRO:9?^:IRQ::T[:IRS:9X@:>>X:9?_:8UL:9;T::a=:IHY:9RR:>ZM9RL:ILS:H;M:?TI9II::=R:@WX:9`9:?SK:?9L::Q\\:ISM:9MI:?TO:<@;:@9J:@N^:8IL99?:ISY:?>W:HH?:=Z?:HHH:Ha99WK98]:=>8:HHK9UJ:;]99UJ:8NI:8LX:ISH::O7:IL[:H??:HSa9\\S98U:8RP9OL:H;N:HON:I>Q:8J89:N99<:ITS:ITT9<W:HIT:IK^:HQR:8?W9WK:??V:HKO:H`P:8@9:8;^:IL;:9?P:IL>:8@9:IL=99T:ISY:=:8:8==:IKU:HT=:HSP::7X::;V:=JJ9O;:HNK9TK:HNM:@S^9W;:8MZ::MJ9[?:H<I:H;J:I8`:I9P:H>;:9M\\:H`I:<^W:I>K9JU:I>M:ILU:>`]:=`Q:=UO:HM\\:>KP9:P:<^V:HS[:8_U:IU]:HS^:H`K9S_:8aW:<RW:;S;:?8=:=W[::JT:?[>:::H:@[S:@UX:=SO:>=`:IVP:HQY:@ZW::9:9RM:;Q?9NR:8`^:9@U:9O7:IMZ::`^9;P:<_J:<RY:9W>:IM7:@T=:<7N:IV^:@:J:@UZ:9MK:@[O:@9V:?\\]:?[P99T:=8P:9?=:=8R:9\\^:=HH:IJP:9UV:9QP:9S=:9YJ:@[Q:;^P:9\\::9R8:9`a9ON:=YH:@_X:=HS:9LJ:=U<:<?S9]M::@Z:9QY:I=O:IN\\:@<P:=;L:>R\\:=I7:=8P:?\\Q:><H:<a>:?I7:?:M:>N?:=N::?[a::I?:?_M:IM_:>H@:;U[::a9:IXV::T;::8I:<_P::8I:I=I:@W=:9XI:;[?:<^@:;[R::`a:>SV:9:<:;KK:?`V:?_I:?IS::?H9IT:<[M:9L?:<[M:99P:>U[9RM::KZ:;^R:>WK::Ya:<V9:HYP:@@>::RW:IYT:99L:IYN:9]S:9LL:?H_:IJ]:IX9:@<>:>_`:=SO:9?8::WM::\\H:@QN:?OM:<`Z9:P:>\\S::V>:IZ=:I@_:IX7:>`7:?Ha:>H^:;Z8:9P\\:IY_:@W=:IYa:>K_:IZ9:9_<:<OR:9?`:;[:::a9:IZV:9@7:I<[9=Y::I[:;Y`:<N8::\\Y:><X:=_Q:<\\K:<9R:IXO:9TP9>R:;=X::RW:I[<9SN:@PN::aP:9?T:?a9:;WU9\\S9@a:>9V:=?O:;W::;^a:9@^:@TN:9?8:?J::8aK:<UI:>K_:>]H::IT:<>J::a<:;M_:9_;:>\\>:>P::;MR9>=:9:Z:><V:?NK:<<M:>NK:97J::X;:98I9>R::>\\::V>:I\\H:;7H:9Z>:99L9=[:<`X:IZa:<:a::J]:I7P:?]V:;;`9aZ9>R:;WH:@7S:=_J::RW:9>[::=J:I\\N:>S7:>WK:=IJ:9:_:9?L:IZ;8;::VN:I]:::=J:IZ?:I\\M::RW:IZ?:IZY:HaT:>>L:I=S:9PT:Ha]:=@<:@QN9MX:><V:IZ::;M<9>R9=^::VN:I]V:I]=::RW:I\\^:;7H:9>`:@JV:I][:I\\]::RW:;9>:<]7:IYN:9L?:IYX:=TS:>8]::Ya:I[R:IY`:?_Y:;^@:>Ra:>@9:99P:I^;:9T<:HYP::KZ::=J::KZ:;_S:HYN:@TT:<a[:=Y99`U:8?L:>HV:9@::@=;9:P9=@:97^9YH:99L:I^^::=J9=<:<88:I^W:;MV:9YM:<VI:99L9<U:I\\O9>=9P?:I\\Q:?_\\:9@:9P?:I\\T:9\\8::7?9>R:I_@:@UT:99P:I_S:IY=:;U=:I_K:=?P:;VY:I\\T:I;a:I\\V9:P:?HO:I_T9RM:I_`:9L?9<W:HY]9>R:>`\\9:J:<7X9IT:I_V::RI9>=:I_V:9K[:;U=:9ZN9>R:<W?:I`L:>Ta:?I?:I\\R:?9S:?a<:9@::I;a:9aZ9>R:<JJ:I_a:<JI::RW:HaX:IIY9NO:<?99><:<aI:<?8:IOH:I]]:<8@:Ia7:IVY9>=:Ia>:<7J:8IL:<7L:;^\\:9=P:I^?:IZO:9?`:<\\V:>S;:9;Z:=O<:?:V:>L::>J?:;X`:9?X:<YW:>HR:<WP:@7T:9IK:9?K:IY[:IZI9>=:=<Q:9S7:9@^:9@<::I]::[T:I]8:I]T:=>W::VN:=>X:IZN::J_:9?8:=^R:I]7::K[:97a9>R:;JP::a9:J7R::Z7:>:Z::Ya::`^:I7]9WT:@`V:H<^:IUY:I=Y:I=[:<IT:8K9:HMQ:8TN:8WV:IKV:8RM:?UK:8MZ:I>I:IV>:9>H:IU^:HS_:H;]:I>9:8N7:97X:97J:IUH::9P:HNH:?>=:IUM9T;:IUO:HT>:I>U:=JK::VO:8Q]9\\S:?XZ:I>W:8L`:9[P8O:HMV:II::H=8:8[X::O=9WK::X8:?^8:IJa:=XS:@M=:9JY:I9^:@9W:HNa:;>P:HPI::=H:HW\\:@9^:@WT:IJ::;OK:I`\\:IMJ:@>?:I9X:=RZ:J9R9><:9@Q:=KT:IMM:J9V:=\\\\:@MT9><:HPI::=J:J9O:>;=:I:P:I:W:@ZL:J9a:HR]::RW:H8@:@M@:=[@:=\\V:9XY:=[_:@PK:><::IHH:::H:IYY:HYY9:P:IYT::OS:IYT:I@9:IYT:<ZQ9RM:J:U:9@^:;WU9`U9R?:I^Z:9Y_:I`Y9:P:@?P:I@=::=J:;9N:I_W:>==:?I?:>J>:?9S:@PY:?9S:;U?:J;8:IYT:;@<:IYT:I`Q:=O7:IJ]:@W]:J;M::]_:J:U:@MJ:9PT::LO:;`R:;`U9>R::LZ:HYZ:9L?:J;^:9L?98N:<><9IT:=KQ:9Y=:J<;:@HX:HaS:;``:I7@:9@::8=W:HU>:=;I:?=J9?\\:I7L:IS7:>`7:;O`:I^J:99L:@H`:<7J:<``:?\\=:I^\\:@H`:8P?:J<T:9K?:I;K9\\T::VN:J<U::L<:IaO:;Y=::]I:I^J:J<V:I^@:@=[:I^I:@NT::;R:@LQ9ZK:J7[:8OI:IKP:I=`:J88:IU?:J8;:H\\K:J8=:IU[:HS]:IU_:IT>9IM:=OW:IW8::7::H\\U:@[J:IW<:?^=:J9I:H]9:;]`:9T=:IMI:<OQ::7L:>7U:9P[::NQ:9aK:IWY:Ia?:@=N:J>;:@[M:<_K:=TZ:J>J:@T@:@TN:=IH:IVV:IZT:I_I::VN:;H>:=;7:H]9:>7W:>\\\\:H`<:@[L:I;:9WJ9=R:>NL:IJZ:9K9:>JX:@9R:Ha\\:9MI:9TR:9^K:>PO:@`_::H\\:8aW9`U:;T\\9=a:?a?:>[N:IZS:><Q::SS:>NX:@P]:=HR:9?_:>NX:;_O:J?O:=O9:<8Z::WK:>NQ::aI:J?W:;S[:>\\I:=Oa:>LM:;9Z:>L=:I;a:9O::J?K:9TO:;L^:<8Z:@W]:><O::8^:>\\?:;7=:Haa:?a?:;9Y:J<I:9@8:J?W:88a:>NX:?JK:>[P:>\\T:;8]:9@8:?]W:9aK:<[J:97^:;@7:99P::U@:>Oa:>V\\9X9:98[::aQ9X9:I:^:;L?:HU`::RW:;8K::9=:<WL:9@U:I[[:9?_:;M]:H8M:=M`:9H]:;9Z9@a:>S;::HZ:?N99\\:9_U:<K9:>ZZ:>[[::RO9@\\9?R9LX:;Z]:;;`::^L9>I::VN:@<_:J@J:>H_:=?J:=MU:I[\\:=aZ:Ia[:>79:>[7:>[[9:7:;QM::\\K:=]`:9@8:9WW:?NW9@\\:?<S:9^7:JHZ:<\\K::a=9WZ9J7:;ZY::OS:;ZY:99L:@<_:JHY::T[:8?L:HP@9][:;;X:<P9:>IX:>_=:>IZ9:P9NT:JJ;::S`:>J::<W?:>J<9H>:JJ::IaW:JJ<::7::;;[9OW:>J::9S`:JJI:?LO:<>M:9?_:JJ=:JJL::T?:>J::9LH9J^:>VY:JJ8:9;H:JJK9RO9R8:JJW:JJa:>_J:9XU:>SK:<W?:<VN:JJ`:=@M:JK8:=@M:?M=:9XV:=`L:?M9:9>[9R8:JJ::=_O:JJM:IP;9R8::T?:>=M:<WW:H]O:9?_:IPZ:JKP:9;Q9>Y:9JN::SM:@=Y:;TY:9;::>==::ST:JJ`::SH:JK^:IRY:@JS:@>N:I;::J;?:9;Q:JL::9;Q:JL<:@=I:=[X:;>Z9R8::]^:@?]:<:@:JJT:@>9:JLL::SH:97Z:@?[:;UY:JLR:JLI:@>7:JLK:@>9:9W7:@?[::Y::JL[9>Y:JLJ:JK]:@>9::^N:@?[:;`<:JM8:JLT:@>L:JLV:9;Q:9YH:@?[:9YH:JM@:JM::?M[:@>L::T`:@?[::T`9R?:?<9:=I?:97\\9@>:JJ`:=_T:JMQ:;SN:;<S:8aY:<YJ::aI:9;;:JMY:JMH:JM^9@>:JLL:JM\\:9:O:JMa:;<S9MZ:JN9:JM[:;<S:JN=:;<S:<Y9:JN@9@>::]^:JNJ::L7:JM\\:JNM9@>:97Z:JNP:@?L:JNS:9X<:JNU::7::JM\\:9W7:JNY::Y::JN[:JN^:JNL:JO99@>::^N:JNY:;`<:JO8:;YJ:JN<:JO;9:P:9YH:JNY:9YH:JO@:JN;:JM]9IY9@>::T`:JNY::T`:9_M:=^]9RM:9_99SM:9_M:>?O:IW]:=W@:IW_:IN89P]:@78:@_U:@^N:9_99H`:9_M:<;_:9S::9_9:9:>:@^L:@_R:;X::9R::9_9:88H:9_M:J<N:@^W:JO_::IT:J@Q::L7:8P?:@]<:;WY:=M]:>\\I9>@:@XO:;Y:::Q[:8P?::^T:;?H::8>9>@::RO9LX::[?:9V@:JQ99:P:9W9:<_P:JQ=:;9L:@@::97\\:8=<:I<<:>[a::=?:8=<::RY:8X99[W:<O8:::@9aZ:JQT:<_I::=>:8=W9LX::U`:8=<:9?Q:JHN::UZ:9H9:;@7::=?:JQ=::LZ::QQ:9HT9LX:?8_9JW:87=:88a:@8V:;^P:=7K::<Y9LX:J@X:9@K9LX:?:79><:@@<:99P:JRQ:9L?9<7::=Q:>\\[::T;::;K:9HW9:M:8RN:=KQ:;MU:JR7:?:::8=<:JP`:<`@:<8Z:<UL9[W:;:;:JQJ:>7_:JQM:9O:::J[:;I<:;:?:8X9:87=:@@::?::9P?:?9`:::@9YH:JSR:8X9:9\\8::M]:;H?:?=K:>JO9[W::U`9aZ::RO:;L?9^U:;J99@\\:<Qa:HU>:;I<:;Q@9[W:9LR:8?[:8aY:;M]:;J99aZ9K;:9HT9[W:?8_:8?[:;MT:;KV:@TR:@^7:>P<9[W:8aW:<<X:::<:>^T:87=:JK[:87=:87=:J<8:9T8:JT\\:IQV:8=W9aZ:J<8:87=:<UL9aZ:JS>:::@:87=:JSH:JT_::=K:9N^:8X9:JSQ:=HH9YH:JSO:9_;:87=9YH:>JO9aZ::U`:JU::;H^:9?`:?RH::RO9aZ:JR::;9[9aZ:=8P::VM:9HT9aZ:?8_:8?::87=:JUW:@TR:JS`:>P<9aZ:;X79>H:87W:9^P:?:J9P?::RV:9TH9P?9P?:JSL9>=:JST:=HH:9\\8::VM:>aL:JSZ:;TY:87=::WR9P?:<UL:87=:JQ;:::@9P?:JU@:;<=:JVO:;W]:8X9:JVS:?:::JVU:8T9:JVX:8=W:87=:;;@:I_J:J>T:JW7:=P79P?:JQQ:JVR9:P:>M^:::@:9\\8:JWS:I_<:9\\8:=N::87=::U`:JWK:=P7:JJ`:JW9:@HV:9?Q:JW9:99_:9HT:87=:@HV9P?:?:X:87=:JV8:<`@:9K^:;I>::L[:JSM:8OR:JW?:>\\]:JWQ:J9<:9Z?9YH9YH:JVQ:?=K:JSR::<=:IJR:9WW:9WW:8a999T9:T::SU:9WW:<7X::=K9YH:9WW:>JO9P?:8a99YH:9HT9P?:?8_:8=`:9:8:;IK:9]N:I_^:>P<:87=:I9S:;7=:8Z^:9H[:8=<9P?::YP:<_P:JY=:9SZ:JY@:8XZ:;H>:JT@:JXJ:98]:87=:@H;:;?H:8Z^:I@H:@><:99>:97a9YH99I:;P>:99P:JZ<:9]N9YH:;WU:JXR:>`>:;M<:JZ;:JZ=9RM:JZ?:9L?::HJ:=>U9YH:?SR:;>Z9P?:;;^9YH::RO9P?8^9:P:<PW:8aY:JZH::>^9YH999:HV9:99P:J[8::=J98a:9\\]:JZ_:>P7:JZJ:;<=:98I:JUN:JZN9>=:J[=::=J98_:;?>:8aK9YH:JVM::7::JZJ::XV:JYV:;<=:8PS:J[?:99>:99@9YH:=Q]::RW:J[_:IQ<:J[>:JZ8::L7:JZJ:;\\Z:9L9:JZT:J[99RM:=TR:9;@:J[S:J\\::@><:J[W:9H99P?:;\\Z:JZY:JYR9:P:;<I:JQJ9J\\9YH:JU@:JWQ9YH:JWP:?=K:JX`:::@:JX_9_H:JY7:?N>9P?:;;@9YH:JW;:I<;:9`^::J[:JZJ:JXT:9\\8:JUO:8X9:9WW:IH^:8X9:<W?:J]I9>=:;^\\:IH^:<O9:?LO:JY9:IH;:@><:JYV:JY?:9_;:;IK:=_X:>[[:JP?:HU8:=`9:::<:9HT:8P?9QT:9HP:9R8:HPQ:JPL:J]_:;>Z:8P?::HL:J^::9<Y:;^X:@L?::8>:J^7::IZ:J^I:?;I:@_`:=SL:=`?:;MU:9_9:;?_:9_9:8OQ:J^N:9JL:997::LZ:87=9SM:>L=8U::=K:9?Q:JTP::Y@:9]=:JT`::XK:9_M9YH:HQ[:@K\\:>Ua:=_::9IJ:JUQ:97^:J^N::>\\9LX:J^N9[W:8=<:J^N::YM9[W::RO:8P?:;Z>:8`]:97\\:87=:>^O99T:<M]:JT`8L:IL]:JVN:=P7:?^7:JWQ:>Ua:9_;:=Q<9HM:JRY:8aY:>\\[:9]=9LX9LX:@T7:8XN9[W:9M]:97\\9aZ:JU@:;Ha:;H;:JQQ:JY]9Ha::Q[:JUL:<O\\:J][:@_R:87=:>?O:@K\\:J`P:98]9P?:JUO::=K9LX:;MZ:>L=:9>[:8?:::aS:;^S:;KH:@TT:9J^9aZ:9^P:99L9<P:9\\]9QW:?L[:9O8:9WW9^T:99;:<W?:JS9:;7=:>_=:JQ8:8=<:;^\\:JV_::RO:;^\\:JU=:97\\9NT:JU@::J[9NT9NT:JXT::S`:J]O:9T::JSU9>=9OW:K7H:;`I:@J[9][9NT:9LH:>JO:;^\\::U`9NT:9HT:;^\\9>R:J\\Q:?LO:JU\\:Ja_9[@::VO::7:9NT9LX:9>[:K7U:9SZ:9=P:87=:9WW:;^\\:=_X:<W?:IJ<:@L?:J^W:@KP:@L?:=aZ:9_9:?L::9_9:J^M:9H9:9\\8::QZ:<W?:9_M:<W?:<K>:@K\\:9?W:K8L:@^<:9\\8:<>T:I`P:99X:<W?:9WW:J_::98X:<W?:<W?:J_=:9R89NT:99N:JOY9RM:?KU:9:8:<W?:9LZ:9?Q:<W?:?]W::7?:<W?9<U:9JS:I^`:I_U:;O]9:Q:<W?:K8Q:;^@:<W?:9X;:9Ha:8=<9YH:>^<9HM:JaR9HM::KU:;Y>9[W9=X:I9W:99L:K:::9L]:9R89[W:9]8:@`7:?=P:=`?:;Y`:@_a:>L=9QT:@8K:8\\\\:I?M:@L?:K8X:<^;:@L?:8aW:9_9:>Ua:IN=:>L=:;=U:K:P9[W:I:?:K8W:=`?:9S\\:<>V:>8Y:@I::>\\I:;Za:K:]:;J_:J^=:>>`:>L=:I]::K;=:=8K:K:S:@^<9@M:;=_:K;=:9]::>8V:?:9:?<\\:>8Y:==>:9@::J^a:K;=:9Q@9?::K;8:=`9:K:T:@;a:@8N:K:W:J^>:@K\\:;=;:K:Z:>\\I::@>:K;=:<W8:@L?:J_I:K8I:>L=::HL9[W:9?Q:J`O9:P:K8a:8\\\\9[W:K9::9<Y:9<@9J^:@LH:@L?:;Y`:JPI:K:`:=`9::TZ:JOZ:=`?:9:>:9_9::aM:9:8:;KN:;KS:88a:;MQ:9]=:;KJ::XK:J_8:;J_:8?L9?H:K=8:97M:;@[:;K=:;KV:9Ha:@8S:=]L:JT`88:9Z?:J_<:@_R:JZJ:9Q>:JP99_H:J_J:@L?:=YK:H:=:9_9:K;79RM:9:>:9?[:J_L:=I?:?X^:9];:K=L:K=<:K=N:9];:JXH::7::JT`9>9::J_:K=U:J_>:?=K::PI:IN=:K<Z:K=\\:K;9:=`I:K>9:9^7:K>;:K>>9@M:;=U::]I:JaI:;J^9IT:;Ra:;JL:=[7:IHZ::OS99]:IHZ:97\\9[W:J_]:99X:;KJ:J_a:9?Q:I;T9:P:;Ra:9?X:>JT:9IJ:K=J:;M::9_I:>L=9J7:K:^:8aK:K?=::L7:;KJ:9@K:K?I:?I;:9L99aZ99U:IHZ::T9:K?89QW:JTH::[T:JaI:>[]:9?_:8=`:8aY:;JK9WK:9Ha:9]:9XQ:IV`:8aQ9:O:=_8:8QX:H;L::O7:8O8:8SU:H;Q:??W:>WS9aW9U\\:I8X:J879Q=:8M]:H;\\9`=:H_Q:HY=:9TV:9SO:8:X9QL:ILO:8@N:H<Z:8@R:I8;:8LU:8IL98P:I=`:8IL9PK9Va:8@^9S::=IN:8]@:88Y:H`K:?7Z:?UP:?>I:?US:8YV:HH8:89>:8US:8Ua9_>:8YX:8U^9aH:HH89aL:?V9:HH<:H_N:H``:>9M:Ha7:>Q^:?ZT:>aJ9[S:IT8:H;V:9S?:?W\\:8Y@:HJU:>WT:8KO:?WU:<RS8H:9>Z:<LO:H_L9N?9M89M::HY:9HZ:KIV::O8:8LR:=JJ:H>O::Q>:9NQ:HIK8Q:>9T:8YZ:8<]:?@8:@O_9[>:HLS:8ST9KY:8Y=:HL\\9_H:8>Z9[;98X8Q:HLZ:?XJ9_R:8T\\:?H<9UJ:>Y<:>R9:@OT9U]9]9:?XH:?@J:?@L:?H;:8ZU:?V<8Q:?>V:>YN:?H<:?@I:8ZS:>YJ:?@T:?H@:?H<:>Y\\:@L\\:8Y?:@R_9IU::H<9NN:H_J9a^:KI\\:H`W9@I:KJ=9>H:@SU9Y_:?@<:?@>8N:?@@:8=8:8=::>@H:>J]:8K`:8R@:?XP:?@^9?>:89O9Xa9QR8P9V\\9V^:9[^9SM:8TS9[J:8TV:87X:87;:8X?:HKT9Oa9U:9P;:HIV:8Ra:HIX:>@O9Z]:HI\\:HIS:8H`:8OK:>RK::@a:>Z::>a[:HJI:??7:HJK:89]:>M=:89`:>M@:>ML9P^9_>:>M[:<8S9[>9SM:89I:8_P:>Y9:9[L:=L_:8\\^8Y:8\\`9L_:8^@9QZ::9a:<XS:=JT98;:8K8:?Z]8N:=RO9Y_98J:<UX:8\\_:8\\a9?Z:::<:KM^:9=M9aK:KMP:KMa:8]8:8LT:HIY:8S_:KJ?::_I9>K:KLJ9TO8P98R9QS9Y?:=<I98Q:KNO9@H:KKY:KK[9^O:KL<:IUT:J8I:H@W:8>R:>a<:H@^:>MJ:H@`:8U^:8SN:8HL9RQ:8HO8N::8::HH_9>H99S98[:KOH:KOI9[?98[:9VV:KOL:@QI:KJN98<:8Y_:=V@9IM:HLV:@L]:8`;:8JZ:9=89KV:>a<:8P]:I8[:H;X9]@9MR:>YN:?R_:H=V:?>N:8?\\8L:9=8:8K]9Y?:H<R:KOX:=9O:==Y:HKT9>\\:9SQ:=7O:KO_:I7^:IK`:J99:HM=:HMH8N:HMJ:I8Z:?T@:HMQ:HKa:H>\\:HL8:HMM:?ZH:HL<9X::8@;:HMR:HL7:HMT:HMV:HM^:8YI:IV99U]::8:9J>:KJS:HN7:8J79U;:HW@:HOR:?7=::8>:<`Y9_H:>@@:H`Z:?YR:8O`:@ON:?UI9[S:>M]:JKX9:P:I]::;^=:=W7:@Ma:IJR::MS:ISR:<a7:?SI:H:X::L^:H:=::`^::7U:KQR:H]H:?UH:@W_:KQW:>R<:KQP:JWV:9`7:H]Q:H]=:H7<:9J_:H]W:J@V::NP:H]Y:<8Y::HO:K@L:9O7:@NV:KHR:H@R:?7Z:KKO:??\\:K@`9N>:HH=:>KQ:@OZ:>9N:KJX:8aR:HL]:KJQ9RL:KKR:<J9:>aP9][:@SU:KIL:KKI:8XN:KPY:H?7:KP[:?7R:@R::=VI:;^=:>:9:@9?:IIN:=R9:8KP:?XX:ISJ:@T@:?^M:;]V:H[<:9:8:H]<:@T@:>_a:<TZ:J>[:<7N:?KU:<TS:<OO:?NO9^T:?IR:>N;:=?N:;`\\::J[:>L@:IXM:8aI:><[:?:::;_N:>]Z:HP_:=KK:>JO:IXJ:?=J:88H:<7L:?:U:?IV:I_L:=PL:?=J:=Q7::=K:=;=:9ZN:9KH::J_:@QK:@_R:@^?:?<Y:K=^:<^=:@_X:I;\\:I=U:<@;:9[V:K@S8L:8N7:?UR::_W:H;K:IKQ:K@_:HHX:HKK:KQY:>9P:9Ra:HR>:KT7:H:]::N=:9ZM:<JS:IJT:9]V:?]^:HZP:9UU:8aS:KR<9RN:KO\\:KPW:KO^:==Y:KUN:KUP:KM?9[T:KRJ:?8^:=IV:@\\=:=a\\:?SM:ISQ:?SI:;H::@M\\:H[>:J>a:;H::?[a:;^?:9UR:9ZH:>M;9SS:<PP:<NJ:KUS:I=`:=@X9@H:KQY:@[@:=RX:HV\\:;>I:::W:@8I::L89ZK9O8:8aW:J\\H9_H:9OS:<7N:>J[:IK^9\\S:IT`:9<X:=@_:==[9^X:?ZX:I=_:H`]9H7:==a9^;:;N9:::>9a[:9>S:9VV9WK:>>R9;S:8`^:KQ]:=]L:>;a:H7@:<JZ:J>a:98`:J;Z:>N=:>_>:9@\\:?JV:=I>:<V9:=Ta:I]J:@PM:9TM:?_P:@=T:?9S::TP:=?;:JPW:?\\=::[O:?HV:?_P:@PM:@PW:=NO:KXW:>\\8:?9U:><V:?\\S:=]^9_T::8V::@<::IY:<R>:;a_:KWO:?]`::7U:KHH:KHJ9O>9J\\:8IL:KHN:8KO:9SP:8]?:KW;:;^Q:I;@:<a[:?^M:9JZ:IN>:9@H:?OJ::H\\:?OJ:@WL:H[?:=\\L::J;:>_=:H`?:HLJ:KWZ:=IP:KHW:9SV:8]=:=IO:KYN:HJY:ILJ:KYQ::P`9S::KHU:>a7:=IQ:?UY:89V:KHZ:IU[:>QW:KH^:>a<:KIZ9S?:KR`:878:KUU:H^=:H_R:H_N:HZX:IS\\:>OM:?V_:>OP:KRK:@N^:8YS99S:KYT8O:KP=:@a?:J\\S:IL::KWU:?YK:<^`::@^:KWY:8YS:==`:8?X:KW^:8YS:KW`:H@Z:KX7::NJ::QZ:J9=:I>[:>:I:=:Y:@P<:J9I:9WH:9KS:9QL:::Y:IX?:?[Y:J<O:J<W:9LM:KT]:I_Z:@]<:9K^:9@H:?aP:9KQ:=[9::97:9WZ:JPY:@;I:@TR:HR>:@N<:>>K:?`T:=;X:H:a:IH9:?aP:HRS:H^^:K\\P:?a`:;S[::YP9@\\::V::?aP:=_R:<Wa:?aS:K\\:::HS:K\\<:IWM:9TI:IWP:IY>:?:::=PL:9T9:K\\L:8a^:;?@:=X\\:@]Q:J;:::=J:J;::99L::U@:<W_:IR9:ISQ:KW@:?`I:?J=:<W_::IM::T?:J@H:HNW:@Y<:KVW:<UH:<?P:IPS::I[:IQ`:IY>:98`:@8T:8a^:<<7:8a::@IP:9OX9\\X::;=:;7Z::@<:;Y`:J=7:IY=:;^a:K\\[:@7I:;;\\:K\\T:=`::9\\;:@WR::=J:@WR::WQ:<_^:9;\\:K^N:@7@:=>U:@XN:=7>:K\\Y:<7H:KU7:?\\=:?aP:K^K:9WL::=^:98]9@\\:;MU:?aU::8Y:KWH:9XI:8UL:<V9::IZ::?@:?aP:;7[9>=:KX;:9\\Q:=HH9@\\:>^7:9;7:;M]::79:>_;:9^P:KXO:=P7:@[J:=]V:;SI:>_I9YH:>_I:>^<:J7N::NL:?I?:K`8:?_P:8?L:>U^:9P[::\\\\:;?V::\\\\:JIN:?XL:JIK::[T:9_^:>[_:I^U:?;Z:K`N:?QS:=@<::^H:HO`:I`P:?9X9>@:>^<:?\\S:I[89:P9_T:<`K::IR:@@\\:K^W:HNU:@8W:9<L::;S:IT]:9[I:IIL:KH;:HMN9\\::ILL:K@Z:IKQ:KH=::<<:?:::I9T:@7W:=\\R:?^P:>`L:@\\H:HVJ:@`_:;^_:IJQ:=]P::I[:8a::<]N:H\\^:9J_9[7:Ka`:<U9:<]=:K`9:98`:IJU:?SM:;N9:8@O:=V>:IHV:;^M:HZO:>8<9:N:<I<:KKK:8?\\:=IQ:KV>:H<@:KPN:KZH:=@]:8]?:IKH:?8^:IKJ:8R@:KIV:9`;:KPJ8H:KPL9]>:KPN:J=W:@M7:@O`:=S]:;_;:=S_:>8\\:<VT:HR7:>O_:;`=:9`^:;UY:Kaa:@P::>\\=:;^Q:9TR:KV\\:9@9:?]::@PL:IY=:=:X:<9O:9Q>:>LZ:<YY:?ML:>T@:=UJ:K\\H:?`[::R\\:<<@:>7J9RM:9<@:I`>:9@:::<S::>I:@=`:>H^:88H:?=J:?<N:8>@:<M`:><@:>K^:>N^:?L@:@UN:KXM:>=?:?\\=:L8X:98Z:KR=9LY:KUV:KZa:9TV:L8::L8<:==X9MR:L8?:H^M:?LH:K_<:K\\?:<><:>]N:H\\Y:>L8:9L]:HaP:H[J:;UJ:I`;:9;I:=;U::PI:8>@:L7?:I;_:>HH:>NZ:KV]:IJR:KVZ:>8\\:L9[:99<:==J:?YQ:H]H:KMZ:>9Q:H]?:H`[:>WZ:K[O:KWW9>=9H@:>9X:=MR9Va:KHL:KYR9\\7:>MR::O<:HM=:8<O9_7:@SZ9VO9SY9SZ:IUP:IV;9JZ:HOT:;:?:K[]:=\\^:HWM:>;X:=[W:>8::J=_::=J:JIX:@9^:<<>:KRQ:H\\_:@YJ:=]L::?@:ISR:J?=:9K7:<U?:=HV:H[P:@N?:L78:>NK:IZ^:?aQ:@T\\:>N[:IP]:9?8:=aa:9?8:<N7:IP]:I7H:9Z?:@Q;:<8Z:9Y]:9_`:=HV::\\\\:9?W:@LN:@`H:=\\]:<;R:=_M:=IJ:<WP9[7:=O<:L=8:9?^:H\\?:@_=:>T`:HP`::8I:;SP:@QT:H[<::SH:=;`:=I;:>=_:9;H:L=M:9@8:98`:?IQ:;`O:L=Q:;TY9>Y:@HJ:@?>:>^::L=L:?;9:?:K9WZ::U_:97^:I@;9RM:;9P:<W<:IaV:JK9::R\\:9aZ:L>::=?9:99L:;9>:;9S:9WX:=_P::J_:=@M:;[?:;>@:9];:HP9:>V<:;<S:=^Y:>^[::]I:L>U:99L:98U:9ZU:<>Q:L:_:=OQ:L:a:>:8:KR>:=OQ:L;:9>=:?YL:==\\:L;?:KZK:KPQ::O7:L;O:8_H:@S[:L;S:J7\\:?SS:@S`:H]P:I>Z:L;[:>;W:>88:=[I::P7:99L:9\\Y:J9P:?^N:>8I:@7?:HUM:IQ^:K]\\:?aI:9XW:=;>:H[O:<O[:I@I:I]J:<_a::IU::X_:Ha[::=K:J?<:<a[:@XQ:K\\@:?9?::TV::\\?:9\\T:IR7:@Q9:=?Z:?OJ::\\Z:=NW:L@O:?`[:HUP:9@::9M8:I`I9:P::T::?9;:@TN:=?Q:;^@:9@H:>I9:@=H:@PT:I<\\:=?<:LH9:<>9:HH^:@:^:L>a:?ZZ:KQS:?YT:>@[:L;@:L?;:?YS:L?=:9M^:K[P:>9W:==^:KZ_:??^:HHZ:L8?9U<:L;P:89<:L;R:@S]:9[M:L;W9WK:@J`:H^N:L?U:<TL:L?W:=:S:JH>:;8J:J9W8`:L?]:L<;:9^M:K^=:::J:KVT:KV[:@Z^:9TI:KVX:H:L:JH7:H[\\:<?S:J<O:?]P:H:a:I]L:<;::9MI:L97:?ON:>N_:<8;:?a9:>?H:?9J:98K::TH:9X;:<=R:=@;:K?S:9TP:L@a:KT^::;>9aZ9@M:=\\I:9L?:@U>:L@Y:LH>:H7a:IN?:LH;:H7M:=J;:LJQ:9@Y:9;T:LH::;N::@:^:KWQ:IKM:9JI:==T:KZ@:?V_:K[J:H;V:=QL:L?I:KHK:9<X:L;J:KHO9X::=@Y:L:;9>H:>_=:=WV:I\\L:99P:HTM:9W>:=^P:<_T:9@W:@HV::;9:HNY:IJY:<JS:L7J:@V[:8a^:@T^:HX=:=;>:=TH:9P\\:<YZ:@<@9];9IT:L9J:=[R:;^]:<]<:?9::>HH:;[=:<MR:IH;:?9V:?Oa:>\\I:;;[:?=J:<=<:=;U:=@9:K_O:I=Q:I;I:;^@:IXa:>8_:9MM:H;V:<NK:8P7:9^P:I9H8X99K99M99H::?[:LL]:LL_:LLa8K::?\\99Q:LL^:;Q;:L:7:8]?:KPM:==Y:LJ`9]::=IR:L8>:L;M:8NV:J=Y:HTJ:H[>::>a::RW:>>P:?[<::KW9>9:LIJ:L7=:?S=:>PO::]O:HNZ:L9>:J>T:@;H9@\\:LM`:=Q8:>H@:LN9:JYZ:@PN:>_Y:9?8:>Oa:I[K:=?Z:>`;:<M?:HX?:IaY:;a_:=@O:;?I:L=::?9O:J==:<YY:>R`:J=@::?T8a:J>^:J>`:<JS:97M:J?8:L9V:>[K:L<Q:J?=::8I:J??:=>V:?LM:J?a:JQ`:?_[:>LQ:?9V:<Y=:<U<:@MV:HY]:I[8:LJ?:LO?:9TO:LLK:=N;:LON::M^:>L\\:J@O:>LR:9;Q:>L^:;@I:;VY:K`R:?_[:?<T:;Ka:9:J:LOO:>LO9HO:LOP:=PL:L@V::T[:L@X:Ha[:I[`:9S=:JJ]:LOU:HPO:9?`:>W>:88a:@:Y:<W=:;><:9;H:JH\\:JM^:<9=:?;I:?L<:9H9:=I:9R8::RO9H>:;@J:9YV:<W7:?Q?:<W@:JW\\9>Y:<O::@?7:@><9][:>W::9^7:;JR:;9[:;_I::SU:>W>:<W?:JR?:>P?:?ON:@LN:;??:JLT:@=8:>]S:IOU:L>@::SH::S`:9;]:@YH:@HS:9S<:JL?:@IL::TQ::\\Z9:9::YP9>Y9[W:=;Z:JL?9OW:JM@:?P>:@>L:9LH:@>L:9;;:@?[:9LH:@?]:HJ::K`8::TX:9JN:LQ8:8OQ:8X9:<HQ:@[>:<HI:L=_:@@P:IPZ:K`8:@>_:9;Q:JW\\9@>:HQU:LRP:JL@:@Ja:LRS:=I;:LQR:@?[:K8S:HP::K\\]:=`::IRH:9?_:9>]:<VP:9@99@>:K`L:JOR:=P7:9?Q:;SX::W;9?R:@H;::V>:LSQ:=>U9?R:?OQ:;M<:LSP::VN:LSS:;WN:HY]9?R:LI9:99;:I7T::L=:>S^:9QQ:9R8:==J:98K:K<V9:79:`:;N[:KWN:;9Z:;H:9R89H>:;UY:IPZ:HTI:9Z?::SH:9W7:LQ8:@IP:@?::?V?:@?<:?N>9R8:97Z:=;Z:JS;:LS<:HRS:::@9>Y:9YH:?;=:?P@:@?::LTN:9T89?R9?R:LTQ9>=:LS`:?::9HO:JaX:@?::<<7:8=W:JOS::T[:LR]:LU9:@?::LU<:::@:LU?:::@:LUH9_H:<;a:?N>:;VH:LUN:LU8:=]L:LU;:J;9:LUS:=H^:8X9:LUV9][:LUX:=N:9@>:9V@9?R:LUO:LU]::T[:LU=:;<Y:=HH:LV8::SO:LUK:;U=:9W9:=^7::T[9H>:JYU:;U=:<W?:9HL:=_L:>TV:?[::LTO:=N;:HP`::[V:=I;:I_99><:@@::99L:LV`:L>V:JI9:9;Q:HNR9J<:;;a9@>::U`:K?U::T[:K`8::J[:LU^:LVI9O=:LRO:=XO:LTS:>I=:::@9?\\:LTU:@;=::]8:9HS9;@:;<S9aZ:LVQ:=Q7:?Oa:;U=:9\\8::TJ:;U=:I<<:J\\[9?R:LR;:LUQ9:P:;9T:LU:::T[::LZ:LUL:LX>:;TK:@?::LVS:;TY9@>:LVV:;_^:=_L:@IZ:>H]:9;Q:JWV:;:^::>_:;ZU:J]V:LWI9?R:LWK:;U::LU_:8X9:LWO:LVK:LUa:@J=:=HH9?\\:?8_:LV9:LWX:;>Z9@>:LW\\:;UU:9?_:JYU:9H9:LXP:;8_:LPT:?ON:@@@:LQV:=KQ:;?H9H`:=>Z9O=:LR;:;ST:;9Z:;:;:9?Q:<<S:JH`:9HT9?R:;:;9O=:97\\9O=:LU9:=8P:LY^:LVI9HO:LWR9QW:LUI:;9Z:;PV:8=W9?R:97Z9O=:LY`:HR\\9]M:<:P:IR`:IRJ:LXU9@>:JXV:;;8:;a`:LY]:?_[:LZP:88a:<8L:;9Z:9QL:LY^:LQU:98]9HO:JSX:<HH::V::>JO9?R9NT:LZ8:8aK9O=:LRW:;9Z9O=:JW\\9HO:LY=:::@9QW:L[P9>H:<<T:?N>:<HL:J@7:9H99?R:<W?9]M:J^^:<HI:<@]:LW;9?R:JWV:87W:;WM:LUU:@Q<:9TH9HO9HO:LVI9QW:<Qa:LWT::ZK9_H:J@=:=N:9O=:?RH9HO:<UL9O=:88a9K;:LV7:K`Z:=8P:L\\=:=P7:8X9:LZH:LY;:=]79][:L\\L:;TY:;JU:;;\\:9HT9O=:<W?9R?:87=:LT7:@TR:<WN:LS_9:P:J<8:;?H:>@;:9YV9QW:LZ;:;;7:LX`:;7U:LWP:;W\\:<WL:;=H:=N:9HO:=\\Y9QW:9HT9HO:<W?9@a:9:8:LUX:9]N:L]?:98]9O=:=ZS:;^P:L]K::RO9HO:JU_:;>Z:L][:;I=:?HO:L]_::SO:=HS:LU>:K^9:=XO:<P9:;^P:LRK:L]O:JW\\9?\\:JV@:::@:88a:L[S:;^P:;WZ:8=W9HO9aZ:@@U:;;\\:@I>:L^\\:LZQ:LVM:9MI::V::LU@:>XK:9@_::>_:8X99?\\:J[T:;X^9?\\:?TX:;W\\::Ya:;8\\:=N:9QW:=8P9?\\:<UL:;;?:J<_:8=W9QW:LXQ:L[T:@=N:L_Z:L^L:;;\\:JWV:;^P::\\^:L_@:L\\;:9Z?:;9Y:LVI:88a:L\\H:8X9:8P?:L\\H:<aS:K_X:L_W:JSa:L_S:L^Z9QM:J@T:@>\\:K7]:L_T::=?:K:^:;7U:L^R:;9Y:LRM:;Xa:L\\H:9T8:JPV:>][:;97:L_P:I[?:>=Z9?\\:L`V::]8:L`;:I[]:L`>:JXL:?::9LX:LWR:LP[:@<8::=?:L`_9aZ:J@M:L_X:>][:L[U9[7:J@=:9TH:;WZ:=@9:88a::Ia::V>:LaW:9];:;WZ:>P<:8P?:LZX:@?;:@:>:=;N::L7:8=<:8=<:L[8:;KV::NJ:9:_:8=<:LQY:;J_9NT:@8>:8aK:8=<:LYY:;LN::=?:LR=:99X:M78:@M8:JR<:;`I:@8>:8=;:K`Z:<`^:J\\R:JQR9W7:=HH:JV79_H:JV;:;TY9LX9aZ:@8>:<`^:L[K:M7Q:JW\\9[W:LTU:8X99aZ:LWV:<`^:JQY:;?8:8aY:J_S:JQa:L_8::=K:JRH:HOa9Q<:K^S:;W\\:=HS9<;:9a7:L__:@?;:KR7::=?:9LT:JQZ:;W\\:M88::=?:L^R:M7Q:L`X:;KV:L]R9aZ:K=L::=?:M8J:;J_:M87:;>Z9LX:K8U:9_;:M8Q:L@?:;=H:9PT:La[:=>U:8P?::WR:JPa:LXY:8=<9LX:;;@:@HV:JQK::KS:JQ^::=?:?=_9QW:;I_:J`Q:IV;::L7:;I<:LTQ:J`W:@IP:Ja7:?:M:87=:J`\\:J_[:M:8:9X<:JT`:M:;:=P7:LRO:98]9YH:;@[:K>8:LQ99>=9_T:K>;::[T:M7>:>U@:;LJ:M8M:;J_:<W?9SV::QZ:M8Q:97M:M9Q:La<:M8Y:JQ7:::@:8=<:9LR:9TH:M7Q:LVI9[W:L`=:>7_:L`@:M8I:?N>9LX:?RH:8=<:JQ=:L\\S:;9[:?K^::VM:JQ=:LP[:M9[:LSJ:M98:=>U:M;I:M:9:?`<:JV::;H;:>JO9LX:99_:M7I:M8a:J]=:JQO:L]P:M9::M7\\:La=:JU>:LY9:M:N:M7^:=P7:M<7:;H;:M:\\:M9J:;MO:JR@:;J_:L@?9?\\:M8T:M;8:98]:8P?:LXW:M8Z:M;T:LX[:9YV:8=<:LX^:M;@:::@:;KJ:?:::;JI:?:::HPQ:JSP:@W_:M<L:Ja<:M8N:M9H:M9]:LXN:M7S:<W?:>]=:;W\\:JRI:9O8:K_X:>P<9LX:LYT:;^P::OL:9?T:K?V:@N9:;?`:;KV:LY\\:K??:;KV:;:?:9HT:8=<:;:;:LWI9[W:M7L:;KJ::YP:K<L:;KV:@H;:M>7:8YT:;KV:K?<:L@8:JQN:;KJ:LVI:M=;:M<I:M8H:;KV:9K^:8=W:8=<:97Z:K:@:9H9:8=<:<W?:8>P:9:8:8P?:;@N:8aY:M=S:=>U9LX:;;^:;?H::OL:@>Y::=?:88a:;77::RO:M88:JZ\\:M?H:L`S:;9[:8=<::XR:;<=:M>L:L[K:;KJ:M99:M9<:=HH:87=:M9=:K=8:=N::JUW:J_V:M7Q:9\\8::XV:M?K:LX9:;>Z:M>[:>>L:87=:M>_:?ON:M=Q:=>U:8=<:M?::;^P:8OQ:M?=:K<M:M?@:M;X9:P:M?J:LP[:LP[:JS_:JZ]9:P:M?P:8aK:JaL:LP^:;I<:M99:M?W:=HH9P?:M9=:J`\\:8=W9[W:;I<:M@R:9\\8:;\\Z:M@R:M?a:JTL:HR\\:?J@:;J_:JaI:9O8:;M9:9]=:M7Q:LS?:8XZ::IM:8aK:JT`:M:K::=K:I_J:M:>:;<I:>P<:>^@::L=:J_L:=_X:9<@:K;?:IXL:M:P:I[]::=K:K9\\:>U@9@M:8a@:<>O:K:?:9XT:KU?:<J[:J^V:K;U:;_;:M?U:JYL:9S]:JOa9P?:IX>:K>Q:K=[:?=@:JYI:8a\\::LZ:JYK:>LO::HL:?<L:8XZ:M:O::=K:9:Z:9Ya:9R89P?:@9O:K;L:@_X:=79:MIS:9O8:LJK::>^9aZ9:`:J\\?9>=:MJ?::=J9:T:9\\]:8XN:MIJ:=>U:87=:<RM:@_R:?<V:<PJ:=TN:K;^:H8\\:MJ::MJM:La;:J`W:J^a:MI^9:Q9P?:98=9ON:MJU:K:J:9IJ:MIS:9_M9[W:J^K:K>R:>L=::Y@:K;=:9WR9@a:MIP:K8I:@K\\:@KN:@KZ:@_[:9_9:;=;:9_9:K<\\::RJ:=`?:9S=:K:X:J^T:K;M9:P::XK:K;=:<ZW:MIQ:K<::9@:::>\\:K;=:HR8:MK>:>\\I:J_U:@_R9[W:<_Z:K>R:@K\\:K;::9@::;Z>:K;=::>=:JO^:K;S:K:U9:999_:879:K<J:K=M9J7:8`]:9T8:K?@:K=T:9?_:J`::M>T:9aa9>=:K@@::J[:MLX:;KV:K?H:9_;:8=<:ML\\:K?P:MM79>Y:;=9:MM79[W:J_a:9_M:87=:9KI9XQ:=YJ:=`?::IY:=YL:MK8:@8N:>>N:8\\\\:<P7:M=_9?R:MM@:98X:MLY:MMK:@=N:MMN:>]S:@L?:9HL:MMR:K;]:>8Y:MMU:K?P:;<;9]\\:K?8:9L?9[::;J^9HO:MMZ:K<P9`V:J`]::]8:=\\L:MMO:=`9::aM:MN8:MJ7:MMT::L\\:MM=:M=_:8P?:9>[:K>>:MMI:MNN::8T:MLN:::@:MNU:?=@:MNX:8\\\\:K7`::J_:MM\\:J^;:=[J:<^::;?8:MN99>H:9YH:MM=:ML_:9@:::XK:<T\\:=^X:MOM9IT:@J[:;KP:8RH:K?`:9L?:==`::=J98<:K?;:M=Z:K[\\:;M:9[W:<>T:K?[:MOS::IT:K?N:;_^:MO99[W:M8]:>\\I9@M:K@>:;KV:9`7:K@I:=[`:KRX:9<L::8I:@K[:KYY:;L7:9YL9\\Y:I^<9:P:=@R:9WM:>PO::J;:>H<:KJZ:8>S:HI=:KK^:>O9:H@T:KKP:KZ]:HXa:IT[9VI:KI;:@O[:KS;:HZ^:;MV:HHP:<[`:K@V:H;T:KIO:HI?:>WX:HIH:J8X::9T:HIJ:K[;:>@a:H@Q:@O7:KKS:?U::KSJ9[>:H^@9\\O:MQ8:KLY:KKW9N@:?@=9^?:?@?:9[L9]8:8<@9JL:@N[:IVH:8VK:H`S9KY:H`U:8\\V:H]@:L?<:?><:L?>:LHU:9IV:?ZX:=Q\\:?>\\:>@J:KLT:>@N:>K8:KLW:>@Q:>K;:KZQ:?>M:=IQ:KN\\:KPT:8U^:KZT:?U[:H@]:?U]:>MK:>a<:KH`:89V:KI7:HH;9`Y:@S>:HOQ:=7L:8<K:>9L::M=:HVN:9=>::Z@:;QY8H::ZJ:;R[:H<_:H;Y:8]Z:8^N9WK9=Q:;_;::``:9aU:9X>:<]=:>R^:?KK:<a>:@]a:LJ9:M=Y:IN]:98V:?Na:>U`:>_U:KTT:?:L:=]J:;<S::X\\:@`I:>]@:?I;:>T<:;SP::=K:9@\\:@MM:;ZI::OS:MTT:?\\J::Q[:>O^9>H:<<X9HX:?P_:<7I:L=J:>U?:@^^:LaR:=^=:?:Q::\\^:9PP:=Ha:@^[:<??:>TV:JaU::ST:9:>:>J7:@@79:9:I^^:>IQ:IO_:9\\`:<UL:JP[:9a7:MUQ:;J_:M8`9H>:8<O:@^^:K<K:>=K:LaL:>^I:LW_:>UH:;`O:>UP:?_`:HV8::\\\\:8JS:?=X::a>:I_M::U;:INS:JO99@M:K`?:JOP9TR:9LR:?OI:9YV:LQ?:JJU9H>:JIN:JX]::WK:=OX:;_>::MV:;OP:JJJ:LW::?LI:@@7:;?H9J<:;>K:8aK9?R:=SX:K]H:LU^:>^T:;OP:L_<:;M9::T[:LVN:;<S9NT::TJ::]^:=]Z9OW:<UL9@>:9LH::T?:MWM:@M8:I[I:LP;:LV@9?R:L`P:@>X:LY8:MW=:LV::LXO:?M[:LV>:@?::=Y9:MW9:=>U9O=:;?_:;MI:LP7::Q[:LP@:99;9?\\:?LK::=K:<8W:>JO:L=Y:J?^:;<S:<9V::QZ:LXS:=I;:HY?:@@@:IZa:L_a:@?::MW7:LX=:MW::JXJ:=XO:MWZ:K^Y:MW\\:MWH:8S\\:MWJ:9T::MWL:;U=:MWO:J@T9@>:>`Q:::@:=Oa:9TH:LU^:MWW::aP:MW<:LUW:MX]:LXJ:9JN:MW^:MWT:9X<:MWa:L]@:MX9:;;\\:9;\\:98]:MX=:98]:MX?:<;`:LY?:@I`:9@::MXL:;TM:>VR9RO:INK:99P:I][:?QT:>U_:L@I:JJ7:>U`:>IX:MW7:?Q@:@_J:>TV:MTI9>Y:MW=:?QL:8=W9>@9NT:?:Q::]^::\\X:MY8:9LK:MY::MUT:MY=:MU<:?J>:9?_:MWW:LTJ:?:L:MZO:MUK::\\^:9JN:MT]:99V::J[:>IH:MU?:MTH:=HH:;Ta:?:::L[Z:LT@:@?=:@K_:=J;:>J::<9V:?QR:9_W:?QV:9@I:LH@:9K>:<:a:HQU:I\\T:JN?:LOV:?OQ:MZ?:>JO9>@:<Y9:?NQ:9LK:;UY:9R`:M[R:L7S:9W9:=<99IU:H`7:L7_:>MV:HW?:ITX:@S7:9S?:8@Y8O9Sa:8Z79OL:?>W9[S:@SU:HH`:8IL9MH:;=U::J7:IKK:MP\\:HI<:>RQ:KQH9X8:MSU:H=;:KIO:>MM:K@W9aX:KR^:>O=:MQ8:K[9:HH[:H:M9][:IT8:KS@:8<U9J<9N^:M\\Q:LH`:MQ_9@I:MQa:8TY:>aY:HT;9T::;]N:?>=:MR::KJI9X`:KK\\:H@=:KIL:?T?:>ZR:I99:=LN:MR=:H@R:?8N:MR@:<^W:@Na:LHQ:KQT:H]J9>=:=M@:;7Y:8?K:IU[:8Za9SZ:8[8:H<V:?Z@:KSS:8KJ:?@\\:?XQ:KL99W9:8<O:8LW9[_:KL>:<LW9V`:KLH:KNK:8TU:KNM:<LO:KLI:M^a:8TH:8TW:MR7:KKZ:9[L:8@T9\\N:KJT:8ZU:KJV:8;?:?>V:;RM:MSK9`K9I79>V::9a:?7X:KNJ:;Q\\:@`S:<M8:MSP::PV::Q^:IH[:8K9:;Q^::`9:;RN:=:O::TV:HY@:@^<:;^O:K\\_:>KY:9OL::T`:9YL:<JY:<`>:LKU:<TM:H:L:L:\\9:N:@a::H;V:M\\N:M\\P:8Z89U<:=LH:MR>:H`M:88M:H`T:@Na:M]K:;RO:M^?:H`\\:L;7:MQ<:KS:9>H9V::M\\H:9T9:@<8:>XZ:<J@9>H:@VW:IH`:M`:9=`::Q\\:M`@:9K9:?SH:M`J:@N8:=Z_:<X=:<W:::=L:>_a:@XK:L7H:IJ]:LH;:9P[:?HY:9];:KXa:H8W:@:>:HO_:<=U:J?V:Ma_:<YY:?9I:=J7:K^T:<:a:?`a:J;I:?9@9J<:I[`:>SX:I[\\::J]:;9@9IT:I7V:LH?:KTW:9?_:@:>:H:\\:@NQ:KU:::]I:=:a:<@;:H`>:M`\\:8<U:M^9:H`L:@N]:M`O:HJ_:MRH:M`Y:>XP:KR@:=OU:M`_:?8Z:MQ>:MQ::>@<:Ma::M__:MSK:Ha=:H\\S:=WT:?<H:@T::9aZ:?[H:L:I:=\\U:;^=:IVN:9_7:@:N:@PI:I?V:?[Y:@PM:<7Z:>`7:@:>:<:Y:?9S::<Y:@Q;:M;>:=:T:KT>:IWa:@XM:><\\:>HN:=?]:>\\@:>P<:MTY:I7Q:98=:>VJ:@_<:>JO:I79:=7;:<?a::HO:<_P:I;?:K]?::J_:9;79T^:@NS:9X;::`^9;N:>TK9[S:;`<:?I]:LKP:IXK9[S:9Z7:@Ta:?Ia:9P`:KTO:?:<:=II:>VZ:L<^:?:<::Ya:9TO:=<\\:J?X:J9T:@MW:>7_:9H<:=;?:>WL:<YZ:N:I:<V:9J7:9Q@:;@<::7K:99P:@V_:>Oa:>WK:@\\X:<HH:N:S:<YQ:HXR:I\\Y:N:a:HR_:<HO:HQ::<]Z:@]U:<<M:I]N:<;>::\\\\:HP<:@N9::V>:HS?:9;>:HY]:>P;:H[?::TM:N;@:>LP:HPS:;8K:;Q::HX;:@<8:>ZZ:KTS:N;R:;7<:@LJ::VN:K]V:?^_:N;N:=I@:>[7::RM:N;R:9<8:97a9>@:I;M:;UQ::RW:<[O:HW]:?IW:>ZZ:?L>:<a=:>WK:?<N:IR=:IO<9>@:;9T:J9T:N<S:99`:<ZN9:P:J;a:L@^:J;a:<VH:N;O:>[7:<WK:J<>:L:K:9@8:@<_:L@^:@<_:9@X:@V@:;98:9H@:<7X9J7:9LR:J9T:N=H:;7H:9Y`:H\\>::aZ:I_@:<MR:>NU:9T=:LT7:IXM:9@W::\\^::aM:=_I:L8U:IWQ:9@8::V@::a9:N=\\:99L:;;I:;?9:><N:N<^::I\\::]X99Q:@^Z:IP[:=`:::;<:=I;:J?P:9^7:<WP:IP;:>LN:>_Q:>SK:N>M9?\\:M8[::VW:L=R:>J=:9;H:<UL9H>:88a:>Ua::S::IPZ:JRY:MV^:MY;:LaJ:MY>:I[]:LX@:L[W:LXa:>H_:=XO:9^P:L\\Z:I^U:L`7:K:7::T[:;8\\:LXJ:?O;:LX@:=HZ:LXJ:?IK:LX@:<MR:LXJ9YH:LW]:>T`:LXJ:LWa:;U7:9@8:LS9::T[:I\\\\:I\\[::RW:<99:97\\9?R:JJ`:LU^:JIN:99X:LU^:@J7:99@9?R:IZV:;[9:<H=:JN:9UT9?R:N@9:N@J:JK::MY^:9WW:MY`:9T::<aH:@>U:>>Z:>8U:@L?:K<_:JPR:MKM:@^<9H>:LR9:@_R:9O\\:J^R:N=X:JPM:>8Y:=_9:>?U:N@[:;`I:J;J:>UI:L9<:9;Q9<_::VN:NHH:9]N:IOV:I<<::SH:JKU:LXM:J@O:L^M:JL7:9T8:?;L:@><:9T8:@H@:JK^:;^P:;PL:=8H:LXX:LR]:>^7:LU^:>^9:L_;:L\\::N?<:L^Q:=]L:;8Z:HQU:N?H:LTW:>^[:LX@9R8:NHY:;9Z9R8:9:O:N?=:IIV:L_Z:;PV:9T8:LY^::]^:9_M:;PV:=\\L:NH7:=`9:MN7:=_^:K=a:@KM::L\\:L[U9RM9HM:;>W:99L:I`_:IRJ:MV[9@>:LI9:;7=:;?O:9YV9O=:JJ`:LY^:;UY:LZ[9O=:JLX:L[Y:@?L:L[H:;9Z:NJI:;9Z::Y::NJL:LU_:LZP::Y::NJQ:;8N:LP^:LY^:>^99HO:NI9:;7=:LT`::>]:LZK:LTT:L[X:LXL:LZR9?I:::R:98X::UV:H79:9;T:<9[:>=Q:LPV:;J_:?;M:><`::\\@:@_S:N;S:9;Q:JRU::=J:JRU:@=@:JaX:9;N:9:>:;V7:?8@:<:Q:NKL:9?_::[?:?Ha:JLS:<:I:9;Q:9V@:;YJ9J7:M\\=:IRO:MMU:NK^::U;:JIS:@=M9;[::]_:NLL::=J9;W:9WX:MTP:JO9:JIS9:P:9Ha::aI:IPI:IW7:@>H:>P7::SH:9V@:L[_:9;Z:IQP:9IJ:NLH:>JV:K]^:H9L:NL]9>>:=aS:8TH:MP^:H`_9^O:9N:9VJ9P_::Q::8=Z:KP\\:=YT:8[Q9I:9ZR:8J@9`P9TX:NMP:8>@9`=:8[P:8@H9I:9SO9QS:IKO:8RH:8@V:I8J:@aM:@QW:8@\\:HH`:9SO9W?:KH?:?7;:8X?:HIU:M]<9T=:L88:KI::HH>:>X>:N8<:Ma99WK:HL^:>RH:M^U:KL8:89N:M^X:KNX:M^[:<QP:=QO:HSa:M^_:8TT:KLK9Y_:M_9:8TV:KNT:KNQ:>Z::NO7:KNV:9[L:9]_:KNY:?@a:>YJ:M_K:HJM9_H:8SX:;R?::QN:8I>:>M>:HJQ:;]K:8WS:?7Z:89H::O=:8PW9VJ:8P^:NMS9`J:M]`:M_^:IS?:<XN:<_;:9=J:KKL:<NI:8]X:HLP:NMV:8H`:88V:=@[:<IR9\\V:8LN:KUQ:8LN:<@?:N8@:>H8:8TR::P^:KUR:@;[:M_T:KQL:MSO::_9:MSQ:9>O9O98X8=9PX:;[T:9IS:M\\@:@[Y:?U;:M\\J:NPP:HOJ:MQU:9S?:9]_:NMI:IIP:KSX:NMJ9?U9\\8:HMV:NMO:NMZ:H9Y:I8=:NMT:NMY:8[R:H?X:NM`9[L:NN89`J:M\\V:NPW:K>[:9PZ:L7a:<XT:9TZ:KV::NQ[:9O7:MJQ:@?U:@:K:KU\\:=<X:>N8:KS<:N:>:H[>:>_;::8I:=J=:9_::?Ia:<]?:<]O:NR9:LV^:9?`:99N:;@<:H7X:@]8:9@7:I\\`:;a_:K`I:?^[9>R:IQZ:N;7:NRX:NRR:;_;:>JX:NRU:J;\\:K>O:N;7::\\L:J9^:N<V:9?`:HUR:H8?:I\\;:L>@:9LT:<Y=9@M:;7^:@]O:?MO:=H^:?aP::OV:<9O:>JL:98I:I:=::VN:<Wa:99P:IXV:NSO::RP:<<@:=[[:9L?:<[7:99L:IXV::LY:?OO:?aP:;_W:NSW:LR7:;aX:KXW:9LT:=;`:K^X:L=Y:NSW:MXL:<OT:NT;:IY>:NSQ:JQ>::VN:;aJ:?\\Z::XL:;`a:?aP9O=:NTJ9>R:@W]:<<@:I?H:9L?:I?>:L>O::R9:NTR:K^X9HO:NTU:J@J:<<@:JIX:9L?:JIZ:99P:JI7:=Q?:N<J:99H:?\\`:?_[:L@H:NRT:;SI:;`U9@M:J<8:J9T:NUO:;W_:N;:9@M:IWN:HTY:NUU:<VH:J<L:K^X:JPP:99L:I[<:L9H9>R:N=`::>I:N=`::IR:N=<:=Q9:NS99>R:@7>::=H:@7>:NS_::Z8:K^X:;_:99=:<=[:9;Q:88a:H_W:>SV:J@T:<OT:8P?:H_W:L\\R:NVQ:;;\\:NVN:8a^9QW:?LT:>R]:<8Z:MW=:N:7::L[:IZ;:@XY::a9:NW7:99L:@X^:HRL::L[:?aP:;XY:HO>:>7^:I^U:NP;:88Z:?7Z:HZV:8K[:@R\\:I8>:MR[:?UW:LML:?>K:H@U:KM<:8JT:KN]9^S:NNL:?ZR:KJ8:K[<9][:??V:N7^:H@Q:KKT:HHO:H_O:HX^:MQ]9V=:=H;9;U9WN:HZa:?Z7:>X[:MQI:HJO:NOO:KM;:KN^:MS9:KNa:NXN:8L8:L9_:K@a9^9:KVM:9TT:H79:H^N:99;:9`9:?NI:=I?:I`Q:8II:HU>:<]?:=;U:=PR:=>`:9a8:@JV:N@_::?K::RW::I::>HN:JZ9:@XR:HP>:@=O:L:O9\\S:=;U:LN@:IY::=U<:IXI:9?`:IPU:H8Z:?:::?I8:;a`:9TO:8=W:;>_:=P\\:NY9:;<S:=;a:9?`::RO:I;Z:;J;:@<R:;;Y:NY]:@7H:@XH:9I7:K^T:=;U:JP]:>8[:9ZK:KT>::@<:>VX::L[:MT8:J=>:JQ]:<:Z:NY::NSY::VN:<[7:>R^:;]Y:NZT::V>:NS\\:NSU:HY]:?<R:@^<9>R:MP=:?9M:;W\\:I@L:LIZ:=K[::X_:>NK:9PR:L:U:9ZU:9NL::_[:NOM:@R<9Q_:@R8::P_:@aJ:=`W:H>a:<J79@O:@;7:KSO:9`R::Z\\:?7P:HMM:HUZ:>M;:NOY:8L`:NN;9@V:MSI:8_`9@O::7[:H@Z:NOM:>MM9W?9WH:NX9:H^H:MQ]:HQQ:8979?>:<TH:IL^:N8K:<WO:H\\V:K[`:N8P:@9S:8aR:?`L:IP]::NP:>ZW:IJO:<JT:=HO:IXJ:=VJ:=M`:<8Z:Ka;:=:X:=N::KU\\:8`^:H]::J@V:KS\\:N]7:9O7:8a`:NWO:8@\\:N[^:8=L9]8:8_a:N\\8:8SO9K9:N\\;:N[_:N\\=:MQ[:L88:NX<9V?:NX>:9>99JO:JS::N\\L:9X<:@P8:97a:L8T:H\\X:N8Q9_H:N\\T:K^=:N\\V:H];:KXI:L<L:9TH:N\\[:>>`:N\\]::\\_:<ZU:;SI:H]7:9UX:9TH::NQ:N]9:HP_:H]8:9K9:?X^:N]?:@R^:=ZR9J?:89a:8O79P^:NQ?:NMM:8\\Z:?[\\:N\\99K9:H;V:8YM9>L99T:NNU99T8K9NI9VI:KR[:89>:NP>:9U_:8R_9]W:8<@:>KM:<@>:=7R:KPa:KPZ:N[W:HL9:KLY:M_@:9[>:NMa:8OH9_N:9SL:HJ`:MR`9O>:KSW:8VZ:NQ:9HV:LH\\:L?M:LH_:L;T:LHa:L?R9WK:JZ\\:N8J:N][:8a::=WV:J9@:HTN:MaP:>7U:H\\T:H;7:N]]:@@]::OS::?L:9OU:N]8:J>7::[`:N`P:@X;:<87:N`M:@]X:<aM:KS]:N\\M::RN::OL:<9R:KW<:J=[:=7T:L?\\:@:X:?\\_:NT9:=W=:H\\[:N`_:?]T:<@Q:IWO:9JR:9UV:@[O:?<?:=WS:K[]:=RZ:KXW:9?=:LV>:K_L:MT^:I^U:K\\N:@;R:@WT:N7Q:=K`:J?P:K^X:L98:NaJ:=[`:@N<:::W:@XS:97]:9YU::^Q::RW:?\\[:I?U::;=:;IV:9;7:<:\\:97]:?\\[:9L?:=[^:99P:L>>:K][:I@U:Ha?:NZ<:=?99ON:N9Z:L7<:9?=::TZ:MaL:@Z\\:>`L:J?=:KQ_:HQ`:9TP:JT8::VN:@WR:NXZ:IP[::8O:@WR::OS:K^_:>U\\:HY]:N\\a:NSa:J>S::V?::VN:N=\\:HT[:HU::97^:@XO:<[Q:9XI:8X9::PN:@]P:98V:@9`:J@[:KRP9><:;?_:Ka\\:9U9:H_W:K_]:N]`:HV8:<J`:N9N:?a`:O8V:;^H:J>\\:K?>:L7M:I9Y:>;>:@U^:=Y>:N@V:@K\\9][:K>Q:>?]:=SS:9aV:=XX::<Y:=Y<:@;S:@_R:IX;:<`L:>8W:8aR:O9Q:;_^:I:S::]L:O9U:=P8:O9W:>8T:;P7:@L?:O9O:@^K:H:=:@KX:O9^:?]_:9ZU:KZ;:NM@9>=98R:NMI9J<:NMK:NQ@:NMN9X::NP:::N[:NQS:IU^:NQN:NMQ:NMX:NMV:NM\\:9U`:NQP:N_V:NQR:@R]:J8^:NX@:8@a9@?:NN<:M\\a::ZZ::_R::Z^:?7;:HJP:8\\V:HM<:8PV:8SU9?H:KV>:N[\\:@aL:HKU:>97:NO]:=LN:L7V9Ha:KKM:NP8:NMU:NQJ:NWJ9@I:N_@:9VH:N_I:<?L:NPH:<XJ:8PP:Ka=:NQV:K[K:HOS:@`;:>M;:8[Y9WX:KYT:O;;:O;?:?>@:??[:MR\\:KHW:N^T:HMa:O;^9a@:MPa:KZR9\\a:MR^9_N:N]R:NX;:=H;9=M9;>:>R<:N]T9V>:N]V:9U]:NXL9`K:NNJ:HY8:>XJ:8P[:8PQ9WK:M=V:I?I:=RZ:9L]:=[W:H\\W:H^Q:N\\Q:J:I:<XV:@W@:=:_:I9W:J9_:>:S:?9K::LU::99:9Y_::<N:INT:HX9:<HN:I@S:N9O::SS::;=:;KU9@\\:I7=:LL;:O=]:?a`:LO?:I@@:K]]:;`_:<[O:IJW:>;=:@NP:?SI:=?O9@\\:IOP:HRN:O8I:=I@:I<::@TX:LJN:O>P9J<:K\\\\:9:H:O>@:KX>:?^J:@U9:L<=:<J]:@N8:J;:::OS:J;::O8;9Y_:I<::@?V:;`L:O>P9\\X:NTS:9:H87:H7;:KRR:N^K:=a_:KVV:KX?:=HO:@Z\\:@N8:@@K:IH=::=J:J;a:O8;:9Qa:9P7:N<[:J;`::RW:;[Q:O8;9PX:?aP:;`_:N[@:N[[:O:V9I@:O:Z:NQJ:O:\\:NOL:?Xa:@98:8K[:NOT:H;M:8PW:N\\K:9^<:IHW:H]<:=HL:O7`::K@:9T=:98=::=J::<Q9RM:>:M:<JK:L@7:KYY::=::KZ8:HYW:<JK9<P:@N>:N\\W:J>a:KV]:HYU:<aM:<JP:<8[:=8Q:M`K:>N`:9[V:HH`:N[I:O@>:MSJ:=<S:MXT:O9;:H[::@MY:Ha?:@TR::PK:M`>:KV7:H]<:OH;:LIM:<@T:H;::?SM:9RQ:?R=:MQU:OHI:@M7:@V\\:O@M:@L8:?TP:L<?:;TY:M`::?TV:J]R:<_V9MR::8I:?`@::JT:NX\\:I`M:=>`:9K>:L:Q:=PZ:J?K:J7>:NYZ::HS:?JV::II:OIS:9PP:OIU:LPJ:9a8:9?8:OIY:;Z^::I_:>NP:NY::;U9:9?L:LOP:=T7:NY\\:9P\\:?;M:<[;:OJ;:=;Y:;>Z:LLT:M\\7:L8N:Ja[:9;L:;YM:<a[:NU?9>R:@QR:?]O:NR\\:;a_:9:J:?H[:OJH:>W?:OJX:;Na:L@L:OJT:8aW:LNV:;aQ:@8L:=[T:@^S:K=Y:MJV:HYU:9H9:>UL:9_<:>`K:>`T:=_\\:;Q@:K_;:>`R:I^J:MN`:@^J:?:]:=;U:J<[:@_R::H\\:MH]:HYU:;LH9IT:JR7:>_;:?JR:?9?:KXJ:;aa:9TK:;aJ:JH;9RM:NTO:99P:I?>:9@7:J@`:9RM:9QN:KX\\:<V:9>R:I?>:OK`:;aY::RW:N\\T:<7J:H_::9?89aZ:=P[:=@<:@^]:@_N:M<R:?\\?:>U@::Z::IY=:9TR:<9O:<[;:KTY:9@::9K[:=T7:@JV:NUQ::=J:NUQ:@I8:OLY:;MO:?9;:LJU:LSL:?_P:JY<:I7Y:K?N:?_?:I]J:9\\8:OL[:;MO:J:a:;9[:=TY:NHV:>_Y:OK=:J=::=^X:OIM::SU:I\\?:JZK::V>:@7R:<7J:?9R:9@H:<@O:<H[:OK[:99P:KaZ:9@7:?LK:;`R:=:Q:?9;:J7;:>`::I\\::;QP:<V@:9ZU:;QS:J7Z:H`@:O<H:N[_:O@=:8=V:O<S:O<M:LML:O<O9WY:O<Q::;a:?>H:O<T:H;R:8IM:NWX:?ZY:H@Q:N]S:O<Z:O<\\:=H::NX=9VI:O<a:KM::O=8:N\\@:O=::9U::O<7:<?O9>H:JWV:II^:=Z]:@M<::VN:@M?:N`T:9\\J:I?a::;=9ON:H_=9:P:O>Y:Ka^:M`H:O?O:O>^:9T=:;_R:<OK:O>::L?`:O><:98J::8O:OO`:<HT:=PO:OHP::;=:OP9:N>L:K^X:;`_:IJJ:I9`:=7;:O=P:==@:I<::?[L::=J:HQ>:99P:<V[:NaV:JO[::<N:O>S:@UU:@X@:<TO:@^<:=XL9ON:OOZ:O8\\:>][:M`I:O?P:9T=:O>`:JZQ:O>P:O?9::<N:O?;:;`Z:OP\\:IP[:O??:O7W:@;R:<\\T:O?K:O>]:H:\\:LM[:O>\\:K^8:O>L::RX::VN:OL9:NaV:9Qa::<N:N<U::=J:N<U:O?]:OP^:H:a:O?a:IUV:NN7:O:a:O@9:O:S:O@;::JJ:O<J:NWM:@;7:O@H:O;K9^J:@`Y:I[a:O@L:;^M:O@N:<TZ:OQQ:;IL:>LI::<P:>:L:OP?:O@Y:J>`:<?S:NK_:@_T:@N<:O@_:KVV:L:T:<JW:9_::<JY:>N_:<JK:O>K:OH>:OH[:IS>:O;8:?7;:Ma<::ST:M`8:OHO:I@S:?8?:M`=:9Z@:OI;:O>I:OQ9::KR:IST:H;@:9RR:O:K:N]M:OH`:I>Y:ORP:OI8:OS;:M`J:MaJ:M`L:9^@:8aO::LZ::<?:<V@9MR::Ya:?\\V:M_[:=Ra:I_L::<J:?KL:L>Y:<=U:IWU:>T7:>LI99T:J?K::]7:OMU::\\W:=^>:9PP:>]^:9Z;:?NW:9Q8:>]^:<;9:OTY:J?X:L@U:J@T::TM:IaX::]7:?;M:<WP:=?R::]7:NT9:=NH:OU;:I;R:>]J:?L>:>S=:IQP:>S=:H9K:9O8::^<:LQN:;=;:@H@:9a8:@>W:M<V:<Z8:@?;::@T:JK\\::=?:LQ8:J`P:@?::L]R:LY7:L_<:K@99>Y:LUK8R9RO:8P?:LTZ:9;H:MP::?NX9[7:<VM:=I;:N?@9SM:MWS9@>:J_]:;U=9@>:K`?:OVO:LQ@::ST:J_?:9YV:OVM:JNT:;<S:;^\\:JOH:JJM:?<;:L]\\:OVV:>_N:K]H:JM\\:M8`:LRQ:?::9O=:@9J:IZa:K]9::ST::S`:NT=:9;Q:M==:IR_:;_`:@L7:?=N:@_V:>?W:<>P:<>9:@8N:<`N:O:>:>ZW:OK8:9;K:9:>:IR[9WK:9:J:<9[:OWH:?P=:NY^:>T7:LRH::IT:L=]:@HQ:9R^:NKJ:9XT:9_M:L=N:;W?:K;T:>?8:K<^:=`?:9`7:K<Y:MK7:>?Z:>8Y:NYM:>T7:9;;::TL:9R8:;TX:<>R:OXM:=VJ:N@Z:;Q@:<YR::U<:OXU:<_L:K9>:OKO:>T7:LQR:OX>:?:;:K;R:=\\]:K;\\:@L?:@`;:>T79MZ:OXT::S=:JPQ:OKO:;LH9J7:9:O:@?]::ST:LSV:=_V:I]N:@@7:N:J9>Y:;<]:M[a::XJ::RW:;ZK:@=@:OYR:JM^:=@9:LQX:<9\\:?]a:97^:OYY::Y[::RW:;>8:LZU:=SO::SH:NJK:N@::J@W:<<R:=?Z:9?Q:J@?:@IY:L[]:LUK:>T7:;>\\::TQ:N;Q:OY_:LOW:9H9:L=[:OZT:NSX:9;Q9=\\::VN:OZ]::UO9J7:@IY:8aY:?;>:JOP:NJU:JOP:JL`:OZX:@K`:?]T:@@@:@>L:;`<:NL<:>`89MX:L=[::TK:@K`:JN`:NK@:9@8:>WP9;O:@@7:=aa:;TX:<UL::ST:OIN:9_`:9YH:>^T::U?:=]L::SH::^T:=_V9>R:@]^:MW_:LRR:::R::ST9IT:9V@9WZ9>Y:<<\\::a9:O\\J:IRW:@_M9IY:O\\?:<[S::SN:J9\\9:P:9XV:NLZ:NXX:@>L:JP`:O[8:IRN9UT:9R^:LZS:;TH:8`a:L@I:9ZU:;77:OR9:8QY::O7:J8[:I8::NM=:8>T:@N^:KaT:J=N:K@\\:H<8:IUT:O:X:NQK:@\\8:8JH:O;Y:NQO:O@::8[R:O:\\:IUL:KaR:IIQ:L7N:=a=:O:^:8@W:O:`:I8>:HH`:M\\_:9N<::PX:8LU:KR[:8X?:ORH9>W:NNH:H^<:LHY:H_M:NW^:MQ;:NWZ:H`a:=Z?:NNN:ORR:JVH:LHI:>RH:M]9:MQK:K@X:>a=:?YU9IX:IS^:KI@9_H98^:=>898^:8SJ:M`Z:KSI:97Y:MQZ:>XP:OO7:OO;:?@;:MQ`:NO;:9[8:?>=:M]]:ILI:>M<:M^V:NNU:;\\?:NNW:KL=:NNY:KL@:KNJ:NN]:M_7::8>:NN`:KNM:O_=:?W]9XR:8ZX:NO?:KJU:>RX:NOI:>aL:IKL9^U:?W_:NWQ:KUQ:<WV:8<[:H@X:NWV:?YH:HIL:8TP:HI`9Z[:HJ7:=RL:8];:8L>9W]9OH:8PK:HJ>:KM8:KL_:>a]9\\=:>Y99\\@:?U;:NXK:OO>:8L<:N_\\9X>:H@_:KL\\9X`:HJT:HJX:HJV:87::HJX:=:>:H?S:Oa99HZ:H@V:N7_:<LU:KH_:Oa=8Y:=:I:?ZU:>K9:>@R:HK;:<T9:OaJ:HK?:;RO:KZ[:O=9:;8[:?@[:LMO9_M:O;L:KPO:IT^:KPS:KPU:8X[:H`R:O;N:O@8::O@:I8@:O;R:8X[9RL:N[U:H>V:NQH:HL;:HM::NO_:=JZ9O7:>Z=:O]Q:NMQ:N_?:NP=:ONY:NP@:N_M9H7:=7Q:O<8:NPK:H`Y:M\\?8H:M_R9MV:NPQ::ZK:NPN:O<;:?X7:M_Y::ZI:>@8:KO>:@\\8:H`P:>]O:@;L:=7W:H9>:N9X::;R:J7Y:@a\\:I8^:OO?:NXS:HHZ:ONW:HIS:H^?:O_8:O<Y:=H;:O<\\:8W\\:8^\\:KI\\:O]H:HHN:KVL:O<K:HHV:O;]:<IU:NP?:NWT:KHV:<UY:=7L:NPJ:N]J:N\\7:H;N9@T:N]P8N9QI:OO::N]U:O^I::>W:HKY:O`;:ON_::H]:I>Z:O=H:=\\a:O=K:J9H:O=M:OOS:KW>:>7M:<`T::<N:>?O:?^@:=N?:OQJ:?HT::<N:HY`:H[L:O>P:HZ9:HV;:OPL:II_:=[I:;U]::^9:=[N:H_7:=P`:H_9:O=O:?a`:I:\\:@:R:HS7:O>P:O?W:;8]::V>:OPT:9M7:O>P:J^_:NVI:9:H9<`:>8^:OI9:?SI:LVQ:N9U:?aa:?;J:8aU:KRR::aM:==@:H:>::]M:8a^:LT7:KVR:@V8:HT\\:J;_:I<H:K_<:<7P:OIZ:OJY:98U:?<a:=@::=]_:9L99J7:J;=:J;<::RW:I<>:?9@:J[\\:9@8:I?>::=J:OQY:9@8:9M]:LOM:=WP:9@H:@;M:<>7:O=R:@U7:P;K:;Ka:@XL:J;Y:<89:P;P:@^;:H8U::<W:>\\8:>LT:K7\\::V>:NUU:9@X:P;]9J7:<7_:9L?::W8:9@X:P:Z:LOQ:P<:::VX:<R::P<=:Ka\\:P:]:=\\L:O^N:KU]:LXL:9^Y:J_P:P;@:?_a:OH<:9?=:P;<:?OO:LM[:NVO:@?;::;R:IHS:8UM:8[;:L7P:N;X:IHa:N7W:O@7:OR;:KZ>:KaM:HKQ:O]`::`I:KI_:88H:8\\Y:8MV9X`9\\X:H<N:8NR:=YU:=VO:J8]:ONX::Na:8OL:8OQ:O;J9IM:;RI::`7:8O\\:KSV:IIM:8VZ:NQ<:8VZ:KaV:J]R:LWV:O78::99:O=I:<J]:HaI:K[a:J>\\:Ma?:H9?:=;8:KWI:N7U:P>^:MS\\::999JW:HWY::a9:<KT:<=U::OV:<KO:I:8:L=W:<KS::8Z:<KM:IQU:9Q@::=J:N:X::SW:<=::;`>:HVZ:>T<:N;Z:HPL:H8J:<KX:HXV:II[:P9`:L?_:9O::;\\Z:I@^:O>\\:=HL:OHX:OP]:L77:N^=:;U>:?P;:K`<:>JX:HaH:L<<:K^8::TZ:L9R:K]K:?:9:L<Z:?`Z:P>Y:>N`:=J@:NQL9`J:O]S:NM[:P7^9PS:M\\`:O^7:H;N:P=`:8\\[:P>8:I8U:P>;:=aN:LH[:O^;:Oa\\:N]X:KO?:<^>:OI7:OI<:OS^::MS:@N8:O@S:9L?:O@U:@?::OP7:OHQ:N8W:O@[:HYV:O=U:Na]:9II:P?;::OS:=PX:N><:J9R9>@:=PV:=P9:<KL:=?Z:N;I:LN<:H7_:P?L::]I:L@S::>?:=8X:;=Y:@TL:H[<:;?=:ORa:OH8:@@^:>LN:OH;:O@P:;?I:OSU::=X:M_\\:M]a:M_N:OHL:OSJ:OHN:O@\\:OSM:<R_:OSO:M`?:OHV:H:L:K^8:J?=:N^Q:9RP:HO@:88I:=LR:OXY9=O:PH=:=\\R:9XQ:OS`:OH?:P=W:I8>:KPV:H`R:P8[::SO:N`?:Na9:<WO:N`P:N`J:L8T:J>W:H8V:@P@:O@X:P>`:IHJ:?8@:KT7::`^:MLR9>H:J>_:PI@:;a^:N9a:IP]:K`Q:LNa::NQ:LO8:OH<:J?@:?P;:J?J:J?L:J@I:KXN:J?S:=N8::\\_:J?W:K^?:>[^:J?W:MU^:=J;::^M:J?Y:9;Q:J?W:OWH:>\\@:LOR:JIS:>L=:J?`:LOV:LZO:>\\I:J@9:J?a:=NT:9@::J@?:J?a:L]Y:>\\I:?KL:OTJ:;Q@:;Z^:;;a:MV?:@TR:LP=:>VW:>TK:>>:::XN:?__:HU>:>SM:>VP:>VO:LPY:M?L:<VN:LX^:=@M:LP`:La;:;U=:LQ7:@?::PL]:;9Z:JaR:>SZ:>JO9H>:LQ=:PLU:I`<:PLO:;7=:>W>:@H@:LQH:9I7:?JH:LQL:LW;:MVY:;?H:88H:M?=:>V::M>K:LRJ:O[`:9;Q:LQU:I`M:=HH9?R:=aZ::ST:@?=:=I;:@IL:LRV:M<<::SH:LRZ:PL[::T[:@9J:N?9:L]R9HO:PMZ:9;Q:OZQ:9;H:@@P:LQ\\:LPJ:JL?:?a8:@>W:MZY:@>R:9;;:LRM:JLS:M[Y:IRY:JM`:JL=:9HW:OV99R8:LS7:=I;:N?Z:=H_:9MI:INa:=I;:LSV:M`7:9?`:LQ8:M[Y:OVR:JNO:OVR:;UY:8=W9>Y:<Y9:IY9:JNH:OVX:JNW:JOJ::Y::?<;:97Z:POJ9@>:LTU:OVa:;<S:JW\\:PMY:=HH:NJ[:LTa:OW>:9;Q:9W7:OWH9>Y:>^_:;_^:HXN:;aK:LW;9R8:NK7:;7=:OVK:;9[:O[_::^T9:7:8YU:LSI:=]L:JM\\::[?:NH^:POY:MH`:;U=:PO\\9>Y:<<V:PO::PPL:;<S:NL;:OVR:9W9:PO@:OOY:NY^:>\\S:PO`:L=9:MV\\:N>@:?:L:IVR9J<:?Ia9?R:POT:LX=:JW\\9O=:PN>:N=W:NHT:;;\\:;9L:JX\\:;;\\9HO:JSO:J`^:MYM:LYM9:P:;9L:N@Q:JJH:LXR:HXW:LXT::Q[9>Y::U`:MV]:9^M:LXZ:MH<:PQT:PQX::=K:>VL:O\\M:LZV:LXK:LYU:=Q`:<<P:<\\a:97a9O=:<<<::a9:PRL:9O8:OJR:9X<:LY^::QQ:9L99O=9=U::]_:PRV:@X@9O=:>`\\:LZP::LZ:;J;9?R:?8_:LYT:PRH:=[O:99@9O=:PJ::9Y=:PS;:9L?9=K:9WX:PRP:OZK9O=:;:;:PRT9:P:;@?:9Y=:PSN:NJ@:JH`:PRQ:;9Z:<79:LZP:LZ7:9];:PSH:PSL9=;::]_:PS[::=J9=8:PS@:L>@:LY^::M]:98I9O=:PS_::V>:PT;:9L?:NVL:LZ9:PSR:PSI:@aM:;>Z9?R::M]:PR^:JSa:K:^:O_L:L^R:L[7:L\\::K7?9QW:Ja9:L^M:NK9::T[:L[@:LU`:LX^:LY^:L[N:PN89QW:N8a:L`7:L]R:88a:N8a:L_Z:L^[:NJO9aZ:PK^::T[:PR9:L[]:LSN:=^\\:Ka]:K=[:>L=:8aK:9<8:PUL:=S@:K:I:=`9:9`7:MIQ:OY=:@K\\::IY:JP@:>8Y:OY?:9@:9K;:PUQ9IY:M`::PUN:>\\I:J<8:PU`9@>:IX>:MK_:8`^:>L=:=\\Y:PV;::>J:MN`:MJV:OXQ:9@::9N^:PVI:9?@:OY;:PVL:>?^:MKZ:=8P:PVI:<OH:ML@:OY=:>L=::VM:?`W:9HV:;X7:9]=:JM\\::WR:9_M:LS`:MH]:9?W:PS?:LT7:<U89@>:L_I:@?::@]<:;U=:NRL9@>:;J]:8RH:9L?:PWM:99L:;LV:9;@:PW?::L7:LW^:<HH:<H8:<VT9@>:;MI9><:;;@:99L:PW[:9];:;UT99T98I:LSK:JW`:L^M:OT\\:=XO:=J;:?MR9_H9@>:PTY:=KK:=^@:L=Y::VS:=Q7:LaR:?;@:;TK:LPR:;;`:;V@9:P9:Y::]_:PXV::=J:;N=:L[_:;`>:JM\\:9PR:OV[:8a9:>J::99_:?]T:PWa:JOP:J9<9MX:JM\\:OJL9@>:99_:JX[:98X:L=Y:=9>89:PUa:ML^:;<S9IT:J\\]:?;J:?J]:9@::;^\\:PKN:<L8:LQ8:JYN:PWH9_H:NTT:PX@:>\\J:>NX::YP:>LU:PUP9:P:JY_:JOJ:;;^:LSM:9;L:O]8:8XN:PY\\:9IJ:PW=:MV@:J<I:>\\I:MTY:O\\Z:9R^:9Ha:INI:9WI:>JX:<?X:M@@9Xa:=YZ9Y9:HL@:88_:8^U:8^:9Y<:8^<:K@P:8I@:O];:KP_9U?:M\\\\:NM>:>RQ:LLY:KW7:MSV:H;[:8@H:O]L:O:T:P@S:O:W:NP::P@U8L:O]U:KH::ILL:P>S:O][:NMa:O;O:@S8:?7;:P@X:O]a::_=:O^8:>`^:NWL:?Y7:8K[:O^=:OaV:?UN:P9M:8>I:=LW:?ZR:O^M:H:=9>=:IT8:KIK:>H9:=Y]:>XP:8X79^L:O^^:N87:MQX:O^a:N\\>:MQ\\:P8O:HIR:O<^9=M:N]V:M]Q8H:M]S:MR8:O_>:=JL9^]:O_@:?XO:?@]:89L:M^W:O_L:O:L:KL<:M^\\:=QO:NN\\:KNL:M_;:M_8:M^`:8TV:O_W:NQP:O_Z:8Z?:O_\\:??;:?>V:HIU:MRT:>@L:MRV:HIZ9Z^:MRY:87W:O`8:Oa?:NWW:MR_:>a<:K[8:NW\\:>Z<:Ha8:O^Y9]`:8K8:89I:O`S:?>a:O`U:>a`:KJ]:NO@:KJ_9VM:KJa:=RO:KK9:8ZU:KK;:P]N:8ZU:KK>:>YY:?HH:8JZ:KM8:O;H:HJR:NXQ9W7:O`^:N_Y:Oa@:889:@OY:O`J9KL:O`L:HJ;:O`O8Y:O`Q:ORJ:OaZ:ORL:PH9:HKQ:Oa^:=V>9QL:HMP:IKQ:P77:P=X:NO[:P7;:I8`:P7=:N[Q:P7?:O:R:N[O:8R[:O;U:KV`:O;X:O]M:O;[:OaH:=IQ:N_H9TH:O;`:P7T:P9;:N_O:PIR:P7Y:=_J9>\\:P7\\:MSM:@L^:NPO9:P:P`?:M_W:8H::;QX::PV:P8::9ML:I9N:PH::@UN:P8?:?^N::]I:Ka\\:O:I:O<>:J=K:KWZ:Ma8:9S?:P[`:M]>:P8Q9_H9;=9VI:LHX:HIQ9_T:P]Z:P7Q:P8a:N_I9]U:N_K9^Q:>a<:O<V:8U^:O`[:P^Y:>RJ:P`7:O=<:Pa;:P8T:P\\S:9[T:P\\U:P8W:P]S:>Ja:KLV:9UN:HI\\:>Y=:K[8:>X>:P]`:8<Y:KH[9Z7:KH]:H@\\:PaJ:P^]:8U^:P9=::O7:N]O9U`:P9I9WI:P\\U:N]V:9N=:9[I:>?S:8]H9J`:KZX:Q7:9\\a:P__:H;N:9SM:8SU:KS\\99X:KVQ:=J>:PH?::TW:O@`:P=::9TY:9K99<S:P9S:IIX:P9U:N\\P:>8;:P>\\:J9J::>>:=:S::a`:INL:=>U:<R?:=[I:Q8I:@<T:NYK:@X@:@7L:I?a:K]@:<?S::W;:<]\\:J>U:HY]:IWS:<]7:PH`:I7>:I^T:PU]:==@:PHR:8aW:K_O:Q8U:>H@:O>N:OPU:Q8Y:=H^:<]7:Q9;:@MX:IK;:K_::NW=:N;Y:O@]::N=:Q98:>H?:<]7:@V;:99L:@V7:ORZ::7;:J;J:9XI:N<;:9;L:Q9R:99P:@V=:IYK:L8P:I?W:Q9W:OJM:H[?:=_P:N8U:>KY:9P[:9ZI:HYP:O?R:L>M:O?[:Q9_:?`S:?[Y:9<8:;`H:;ZY:L;a:Q:I:?_=:?[Y:PL7:K]8:Q9M:PHS9SV:I;P:>H>:MaT:J:N:@V[:;`H:;W`::RW:Q:^:K^`:I^T:LW>:J<^:;X?::OS:>>?::RU:Q9=9H`:N<8:Q:U:O=^:P<H:=>V:9Y8:O@]:Q:[:@WL:J<^:OM]::aa:Q9=:LW>:;`H:JZ\\:9Y=:Q;V:Q9J9Y_:>[7:PRP:O7@:::W:<Y=9@\\:NW7:@XX::RW:MaH:I@S9^T:JI]:OUU:@7M:L8Y:OUW:<?S:8UL:=;;:>P<:<9=:9_;:H\\7:>ZZ:@89:Q<>:<U`:I[a::8Y:MV::@<>:Q<K:<OP:H[V:H[?:JTU:=7;:K]Z::PK:LLS:K`::MTW:K\\I:PKU:OM@:Q<M:N^J:;:;:<MR:PIK:ORS:;=;:>PM:LKV:>8T:@\\J:MK`:Q==:=\\U::T^:N9T:97]:>^<:OMK:J<@:;`>:9_I:<@O:OTJ:INW:9X<:HVZ:HXQ:;NQ::RW:Q=]:99L:J>_:@X@:N:]:HXQ:<<J::=J:<<J:I[`:?LK:>T<:;9I:K_?:9TO:N7S:JJT:N9W::=L:@7Y::99:Q=R:@NH:MZ<:Q=U:9@::Q=W:<a>::[O:?O7::L7:?;^:HV[:JHR:HP9::=K:>^]:>^a:MZ@:;PH:Q=Z:9LK:Q<U:IPL:98]:Q>]:HPQ:>]]:>T7:;K`:Q>H:P<_::99:=:Q:Q>L9RM:P:]:P;=:LKW:9TI:;@_:?KH:OSQ:L>Q:Q7]:K^7:9a8:H:`::II:<UL:<MR:PN>:8a<:P=P9>I:L7O:>Z`:IHW:L7R:IHY:H`>:ONW:P=Y:P`Q:P=[:8^P:P@Y:P[Z:P@[:H=?:P=a:I8T:H<O:P@`:IT?:P[7:N^U:P>?9>W:P>H::O=:P>K::N^:P>M:KaO:ILL:P>Q:ILP:P=Q:8@R9WK:L_L:P>V:<XZ:9P7:PJQ:=:T:HaL:P=T:<XX:K\\V:P>`:Q?M:PIU::;=:P?::HVU:99P:;_L:N><:I:=:9@K:>^H:=Q9:=[>::=J:QHO:P?L:N;I:>:_::[K:@H<:Q?8:I7X:LQK:9_Z:P?W:=@P:P?Y:;NM:KU::;=Y::\\::O7@:P?_:97]::IY:IST:;>I:?SI:P@J:PK<:P@<:OXY:P@N:P@?:L:V:QII:9^Y:QIK:IJR:9?8:9S\\:<9N:=MY::NQ:L<O:9RP:P@R:O]O:8@\\:P[M:O@<:P=\\:NN=9U]:P@\\9JL:P@^:Q@O:8@;:=VO:PH7:P[^:@RK:Q@?:=7S9>=:NIO:MaH:OS\\:PH>:O7\\::K[:O@R::]_:PHK:LZT:I:a:OOV:PHO:OR[:O@\\:PHR:Q;I:;?Y::>9:QH[:PH]:9HH::[W:@]8:;@<::<^:QJ`:=@<:N;H:HPS:MH\\:PH\\:>:`:PHa:P:L:PI8:OX=:<KZ:MNO:HTY:PI=:9`9:PI?:OH<:MPS:H7H:OSQ:L=I:Q?W:PIM:H[<:OSV:PIP:M_^:P`::@M7:@[?:Q@9:@L8:I?U:L:=:98V:OHT:9QY:MaJ:OH;:O?L:OST:QK[::9K:PIa9N^:P@=:PJ::QJO:PJ<:H\\a:ORQ:OH[:<@=:QI^9`J:PJI:HMQ:PJK:L_Z:PJM:IMP:N`H:N\\O:P>Z:P9X:@P>:PJT:;]a:PJV:?TR:PJX:?K=:PJZ:9OU:8YS:O@Z:QJZ:<]7:;U_:99L:@;Q:Q;N:M8R::Ya:LI[:>`9::@=:=N<:=UI:IX\\:J>`:JZ\\:L8S:P@O:J?S:9TH:>[M:PK9:9^M:PK;:QIU:L7@:J?I:J@@:=O999=:879::\\\\:PKP:J@I:J?V:J?S:@??:LH?:J@K:9TO:OV<:H8Z:PKS:;VY:LVQ:9TO:LZO:<8Z:PK`:LOV:PL7:>\\L:PKY:PM>:PL<:LPH:NYY:>LO9?\\:QNX:J@Q:?JJ:9TP:PL>:>LO:>\\U:?LN:JRa:>U^:8aI:=?J:;?_:LP@:LO?:@>O:;TY:PLQ::IS:>W>9[W:LPX:8=<:PM9::=K:<VN:<O::OUX:=@M:9\\8:PM_:?:::?L9:PMX:?O9:LU`:MX@:=I;:K]9:NKM9P?:QOP:HWa:OVZ:IQH:MV?:LPK:>W=:NKM9NT:LQJ:>\\>:OUN:9_::LQN:@H?::IS:OJL9R8:M@W:@=@:QOU::J[::SH:QOX:;U=:NJ`:LVQ:PT\\:LY8:?L:::ST:PN@9R89P?:NH=::\\_:@?[:=NH:@>W9OW:9LH:@>W::T?:JN8:JLS:;]S:JMI:@>99MZ9:9:PNY:?M[:OV<:JK7:=\\]:@H7:I=@:>]Z:?O?:PIT:OVL:@T@:?;?::]`:9Z?:JM\\:<Y9:PP\\:MXa:JN9:QQI:JOP:OZH:LSK:NJN:9;Q:;UY:POR:LU_:JQN:JM\\:QPW::T[:?O=9O=:M>S:L]=:L=\\:L@8:PO_:JJM9?:::QZ:PP8:IP8:?O::J@T:KVO:K]J:LUM:=_S:;<S:QRI:LX]:PPP:QP]:=`J:?N>:LT_:;[J::UU:=]7:PPN9J\\:OVP:PPW9@>:9W9:LR]:NJ`:PRZ:PY]:PPS:PP]:NVP:;<S:QOU:PVV:;<S:<_P:LR]:LVZ:N?9:QO_:QS7:=N:9>Y9P?:QRQ:@K9:>IM:MV\\:L>?:QO>:9;Q:Ja9:LXX:>\\]:MV`:QR?:?OV:LU^:QRI:L[J:QP\\:MYL:MW?:LW@:N?H:PQT:MZS9>=:MXO:PQZ:=I;:KTP:9;Q:JSH:OHM:K]J:LUR:MY@::T[:QTH:QO]:L\\U:JQW:LUJ:LUY:OQW:LV>:I9M:?TX:N?7:?=K:N?9:?O=9HO:QT`:MW>:QU7::LZ:MYP:QTZ:9^Z:LX_:QT]:QU?:PR>:L_9:LV;:JWR:LU[:LVH:LP^:QT@:LU`:QUQ:QUH:MW[:LXJ:?8_:N@Q:QTP:?=@:LXS:QT7:PQ\\:8W]:>TK:PQ;:;9[9@>:;:;:M=a:QTO:;W?:LYP9ON9:<9?I:QTU:JO<:MYL:9TK:<UL9?R::^T:<79:N?9:QOU:L^M9O=:QSI:N?;:=HH9QW:?J[:LZJ:L[V:=P7:LZ8:L^M:QQI:QVY:;7>:NIR:;9Z:?RH:LZL:;7>:QNR:PTZ:LS<:<:Q9[7:PV<:QO\\:PTW:MT^:?Ia:L\\>:=]L:L\\X:QRI:QV^:L\\\\:QRa:L\\_:8=W9O=::U`:LaR9O=:@IL:OW=:9K?:PUL:@\\J:PV8:9@::9LR:PVI:PUS:K=Y:@`8:MLO:N@a:N@Y:PUX:K<]:@_X:PU]9@M:PZ7:JOW:@L8:QX:9@M:PU_:@_R:QWN:J]^:?:9:MK`:NUN:;<S:QXQ::X;:PVY:NH::PL?:IQV:PVP:=[T:PUW:QX`:K:V:MKZ:PVO:QXV:?:;:PVK:@KJ:PVU:OTK9IY:P<W::J_:JM\\:;X7:PW8::OT:OX`:>8Z:PW<:>\\J:LQ8:M9T:N?X:I=?:?;J:N:J9@>9:\\:97^::RV:99L:QY^::=J9:V:9P;9@>:QYX:PZ<:NYU:<H7:<_X:;<S:QZ99><:QY`:99P:QZI::X<:J\\8:PWa:PX8:JM\\:;;@:QW=:=KK:PQK:NYU:;^P:9Z7:PXH:?N>:>\\@:PXK:I_[:PYZ:J@M:L=R:>I\\:L=Y:;:8:PXT::]<:;^Y:;OM:;S^:QZO:;^S:JM\\:99_:OV[:9PR:>J::@HV:PY8:Q[@:;<S:98T:PY<:;<S:PY>:J<_:PX^:PYI:9@::<Qa:PYL:<H8:=aa:QWN:JXP:PYR:J@I::S`:PYV:9LT:LQ8:PYQ:PYZ9][:PZ@:IP\\::>=:>NX:=MS:PYa:;<S::YP:JN\\:;<S:@H;:PZ<9IT:M?::PZ?:H8\\:PZI:;YJ:<;9:>PJ:@P`:QX\\:K@H:HXW:K@K:P@O:<?X:>R[9>>:PZ_:<U\\:8OL:8H7::;V:P[9:O]?:P[<:J=M:P[>:K@]:P[@:88M:8H<:8?U:O;79T_:8HH9ZT8[:8HK:8HM8J:KO;::8::8HT:8988Y:8?V:97:9`_:8H[8@:8H]9X@9_T9SM:Q]^9VP:8RI:P[H:O;Z:O:U:OR;:P7N:NMW:OR=:O]T:8<M:O]V:8@J:O]X:P[R:Q@=:OHH:P@Z:MP_9TH:P`^:PaT:KS7:P\\9:KS9:N8;:M`a:8K;:N8>:?@V98W:MQH:P\\I:H@Q:P\\K:8Y]:HHL:H`X9>W:P\\X:P\\Z:M_>:P\\\\9UK::;[:P\\_:88]:IVH9Y?:PaX:KLU:MRW:Pa[:P]X:P8^:H^;:P][:ON^:P]]:?UX:?U`:KZU:MS8:O`]:KN`:O`_9ZR:H@[:MS>:?V:9\\X:8HU:Q]X:NPN:KS?:MSH:8<V:>OO:<I?9_H:NNQ9`=9N@98U9LH:P`?:KR[:=ZK:HLK:8Z;:?@K:P^H:P^P:P^J:?H>9QK:O_]:KK7:KWN:KOR:>X[:KK::?@O:@SS:?@R:KK=:M_H:P^S:KK@:8JZ:>R=:?XO:NOU:Oa[:P_H:O]Z:QLW:P_L:8X[:P[U:P_O:8XR:M^7:H@9:KQ>:8;9:HIZ:@Y_:MJ^:M^M:?Z<:M^P:?Z?:@Z::P_X:O;W:P7M:P_[:QK_:P`@:P7a:NPS:8=X::_::MSR9PX:9NL:ONN:KZ=:O<X:PaT:O]]9`P:P9K9V>:OO9:Q7a:?L::OON:9J_:=[I:QH;:OOR:LMW:P9Z:OPO:N`W:O7a:=XU:O>P:?HT:9P7:Q8N9RM:IML:@=N:O8;:P:<:I:X:K\\^:OOU:::W:@9Y:97]:Q8\\:=>U:<TY:I<::O>8:@T_:R8=:9TJ:K\\M:9:H:IHR:M_\\:H<V:P=S:K;V:M`::=L9:;]@:Q][::JY:Q^79_T:9S?:Q]a:8I7:Q^9:H@W8=:8=99NM:9>;:8IL:N_<8Z:=QX9HX:KN9:8HI:Q]P::H7:QaP:<NI:>XJ::H8:KN::P`H:IUX:MQU:Q@=:Q@[:O]X:Q@]:KH<:ILQ:Q@`::_I:Ha>::;=:P>X:JIS:9Y=:O@W:HRJ:<Ua:?aX:9YP:9O[:;LZ:9PI:@=>:ORX:I9W:PHR:R7T:;UW9@\\:HW\\:9L?:HW\\:99_:N9R:L8Z::LM::KH:9;L:<K\\:O=\\:R:H:H7_:9K>:=8R:;<I:9LM:PJ`:=]L:MaY:9^M:>JX:K\\U:QM9:OP:::<N:NSI:99L:L@]:Q9\\:=KV:LS<:@<V:J:P:9KQ:R:J:9;I:;N]:NIL:;LZ:I@Q:R;9::LT:@_[:R;<:?\\7:J7O:97]:OQ<:99L:N;_9RM:Q9T:P?8:9K7:?]T:L7Q:97]:;Q?9=\\:KWK:PII:QJV:P:_::WO:O87:J:T::VN:IYV:99P:N=J:I:Y:9`^:IJL:IP>:@Z`:K`9:><a:OH<:?_]:R:[:MaK:=I7:?SI::aM:P@K:;Y;:Q<a:?`[:L]]9O8:R7Q::9K:R7::P[J:OR<:II=:O:[:8TI:KO8:Q]R:Q]T:I>K:O=8:Q`I:Q`K:8TI:P_<:O`_:ORM:>_K:R;^:QLO:9\\J:QJQ:O@Q:R;\\::VN:@;Q:P?8:@WH:Q9U:M`?:L7R:PHR:OSN:N9::P>X:OKW::]_::;K:QM@::<Z:I^S:9@R::HX:N[;:H[?:H\\9:QL9:QKS:L:Y:H[>:<JZ:OS9:>>8:OH<:O7]:H:O:>N`:OS?:9UN:QK^:8P@:N8H:PO8:I:a:IHX:P?]:QL::9O::QL<:J_M:PI[:OQT:P=;:PI^:9^N:8a7:QLK::OJ:PJ9:PJ;:R=L:QLQ:OS]:QK\\:OR9:P_K:I=`:I9Q:PO8:LKL::VN:LKO:==<:IJ?:P<@:IX<:N9:9ON:O8W:H9L:<?Z:Oa`:HMQ:R?@:MPP:N]8:J>Y:?a_:L?`:R?Q:O9>:<7N:;NJ:PJ]:LN[:OSP:NRJ:L8U:K^=:PK8:@UH:ISS:J?>:QIL:L:U:?=Q:>LH:PNK:LO>:R@J:?MI:PKL:LOV:LP::Ma`:LLJ:>LO:=HZ:J?a:?;M:=NV:R@J:NT9:QNM:J@::?a?:N>S:PKX:QN8:<8W:MY_:NHQ:?a?:QWI:=PL:QNJ:O7a:>NX:J@?:>NQ:L]Y:QN8:QN`:9@::J@S:J?a:8P?:>L=:QO::J?a:J_P:>\\I:;LJ:J?a:M:\\9@M:?NR:>\\N:MHH:P;S:=>U:;P::PLM:;a`:PLU:87=:I_J:HRR:?=K:MT<:<W@:?NT::ST:=MU:LVU:QO\\:?LK:N?9:@@\\:QO`:>J9:;?]9H>9YH::VS:QOJ:J_S:9^7:@>R:N>M:QPH:JIT:9MI:LQM:9^7:>_K:MXQ::aZ:=I;:RHa:LT^:RI9:JSI:OUY:RI<:POV:RI@:PPP:RIH:=XO:N]9:OV7:>U@9R89YH:QQ7:MP>:9;H:PNM:@>R:?M=:OUV:M7L::SH:M7O:JLM:LR?:JL?:OX7:@IK:9TP:Q?>:?ON:INa:Q?<:?N<:;^P9SM:NJQ:LR[:LP^:JM\\:RJ9:M[K:OW::K`::Q\\>:QS8:L[_:O[O:9:O::]^:O[O:<Y9:;UY:O[O:97Z:I_N:PXR:;J?:;TO:OM[::a9:@7U:99P::XT:PZJ:J:Z9>=:;ZN::9=:;UT::T;:;U_:?<;::V[99T:I\\N:L=Y:OV<9>Y::Y::QSP:OVW:QR\\:POS:N>`:RJ=:;9Z:N?@:QRN:PP\\:PO^:>S]:RIa:QQZ:RK;:RK>:QSX:LY8:RLK:L^_:IP\\:PTY:LPa:L>Y:;U=:K?R::ST9>R:QZ]:>\\Z:IP\\:O>V::ST:9YH:QVP::T_:=]7:LQ8:LX<:IP^:LR=:OVR:LR?::ST:9LH:N>S9>Y:QS_:?P[:=_M:L_]9>Y:O\\::QTX:N>`:M\\=:N?X:N@K:QO^:LY8:IVR:QU]:;U=:LV=:RMX:MWU:?LP:L^M:RLK:PQP:QTK:QU7:PQV:RN7:QT[:RM[:RLV:L_<:QWP:RM_:;<S::U`:QUL:NTM:RNH:RN9:;9Z:RN;:OQW:LY>:QTL:J]<:R@a:@Ia:LT\\:HXW:OWQ:8a^9JW:MKK:>?W:QX_:=_I:>L=:;9T::U]:9R8:MaO:QYS:P:<9@M::LZ:RO<:;_[:NIW:MKL:O:?:MLH:OXJ:MJ8:MKZ::QQ:ROJ:=H]:QXX:>8Z:PU[:QXa:?8_:ROT::>J:PVR:NI]:@^I:MKZ:=KQ:RO[:MIa:RO8:NSL:>\\I:;:;:;IV:QOJ:;<Z:9;H:;IR::a9:RPH::W@9H>:;:?:L>Z9R8:<79:QXQ:PVX:QY::N=X:9:8:=_L:99L:JRW:<OX:MZ`::M]:LQV:H7S:>VL:RPN:PTJ:QXQ:MJ`:MO7:ROX:PQY:>O`:RI8:JZU:PNJ9T^:IO;:HQY9R89;\\:97^:9LR:99L:RQJ::=J9;V:9P;9R8:RQ=:>I_:?__:RQ@:;W[9R8:RQP9><:RQL:99P:RQY:9L?9;L:L>P:;<W:PX8:=@M:8aK:=_V:=PL:LX@:?__:L^M:HP_:PM7:J@I:@H@:IP;:@\\\\::SM:RM8:L=_:;K<:L>Z9IT:=9>:;>?:9XT:>L=:J<8:Q\\I9R8:>PU::XN9R8:9N^:>IK:K7\\:9?X:L=Y:9IJ:=_L::W@:K?R:PZL:?[Z:RJM:Q\\Z:9WR:Q\\\\:PZS:K@M:J[T9QL:O]::::79?S:8I@9JL:O]>:NM?:@S7:P8[:HK]:P[?:KZN:8IJ:H>K:8IN:8IW:8IY9Y?:9U]:8I\\9U8:8_S:8\\]:8=\\:8>M:9=`9?V:@Q]:Q^@:NMQ:Q^<:O]P:P_[:QI`:Q^I:P[P:Q^L:R9T:@LT:QLU:Q]L:M_]:>97:M\\a:NN@:ONT:NNI:OO@:MQ::IS[:NNM:Q^Y:>R::MQ?9>=99J:=>898[:Q^^:>99:P\\J:>WT:M\\T:Q_8:MQW9[K:Q_;:P]K:HSa:P\\_:O^9:P[]:O@?:@;7:Q_L:P]U:8@]:Pa\\:Pa<:MR]:P9P:Q_U:?>`:HH7:Q_X:KZS:NXO:Q_\\:MS<:LH^:HH::?V::P]_:MQS:8<Y:P\\@:>XV:?>[:O`X:?X::O=7:87^:H=^:8:<:NXL:8N::8H`:8Y<9M8:<L^:8\\]:Q7;:>MY:>QX:P^Y:8WJ8Y98N:>K7:RVH:8JN:9NO:8^O9S<9]X:P_]9>K:KLY:R=?:NOV:P=Z:P9O9X>:KPT:P_I:H_a9Ja:RSY:RW;9[H:P_J:KO]:I=`:P_M:I8>:QaK:8Va:O;S:H@9:8P^:H=7:RS_:;\\S9>]:RS^:8IZ:KQ::H@R:KQ<:M^S:P_W:P7J:@R`:P7L:8^P:Q^>:P7X:?7;:;R[:KQK:?7<:Qa`9UK:R778K9H`::Z?:P8L:O<@:R7=:KZ`:??_:P8Q:PaV:NXV:9U@:RUQ:KHW:Q7U:>RI:P^[:8U^:Pa@:RV[:PaP:P7V:OOK9>=:QTW:R7M:>:H:O=J:Q8<:L;`:I:T:;Z<:J9Z::VN:R=]:@]J:@NP:R89:IH::HX8:=KU:P9a::>^:=MZ:9Y=:;7X:R7_:OQa:NaY:=X[:RY>:KWI::8O:>:X:I?\\:R7X:RYK:N:a:J:8:P:;:RYP:?ON:Q8R:RYS:P9\\:@NL:@N::JH=:R:::?]8:Ha?:NH?9@\\:LI?:=\\J:<[8:RZ::98J:O7H:K]]:Na`:;^S:H9=:R<?:9K::9_O:R88:RYT:9P7:J;=::OS:J;=:OQ`:<RY9@\\:IYT:J[<:O>P:L9N:Na_:R8L::;R:;[T:R7;:P8M:=7K9Y7:9IX:H<>9?>:PJJ:P[=:@N^:R9?:P_Y:=UR:RT7:RW[:=_J:O;W:I9K::H?:HJ::QJL9KH:I9?:9>N:9I`:<[^:RS[:8I[:8I]:RS`:8TR9XO9OK:RS\\9>H:R[W8K:9I`:8<O:R\\8:9>N:<NX:R\\9:R\\?:RSX9Y?:H>X::7`:N8::=Z?:Pa`:HQP:O^H9WK:OI>:NaZ:?^N:R7O:OOQ:H\\Z:@:I:<]<:KW?::J`:RY@::VN:<Ja:ISQ::U`:<TV:@TU9][:?JU:<JV:OH;:I\\<:@TH:=[W:K;K:INV:QKI:I@S:=R]:>PM:Q<J:?`^:K\\R:<S::9L?:O8O:Q;]:HUO:IH::P:H:9L?:P:H:Q:::=;>:?9R:J:O::IR:9`7:HaV:Q=7:KX`:>7M::\\\\:?_Z:L=7:Maa:?9K:HX?:JJ;9@a:?ML:?JI::HS::=H:R]Q:O7R:9;7:;U?::<N::U@::=J:IYJ9RM:I?9:R]X::IN:N9:::IQ:>HN:9S\\:R]^:?`[:?_Z:Ha[:?;Z:?9K:R^9:IQ]:R^>:N9K:H[?::H\\:99L:R^J:H:\\9:798O9NO:>TS:R][:9TK:N=W:?`Z:>_I::IY:R^]:>[U:8aW:L=7:><[::TZ:R^<:>=K::VV:=HO:=@M:;=;:O[H::TX::TZ:LLT:=N::R]O:H^[:I;7:=;W:I;Q:OMU:<9[::OR:Q:X:I?W:Q:W:H:a:K^U:QRO:?[a:<=R:Q:Z:JXJ:IY::?;Y:IJ]:8?::?Qa:N9?::=?:<O\\:MTR:OJX:NZH:R8M:P8;:Q?a:IHU:Q@8:R;[:R8R:<@;:=QK:9==:>Ya:R\\J9IX:O\\::R[`:=9L:=JR:H=V9LJ:IKV8H:H=Y:=9^:H=8:H=L:8U?:RaM:?S\\:8HR9Y\\:8<@:9=W9RT:Ra=:H;X::@Z:Qa@:R??:L;;:>9V:L;=:==]:8>@:RSS:H>X:RSY:RVa::HM:@ZY:R=X:I?W:9:L::KI:L8W:P>[:R=a:==7:>HO:@XP::L\\:?SL:QH@:::Y:=T@:I]J:L@X:N8]:LH8:H8H:P;T:=I`:@_L:97M:9?[:=UH:NM99RM9=_::=R:<JY:@=7:R=M:QKZ:PI_:8a7:R`a:RK\\:=<;:RSV:8IM9Y?:=Wa9[H:RaV:9VL:H=W:RaH:RaJ9\\]:P9>:H=H9MW9LJ:RaO:H=V:@O?:RaS:=H7:S8J9NJ:RW@:KV?:RaZ:MRN:L;<:J\\S:Ra^:KZ>:Ra9:P_?:QJK:RIa:@`[:QJY:Q9P::KI:H8:::=H::^8:=<a9][:J;X:H[^:;a_:>>O:OP?:>>K:MT::?aM:LIa:Q>R:LJI:;_Z::^J:QPK:P?S:>JU:S7Z:?:M:HX?:S7]:S7_:=]I:R<P:PIL:<UO:QLI:9RP:@QU:R<]9QL:R9J:9=_:RSS:KWV:Ra\\:S8`:L?H:>9]:8IK:O`;:R[]:OR::IT^:R9P:NQ=:R9R:IIR:R`[:P=R9>H:LTN:QJW::?>:IH::R7P:>8<::Ka::X_:R9^:MaM::<N:HR8:QMK:Q8P:S9=:=K<::8]:QKO::=H:;O<:9UO:9aS:L@;:=R`:=;@:Q=T:LJI:LP<:;^S:I]R:<V;:L@?:OQR:KYY:=;U:NZJ:J>`:;\\Z:J:O:@QO:OS7:K^=:?]=:P@=:QIO:@_[::]X:R_P:L<Q:KV]:S;_:?9Y:P@M:>_I::TZ:S<9:=?Z:8aW:S7?:OH[::7U:R9O:RT<:P[N:P@W:?X=:RV_:O;L:=RW9>=:R=J:LaI:OS]:S87::T^:OP]::V>:R=Q:PHS:OHR:;^^:KV7:R=V:R>U:R><:LIQ:<Ua:I;_:<JY:L:U:S87:K^H:S:::8a7:R>M:RTP:QaL:QK_:KVO:R>S:Q@::R>U:O@Z:R>X:PYS:@_T:HNV:R>\\:OS=:?TV:OSW:@S7:S78:QLZ:PIU:R>T:M`;:>UQ:?:;:N8P::M`:PIW:OSL:Q=N:H8V:<TV:QHI:?R;:9RR:R[Y:9NP:S:P:R[>:S9::9R^:S7^:R=K:S:7:ORS:R>]:M`L:S>J::_P:R[\\:S99:?8:9>=:S>Q:S<Y:QJP:R>I:QLH:S89:8aO::^]:Q@=:;]K:;R]::`S:>9S9XO:8VL:?TZ:8?P9VM:8=Y::<<:M`^:Ra[:8KO:L;>:==^:L?7:?Z\\:O^V:L;8:LHM:NX7:P\\=:P8]:Ra`:S:M:R\\H:RT9:8IU:8RW:QJJ:P>N:KaP:RTJ:NQ=:P[R:L?L:L;Q:@S\\:N`:9^T:<^V:9K9:M@@:I?I:LI;:<YZ:L?W:L;^::]_:<OJ:=>T:O8P:K[^:=:S:QMJ:<MU:K\\7:>7M:H]V:OPM:<VH:H^P:O=[:>\\N:9ON:<I7:QKO::>I:PI=:<`>:HVS:S@L:J:=:H8O:=Q;::RW:J<a:?\\^:=RZ:Q\\I:?_8:?`P:=;W:;WU:S;`::8Y:O\\H:9]V:?9K:S9S:IJ]:J;J:L<V:L@T:=T?:>HN:N7?:>H^:9HL:K\\K:?ON:QMM:LZ_:LL>:=]^:K`O:?a@:>T::HPJ:Q>Y:<=V:IaU:IR;:<7M:>T8:;<8:=>X:HVZ:L@8:><V:IN_:SI=:K^?:I7W:?I<:;9Z:K\\>:LNT:J<R:P>^:J;Z:IJ]:I_]:9?`::W8::=H::W=:L@=:98V:IJL:LN@:<\\K:R@;:9@8:;MU:HO_:><[:9S\\:9Z;:@`N:@N@:MWS:J?9:>=<:?;_:K`]:HO`9T^:>_^:9J\\:J7::I]J:K<K:LN?:;MR:OJ_:>LX:I:I:I?;:;?V:N\\V:HOY9RM:@X?:?LN:OMR:S@`:<8@::>I:@W`:9ZU9:L:8YS:PJ^:QKT:R>>:LN^:@PW:>[U:L7>:L<P:OHY:N^::9TK:R@H:<aS:J?a:9H7:>\\I:KXN:LOV:R@N:@P]:R@P:>LO:R@R:LO`:Q\\W:QNX:R@W:IQI:J?a:R@Z::U<:R@\\:9TO:R@^:Q\\Y:J?]:J@I:J?`:J?S:RH::;;`:QN8:LaR:QNW:J@T:@\\\\9?\\:J@P:>LO:RHL:LOV:RHN:>\\I:RHP:LOV:RHR:9@L:QN[:97]:RHV::=?:PLH:JTQ:MaZ:LW;:RH]:;?H:<@Z:LQ>:MHS:LP\\:RLR:IQH9R8:?NT:@?R:JI;:;<S:RIH:98]:RK<:OZK:OP]:PSL:<[O::=J:<[O:99L:RZX:L^7:JLT:PSL:RZ\\:9L?:IYT:L]@:>>R:?;I:QOa:9?_:RIO:PM=:M:\\:LPZ:QP?:9?_::S`:QPI:K]^:;W>:?9R::a=:Q9Y9H>:IQ=:9L?:I<O:99L:;:X:IaU:LXU::VS:RJ`:>K^:O[O:RI_:JN9:J_]::J[:RK::N>`:RI>:RNT:RLW:QV]:L@_:PY]:LZK:O[>:OVU:Q\\U:R@K:;TX:JO<:QS;:9LH9OW:JN9::@7:JOJ:JKU:JOP:9JN:?<;::T?:QRQ::S`9WZ:MUJ:>?I:@_L:NK[:NM9:99;:PNZ:>TK9SM:;IV:L=Y:8?::HU>:JM\\:;Q@9>Y9MZ:QR>:OYR:QSS:QO[:LR]:RLK:L[M:QSM:RK@:9:O:JO<:JLQ:JLN:RKN::ST:97Z::Y::<UL9>Y:9W7:PN7:OVN:IP^::^N:SP>:PPP:RLM:LTH:QRO:;`<:RL?:RLR:SNZ:;<S:RLT:SN]:L]9:SN_:?::9QW:RIJ:IPV:>U@:RL\\:SO>:>?K:JOK:;>Z::S_:RJZ:?Q;:LW::LXU:;@_:;^P:LW>:QV>:SM<:N?`:RLR:=8P:LU^:SPX:L^M:SN]9HO:N?@:RNM:QS?:@HM:;TJ:9YH:LXZ:SO@:SQU::T`::^T:MY^::S`:HU[:PR;:LQR:PR=:RMV:LZY:9TK:PT@:SOJ:NJV:NL;:LYZ:QVZ:PTK:PP]:PTN:<_P:;9L:SRO::L7:LY^:@@::NJV::U`:LZP:@@::PU@:MVa:9@Y:O\\^:NLQ:LW;:LYH:>TK:LYV:;9[:LS]:J]<:PT@:J_]:LZ<:;9Z:SQ[:;;\\::RY:SQ<:RK>:NIP:QVa9YH:SS7:JK::HU[:QWL:QY?:H_]:PUT:@L?:MKO:MJV:PUV:9\\T:QXa:;9T:QX=:@KW:OWO:9MI:RPS:;?I:QXL:>LO::LZ:PVI:PV7:K<H:>\\I::QQ:PVI:O9Y:ML::9@::?8_:PVI:HYJ:MNU:>L=:=KQ:QY8:ROV:9?W:QXZ9\\Y:QX\\:PUL:RPR:MKL:RQ9:>L=:;:?:PVI:=<^:RQ8:QY;:@K\\:OK;:9@::<79:PVI::OY:QYH:@KY:MKZ::M]:PVI:MaO:STP9@M:?RH:PVI:NY<:SUP:@Q<:PV]:9?_:RR9:Q[W9@>9K;:QYQ:;<N9J^:RON:PV>:8`^:OK8:OXN:N@W:OXP:>8Y:IR^9IY::>=:JN9:L]I:LYJ:K]M:QZ?:<O?:;<S9;=:=\\X:9L?:SVN:PWS:L]H:PWU:PL8:PWW:QZ@9@>:SVQ:IQV:99L:SVY:99L9:^:9WX:QZP:LSK:RR\\:PX;:=NP:PX=:;MO:;^P:HP_:QZZ:=N::@\\\\:RM7:;;Y:PYZ:P=>:;<S9LX:;T\\:Q[W9@M:<O8:9;T:Q[[:QYN:9@::H==:SWR:>>W:O\\O:RR^:SWW:OIN:>\\I::VM:Q\\I9@>:L^V:OV[::WR:Q\\O:O8M:9?X:Q\\=:?=@:Q\\T:PXR:LO=::\\Z:Q[N:9:>:PZP:MPL:Q\\]:K@M::YM:O]9:K@Q:8OL:<IY:8J[:8RM:RSP:>RQ:8P]:=<N9LI8P:KI_:<[^::J@:8O<:P[=9?H:=7K98U8=9H@9`::<J79J?9JH:<^\\:8]`:Q]\\:KM^9[_:N^^:88I9>U:@N^:QaY:NP7:RSS:8JN:8JP9>P:8J?:O@8:H<@:II<9U=:P[I:RTN:NP9:O;Z:RTH9\\8:Q^J9Y`:RTK:Q@_:RTM:OR::O]^:OS@:QJ8:RTS:N\\9:HHV:P[a:MJH:P\\8:?V]:P\\;:RTZ:Q^[9>=9>9:Q^]:KS=:O^Q:RU8:K@X:RU::MQV:KSH:Q_::>XP:Q_<:KNW:P\\]:Q`V:=ZR:KK]:RUI::Z\\:@:`:?X=:RUM:HIY:RUO:Q_P:RXQ:LML:PaK:P^Y:H@[:?U\\:Q_Z:?U^:OaI:RUV:RU\\9Z[:KI8:MS@:=a7:LHO:R\\N:KZL:?aI:8I=:Q`P:?@L:P^M:8ZO:KK]:Q`W:KJY:KK<:?H<:?@T:Qa::O`a9aU:RU9:K[=:HJW:<_8:<SU9U\\:9S?:HJ\\:HJX:Q_S:Q7W:MS;:OaR9I]:>XH:>K<:<T89U<:<T;9IO:HK@:OaJ:KI\\:O^X:?8]:IJ@:KMH9RP9S7:8TI:Q_I:M^::NO8::>W:8HV::ZM9RL:HKZ9S7:IU<:8Ja:==Q9][99L:;IZ:?TY:8X::RVJ9Ja:KJK:?8^:8N9:@L]:<I]:9VS8P:<I`:8NV:<J8:8<U:S<T:P_>:RVa9U]:HMI:P_I:8UY:<RT:;R]:SYW:8W\\9SQ:8`=:8JY:SXT8N:<J8:S8[:H`R:HKZ:S8\\9_X:NOQ:8JI:=JR9?H:9M]:NOX:SYV:S^N:8W\\:8W^:S^R:H;X:O;M:QaI:P78:RWL:8`W:P7<::_T:P7>:KSQ:R9S:P_V9J\\:?Z::8Z`:QaU9VP:M^Q:@Z::@RL:Q]@:O_X:P`I:OR?:9IV:H>J:P`K9UJ9HJ:>ZO:RW_:Qa\\:R>P:NPL:P7_:;Q\\:P88:;QZ:9>V:RSU:SYW:=7K:9SH:?V^:KI>:@SI:8I::N7Y:KQU:@W_:<I=:@OW:P8\\:QVQ:IMN::98:PJU:Naa::]O:J9X:P?]::;=9XQ:<=R:9O<:O8;:9R^::@>:<J[:NQ_:@[T:KQO:HY8:S?U:KR?:S`8:?[7:H]L:KRL9WK:KQ[:N?::=\\R:R<7:KQ`:LKV:ISR:KR9:HQJ:NWH::@K:RXJ:O^?:MQ9:P\\7:9`;:OaU:RTV9>H:>@@9^a9IL9U::8;U8V:KS>::_T:9S?:HZL:R\\7:I>Z:=WV::UL:S>;:P?]::8O:Sa[:@<K:O8;:@MT:R9a:9Y=:9O_:NaV:SU>:RZR:>:[:@WM:K9=:P?\\::P>:OQJ:>:]:97]:JR[:T7I:9L?::<^:RYO:H^\\:OPK:T7>:N`P:RYV:I:::O?V:RYY:J:7:R:R:T7J:OQa:RZM:HQ99><:@T?:O>T:IJ8:<8S::<^:=`L:S@R:?aP::IY:9ZU:LLX:S?N:L?@:==^:8J::S^N:KS=:9`;:9^P:R[`:>ZR:S^<:<I[:8J]:8PH:SYX:8P^:8<U:N\\\\:S_^:O`>:S_`:O_H:MRK:LHR:S`8:=OU:8@Y:<I>9_W:PJL:98>99H:KUH:@YH:<J[:H]S:>77:OQ7:S=I:P@8:>8Z:O?N:SZN:S`T:H]]:I[a:S9<:QJX:L9H:=T7:9Y=:@;K:>PO:K^T:;`R:8II:<V9:?9U:SHY:Q>Q:R^Z:I\\T:>LL:KXZ:PMI:<J]:S<a:I<W::XO:9R8:KU>:@`::>8Y:MJV:?K=:KUK:H;@:N]>:RXH:8L`:Sa?:Pa::R7?9WR:R7H:O<[:RXO:9S?:SaK:R7>:O^;:H_S9>=:PP<:RX^:<><:=:X:QL_:Q8=:RY8:R\\Y:P9[:9P<:I<::P9^:R:9:HYa:RYX:=\\W:PI;::a9:N:M:N[8:R8I:R7`:H^]:O>I:RZS:RYa:LN8::]_:<]_:P?J:RYJ:RZZ:RYZ:T7[:T;M:RY]:K^Z:?^X:T;:::II:I<::HS=:O>O::=J:;8@:O8;:R7Y:97]:<VK:I;<:@?W::=L:;WU:RZ;::8O:R;S:99P:O?7:NaV:P;]9@\\:OQH:N;`:OQJ:O?^:RZ`:KaJ:8a<:ONM:T:N9I@:9S?:SYR:NMZ:8@9:S^8:RSS:R[;:I9L:S>N:I8Y:8T@:R9@:8IV9WJ:9VV9Va:R98:P`\\9>=:=>89]S9[S9979[>:ISX:ISZ:H;V:8IL:8I<:S:Z:;<=:NaQ:Q8::K[_:T:a:RY7:LKQ:;@W:9X`:R\\Z:T;R:LZT:HaR:R^P:MaR:?a`:QHL:QJ_:99P:JH>:?;\\:SIP:9P]:IQS:IN]:N;I:RZ?:T>=:<>I:HV\\:>?>:JJL:<Y=:MVQ::]_:<KQ:OP[:MVN:?:M:L>?:9P[:HV_:OX8:=\\]:?\\S:@HJ:=TT:?:a:98I9H>:T7a:T>V:H8T:T>W:J7;::WK:<YZ:IO^:SOY:LS<:;YX:<;P:PI::S@a:P:::<OX:9K>:?Ha:8a@:?a89][:=MX:@P_:O7[:P@O:I?79WK:Q:^:R_a:S`L:S>8:>8?:O7N::RW:OQ_:9OX:@:M:I;X:LIW:R;=:9QQ:<8@:J;a::>I:O?U:T=]:9>^:;>P:Q:^::>I:T?[:R]R:O@Q:I<::;7@::=J:;7@:99L:Q:^:9KS:T@9:QMM9WZ:R]L:?`=:H_[:OII:9_7:8XN:HR>:R;?:8YS:;N]9?R:;X?::>I:Q;<:9OT:T?O:=Ka:S9M:N9=:NaW:SH^:=@J:NZ99>S:::]:Q8a:T@J:97^:;:X::>I:;:X:99L:@7R:<OO:8SN:HYP:Q;X::=J:Q;X:<V?:H\\a:>ZZ:OIK:R`Y:P`P:SZ8:J]R:Q97:QL7:R`_:H;@:S_]:8<[:SYS:KZ>:RX9:HOS:T=I9_H:MX@:T:^:@;H:<9I:R\\]:IOH:9UR:T@O:::H:PHU:<K?:9;@:L=?:Maa:9RH:HRa:H8[:9?W:HVa:H[J:T?L:<X<:Sa\\:NM8:R:]:=RY:@WT:I9Z:HTX:P?O:SH>:Q8Q:9TJ:9\\;::\\L:QHV:HY]:K=X:NW@:@[99:Q:LI9:T<_:S^S:SYU:OR;:S^8:@aY:@RN:?W`:==\\9RQ:R9I:T=<9O7::Q@::JZ::?V::_Y::QL:H@Q:Q^U::JL:@aL:8VI:KHT:RTT:O`9:H;]:O`<:>a<:Q^S:RXK:HHZ:89X:P]8:8R;:M]\\:O^J:KI<:O^L:SZM:Q`?:RU;:SZX:SZV:T:P:H^>:K[=:RU>:M_=:SZ\\:Q_?:P\\^:SZ_:M]^:P\\H:Q_>:KJ\\:S[Y:NO@:S[[9NM:?@I:S[^:TIM:>YT:Q``:8ZX:T<]:8JQ:RSS:R=?:8X?:S^_:N_R:P_U:=a?:?ZI:S]\\:S]S9[Q:S]V9IM:S]X:P\\O:>O7:TI@:T<^:RSS:TKM:Sa@:SZN:SZI:P\\Q:O_99V?:R7J:HY89WK:T:]:R\\S:=Z]:RX`:T=Z:S@V:O=S:98V:N=`:HR>:OQR:LIK:@\\J:;`O:M>`:>:[:L?^:H\\::@]L:O8R:;LZ:I?O:J^S::Y_:H7;:>:Y:?^R:OOT:@:8:I?U:R8?::]_:@>>:99P:<]X:T<;::Y>9@\\:HNT:<]`::=J:9QI:T<O:OQa:S;Y:RY_:Q?P::8O:T<>:T?;:T7X:T;H:JL@::V>:<X8:T<S:Sa]:9P7:T<L9RM:T<N:N9S:T<K:N;^::RW:@?X:NaV:T<U:;W^:T<W:KV=9RN:S]`:KIS:S^7:T8L:H_N:;]K:SYH:8@@:K@Y:TLa:TLP:R[H:TLR:?7Z:S]\\:Q@V:H;M:Q@X::[<:Q@Z:N_]:P>O:?Y`:S:U:O]Y:S:X9]N:J=Z:H[=:HOW:J<P:>`T:HWN:HTW:SUI:HYR::RW:;S\\:N`P:S@U:IVZ:TPJ:SJZ:?\\_:NX_:@T::=[W:SMR::UM:98K:IVR:I:;:I?;:>7O:97^:P?N:R:Q:T>V:S@R:NaR:=7;:TI;:I^N:;`H:<]X::=J:HUT:P:X::R9:9Z>:<]7:;TQ:R;7::RW:<WR:<KI:8aW:;W:::II:R;T:I9X:I:a:I<::N;U:LI@::=J:HUI:TM[:T;X:;U]:;U\\::a7::=V:?aP::LQ:K]<9>H:SJ^9>=:;aV:@];:9TP:H^U:H8N:9YU::>I:;Ua:=\\T99T:PRL:TJO:@:9:9UV:N^8:L>;:IJV:9K9:TJO:KRR:9:>:O8_:;W^:OO[:;?I:KU_:Q?R:K^<:L<M:T9L:ISP:TRS:<\\T:9`7:TRZ:Q9X:TR\\:P@;:?aM:<]Z:L:\\9:P:OT7:IIW:P`U:QH8:T;O:<Ua:<Y7:N`L:IRU:LJ9::]I:IS<:;Y>:;>_:<H`:<M[:N9::SIU:;aO:IXa:<P::L8J:9K9:<;K:?NP:99P:O\\L::UK:@T9:@@@:@=M:QK@:>7T:9L?:I:^:@=@:J7;:M[I:<HH:R`;::J_::SH9J^:OYa:KWH::SH:@:Y:<WN:PZ<:;U8:9]=:LU^9J^:?\\S:OJN:=TT9SM:<7R:JK`::V>:NST:;Q8::XL:Sa_9RM:<<L::V9:9TI:>SV:=OU:@>I::TX:9HL:>W8:LWW:HP_:SSY:OHM:LY>:QTU:LY^:L\\^:HP`:<UL:L\\X:L^_:J@=:9HV:9;Q:IH<:Q:@:@X@:QT;:;M<9QW:TUX:O7P:P;Z:HY]:OTJ:L]Z:;W\\:@>\\:;NJ:NVZ:=]L:;:]:OUZ:;7U:N7?:;Xa:=8T:9a7:TVJ9LX:M9=:TV<:L]V:9a7:MWW:MZ?:<aS:HP_:;PV:TVP:;ZS:J@T:L^]::=K:TUR:=P7:J]::;^P:>`\\:NHW:;7=:OMM:NHZ:HR\\:L_7:9\\8:OUQ:R<Q:L]O:K7T:=XO:;^\\:;=;:MW[:L_Z:QTU9HO:RI[:IP[:LIU:;7]:NI;::]8:M8`:J@S:?:::8P?:@VW:;7U:L`I:;^P:9S`:L`a:SNa:9TH:;9Y:TWU:IXL:>]P:TWY:>TP:?N>9QW:JJY:;TY:SQ=:LaO:L_[:QW;:TUP:?:H:PQO:@M89WZ9HO:I\\J::OS:TXQ:8aY:PQJ:99X:L\\X:>WP9MX:H9K:IPI:I\\X:9O8:TXU9Q<9HO:9JN::7?9HO:;ZK:IPI:;ZK:99L::Y^:9@R:>S_:9@U:=X@:JP=:N`H:@^T:K:a:MIH:=`9:N@X:@?::=`9:P<\\9@>:TXT:9LU9>Y:OZ_::RW:TYW:OZM::T[9MZ:9]=:L\\X:9:O:JPO:9J_:K;[:MKU:ROQ:@_X:MJV:JPH:NI[:@QN:@8N:O\\]9Q<:9\\`:TY]:JM_:;^@:<<7:9]N:PQJ:98X:L\\X:?OQ:9;T:TZM:9];::a`:NLU:;;\\9?R9@a:TT7:97M:NIa:R]8:99P:TU9:9IV:8H`::OS::<^:HR[:I^P:I^::<>[:I^<:99L:PS?:NI`:9?Y:;Y>:J=>:;=Y:RY<:;`Q:SJV:@J`:>_\\::L\\:>]N:>8_:;QS:TLO9Ia:P7J:;R8:NMY::ZX:=:;:M\\K:S_K::JM:T8K:S^W:KWZ:?9X:P8<:KaN:OaY:N[V:;R>:Q@=:TOY:8OU::QT:;RJ::QW:@aS:?7a:S@7:TOa:P>S:>:>:OSK:Ha?:R9Y:OX_:N]_:T<8:>[;:>\\=:I`?:H[J:I9]:>HK:<Xa:@NH:N;9:HX>:9MI:?=<:<Z<:IO^:9YP:=I::@<J:TM`:JK;:>LI:L@^:9LZ:N;I:@UJ:T\\_:T>W:;WU:@_Q:@IZ:T>Z:?:K:<YX:H[U:?QL:<Z^:@]R:J:@:MaQ:9T7:<@8:L=W:TSS:HXW:@ZS:LL<:@^<:=T7::>I:;VI:9KS:T<I:;IL:Q9O:?\\;:<9:::Xa:I@M::<N:HUI:TQW:TO;:R?[:H[?:=W?9>=:;VI:=[I:K]X:IYI:;VJ:T^L:JI]:T8;:O7@9=X:9^Y:QI@:H[<::N=:OI[:P@::I?>:<L;:;I=:QI8:HW8:J]V:;=Y:O7Q:T=_:<S<:IH::JI7:9L?:N=8:?a^:R]I:I@]:@WY:P>a:MS^:N7R:R<H:O7a:?TS:TS;:N>=:T?U:@PT:R<O:=HL:H:U:T_R:N9_:K`9:8=W:L9::I\\T:;a9:R<Y:L7S:S>W:Q]>:S^O9a[9>O:89;:T8R:8J8:<J8:S>[:IZ<:S9`:S<Z:S>`::N=:PIN:9RP:@YW:P`I:@YY:TIJ:?X7:T[`:8JL:P7K9NN:9M]:S^::T`>:8^R:T`@:8P<9WK:?P>:S9<:TH^:<MH:M`J:R9`:QY@:T;7:@9\\:<<M:9`9:TIW:99L:@=P:HVX::8X:<M]:IQT:@U[:@_;:L=::IQI:@`M:T_9:TJ8:@<K:N;=:R;M:<M?:S;7::MS:I@9:9LZ:;@<:9QI::?<:98V:;Za:OR`:SK@:H_[:ISO:HYL:>OU:J9I:HaM:R]S:T_N:T`89RN:TJV:8JH:S^8:T`Z:T`=:8^Q:<IZ:T`^9_R:T`I:S>]:>OT:T`L:PIL:S>U:>N`:T`Q:IK\\:Qa_:HLM:R<]:S^8:RW]:T`Y:T`<:S^;:T`]9Pa:T`H9>H:SOJ:Ta7:R;O:R9_:I;9:?^<:99P:S@P:>]P:;NR:Ta@:QHM:>HK:TIY:9KT:TaM:9LK:8aW:<?=:>=K:98`:T?>:?P?:H8^9O8:TaU:=W@:OPS:R;::TaY:<V8:Ta::I;9:PH[:TT<:TaW:@ZY::8X:U77:OHY:ORa:OK\\:@Ma:U7<:=H[:Q8>:U7?:R=N:S>H:=<8:Q\\`:S:=:SY^:O;9:@L`:@;9:PH8:S]Z9>K:ORM:>]R:S<X:U7V:S>_:U7X:R<9:TPM:IVX:S:[:R\\[:R>V:PHP:S=9:S>7:Q>J:@;T:P>W:OPN9WK:S=;:><9:R>>:S=>:OH::P=::ISR:9?W:T`O:S=K:QK]:>97:S=O:R>R:P>]:H[;:R:K:;<W:S=U:OSQ:OO\\:QL@:T`N:S=J:8aO::@K:OSX:SZK:O^K:8\\K:TKW:O^H:TM;:SZP:=>8:NNQ:SaV:OS@:H:::T\\Q:S=a:I?U:9aS:=T>:PYW:NY@:=;H:MH^:LNJ:=\\a:S;::TMO:TIX:RH\\:Q9>:HPS:T7@:TaI:N;a:MUI:R_8:>[7:R`<::=V:=[I:<@\\:R:Q:T9T:>8[:<Oa:Q9=:RZ_:MI=:U:J:>M\\:R>>:H\\<:OS8:>ZZ:MTP::J;:R?T:SY[:H>=:=YU:KYW:9S_:N`V:@;H:N]^:O=L:O98:IVT::JT:KT;:?]`9:\\:QM?:J>`:Q<_:;NR:>JX:SI9:S7V:?OL:S;T:HWW:;a_:=SR:OM;:=P<:IN?:I?K:I`W:@U<:99P:=[=9RM:RY<:>_H:SKZ:K`W:R]N:OZJ:T^V:RJM:QHN:=P:::HS:9aK9@M::\\L:;T8:U=^:LH;:IJT:?\\L:N;P:N``:<UM:9@Y:@^;:@>\\:I[V:IY;:<=U:P@9:9:_:N:_:9@K9J7:9M8:<<Z:K7I:=\\H::8Z:SL;:;Z_:?M[:;8=:TQ]:N>7:?L^:SL[:J@H:P<Q:R]U:99L:P:H:QO8:U>a::VN:;U]:TQQ:<@S:U>]:SVU:QNX:R@N:QN<:LOV:NZ<:PL@:R@J:PL;:?JM:>LL:J@;::HS:>NX:PKI:?a?:PYV:QN?:?a?:JPT:RHK:RH8:9_=:J@I:QO::>NQ9LX:JQ]:J?S:M>Y:9@::K@@:J?a:LaL:>\\I:;OV:R@J:87=:>L=:>[[:J?a:JX<:>\\I:MJS:>\\N:JUR:SLa:JaU:=?J:?KU:LP@:M\\7:T>S:JK=:RI8:=X9:L>X:M7::PP`:>P<:=^@:LST:OV`:LYZ:PKX:PRJ:M:8::V>::X8:PRY:TW_:;M<9O=:UH=::a9:UHI:N`Z:MX7:>`8:>W9:SP\\9:9:RIM:?LO:RIP:MV=:N>M:QP8:;TY:HS<:;`O:QPJ::\\^:MU@:9?_:SOJ:HP`::\\^:@@Y::SU:JK=:@K8:PM`:PMU:RLQ:RLK:QPZ:N?9:9^I:L\\U:NIO:QP^:RJH:?LO:RJK:OW`:@>U:@>T:SOZ:PNR:9;Q:=>>:@>L:TY\\:IRY::]^:@?[:OYH:NLI:;I=:HU>::TU9>=:UI^:N<79<K:9;H:QPa:JKa:@N9:9R^:QQS:=;V:QRW:NJ=:PIT:SWH:>]R:SOa:QRO:QR=:RLQ:L]N:JM\\:PMV:P=<:RM\\:PO[:RK@:POQ:MX`:PO]:NQ`:SPR:>[P:SR9::ST::T`:UI9:MW@:QS@9:P:PPN:@?::UIH:RN::SPH:QS[:=]7:SP_:U@[:SPa9@>:UJR:SMN:UI@:LY8:UK;:;7=:TX::SW>:SQL:?LO:SQI::aI:JQ<:QS;:8aY:UIS9@>:UIU:JOP:UIW:LSK:UIY:O[>:SP9:UKS::T?:SOS:SQO:@IZ:U@S:9;Q:RMY:@I^:L_?:I9M:LVZ:QU<:UJR:>=O:PTT:RN=:QUT:<_P:RNP:ULJ:SQY::T[:ULL:>_N:L\\U:QTW:QTa:QUT:RNO:LY@:@N99J^:QTR:<@^:HP9:IPZ:SSP:IP\\:=I;:LV?:RNR:ULV:RNU:QU\\:MYM:;U=:97Z:?`Y:KTa:<<89:P:<>;:9Y=:UMO:9L?:NJ9:9O8:UML:TTS:QUU:9L99?R:UJ8:9Y=:UMZ:U@a:L[P:MY^:QUK:SQU:=KQ:=><:NK\\:P;]9?R:;Ia:9Y=:UN<:JRV:<;Y:>P7:LU^:;:?:98I9?R:RPX::a9:UNM:99L:J7R:SQW:LU9:OZI9?R:PSU:PQT:;:?:UMK:TJJ:;T:9:P:=:S::OS:UN]:UN9:SVT:PTL:LSW:UN\\::VN:=ZV:99P:NLP:9;@9?R:UNS:N@M:UNV:;<S::M]::TJ9:J9IY:?RH:;9T:LR]:U@[:LX=:UK9:SN^:L_<:UM@:RNX::^T:RNP:UOR:LX_:9LR:N?9:M;J:;;\\:M;L:QUI:QUT:;^\\:RNZ:UL^:=_M:TUH:UI_:=_V9@\\:SU\\:;U=9;9::]_:UPJ:>7R:Q[?:UL=9?R:SVH:;7=:8<O:M?=:QSL:<W?::RO9O=:=\\Y:JUJ9J\\9HO:UO[:L\\X:UO]:;^P:Q\\_:L`7:N]9:QWZ:L^M::^T9HO:L\\U:UKH:TXM:UJR:LaN:?::9?\\:JVV:L^W:HR\\:TWW:T9>:;;\\:L`I:9H9:NJH:;;\\:UPW:9O8:UIS9HO:UK\\:TX_:JL@:TYZ9HO:UK`:;9Z9MZ:L\\P:8=<:SP@:;X7:L]8:UP;::=K:QRN:<YX:<<O:;TZ::Q[9?R:UL?::aY:QT<:PQL:LP^:L\\X:UQ@:ULW:;7U:QWP:UQ9:;9Z:<_P:PL7:LYX::SI:9:8:PZI:PX[:=SO:PVa:;V9:K^[:9R8:@a::MO@:LS<:IN=:NIU:=a`:SV::>P<:L_H:JOa:;Z::O9Z:QXI:PIT:@K\\:=?_:;<S:PU=:9@::;;@:PU`:<;Z:TRW:MNQ:SU;:MI?:TPN:TYN:TYM:>LO:@HV:;U?:LT9::>J9WZ:RNa:@L@:ST`:NI\\:PUU:=`?:O>V:>\\I:99_:US]9UT:KY\\:QX?:=`?:@^Q:ROW:UT9:>LO:9PR:UT?:=Oa:PW::MKZ:8a9:UTP::OT:MN`:UTK:RO@:M:89@R:SRM:JOa:;OP:HWP:RP9:9HL:ST?:K=Y:>?[:MKT:<J[:ST[:<7X:I;a:9R8:;9@:N@`:ST<:UT8:TYP:SS\\:>L=:=MS:UU>9P]:SUT:QXS9:P::YP:UUO:<;\\:OYK:R8J:>\\I:@H;:UUU:T=a:STU:>\\I:;;^:UU[::>=:RO?:MKZ:;77:UU[:9KI:RO]:K<[:ROP:>LO:JZ\\:UU[::8_:RP9:@KN:SU>9@M::XR:UU[:9\\`:UV<:K>S:SUK:QXa:;<=:J;R9P]9H>::XV:9]=:LY^:J\\<:9R8:;=H:STY:UT;:NI^:@=N:@H^9:P9Y?::V>:UW:::J_:;SU:;<I:99;:TU[::=K:LaP:UW=:;9Z:;\\Z:;<X9@M:JX`:9:8:NI_:;^P:<<Q:97\\9HO:I`T:;PV::8<:9:_:<<7:<VT9HO9=[:;OZ:9L?:UW^:9;@9HO:IM\\:TXV:;;\\::HL:UWN:LPH:;8\\::8<:MML:LY?:MN=9<Z:J[L9:P:UXK:9;@9QW:UX99VW9QW:MI]:8XN:;==:JPS:SW;:?=@:UV^:9L?:UXN:9YV:UWV::L7:UWX:<HH:UW[:JH89HO9=<:9JS9QT:LW8:J[Q:;;\\:MJQ:;<X:Q;`:;?9:J@M:9L?9==:UY>9LX:IM\\9:W:;J_9LX:UX<:<`^:=]^:L`T9][:TVM:;IL9LX:UYM::V>:UY\\:M<_:MIL:9X<:M7Q:UXT:8\\\\:9S\\:MJY:;MU:9:8:JUW:;NM9HO9=P:K:;:TZ_:Q[=9RM:UX\\:TYZ:SKY:;Oa9:P::8<::9]:;;\\:;PL9];9HO9<a:9JS:<8J:99P:UZX:<=Q:UY>:UX8::L7:L\\X:UZ8:URK:;8R:UYI:?=@:J@=:UX7:>PN::X_:U[8::[T:UY7:9L99HO9<T:MJ@9:P:U[L::=J9<7:;?>:L[9:UQM9@S:UPR::Q[:MY[:98L:88a9HO:U[Q:9ZP:8P?:NVU:9?Q:JRI:O7K9LX9<I:UXL:U\\9:JRL:SVU:M9]:=?O9MX:M7Q:8P?:<YJ:U@7:U=]9RM9<=:;NY:8=M:U\\?:8=M:?K^:>L=9HO:LPQ:8=M:U>`:97a9LX9<9:UXL:U\\[:NKV:UZK9>=:U[\\:@]?9Q<:JaO:U[=:UWW:U?\\:U[H:QZ@9HO9;Y:UW_:99L:U]@:U]::UX_:J@U:U]=:SVL:U]?:U]H:99P:U]J:9L?9;O:J\\8:PQJ:PX8:L\\X:J^a:;X^:MV?:;Y8:U]M:>]P:HP_:UQ<:QZ[:;J_:>=X:NT`:;J_:TVa:NZ^:L_7:;=@::J_:U^::99_9:P:<=J:TZT:QZV:M<H:MX]:=aa:U^::PYQ:U^L:=XO9IT::Y@9>H:TZT:>NX:J_=:L\\::IM\\:=XO9HO:9:Z:TVa9IT:<aR:;7U:=IJ:U[<:J@I:8a@:>=O:U^::PKK::YM::aM:LZ?:L\\K:>8^:LN^:9MK9:O:JZU:RSJ:SXQ:8^@:=M;:@OL:H@99UY:8>T:IL8:>PV:8KI:8R[:H^K:?UL:HQM:@;]9QM:=L<9?Z:8HY9RR9K`:8<M:98K:8KK:@OH:M]@:P\\7:87X:M][:8KZ:@[_:?>8:Q]U:Q^O:Q@J::@L:S8=9a9:=MO9QL:;R@:<[_:S_H:8N:9U\\:IIV:8ML:9ZY9?8:=9H9_R:RaJ:=9K:U`U9I>:RaI:=9T:U`X::@Z:HQU:=M79>_:=9K:9=X:U`_:=9J:RaV:=9N:Ua>9KL:?T;:<[Z:H>::O:L:?W_:TM9:T:Q:R\\L:87W:HL=:8K^:8ZX:KIL:S[::PaZ:HI[:S[=:TKH:Q_S9]O:RUT:KHX:RUW:KHW:KN_:S[L:S\\M:S[N:?V7:S[P:MS?:O^U:S[T:RU`9VR:TL>:KJU:P^I:8ZH:Q`U:NOH:Q`X:@^a:Q`Z:>YZ:>YP:S[_:Q`S:>YV:Q`a:V7Z:>Y[:Qa9:M^K9U<:U_S:8K>:8VT:=L_:S8V9]Y:U`>:PH8:N[K9?_:N[M::ZN:P7H:8R[:V8?:N[R:@RJ9>W:RWW:=`S:HMW:=OR:?XN:RWW:HM`:R<^:U_`:=`]:P_I:88U:9`[8T9aN:>@K:RWS:8KH:8KJ:S^I:8K]:M_H9a>:R=::S^I:UaM::YW:88::9=U:U`I:?X=:S^[:OSH:M_`:RX7:P7`:T`T:RX;:P`M::ZI:@X9:@;W9QX9OU9PX:Ua7:<M8:>OJ:NP\\:ILH:KM\\:IU[:N7\\:Q`T:K>[:L_`:>;>:9aR::@<9[7:=YN:9\\;:L;_:U8K:I>_::]L:8II:HTQ:?^W:97[:<aO:Q?P:<JL:@K[:H_[:9UL:N^L:KaK:@a::8K@8Z:U_Z:?XS:S8^:<\\`:MRN:UW<:M^I:L;@:8YS987:HJN:M^M9K`9IL:V7J:?>P9]8:V8=9\\::8VT:??=:OaN:8SV:Q7a:>_K:Na8:TP`:Q8:::[T:?SI:<_T:=XQ:HT]:9XS:9TK::`a:KXW:?HT:=WP:9?L:?9U:9K>:?]9:<R`:9aV:Q<_:TTM:L8L:?[Y:@:Y:SIY:>`7:JL[:N9>:?`[:LV>:U>K:MUX:=NO:NaU:9LK:@QH:JX]::OY:;_Z:LT]::=K:L==:?]X::\\?:T@Z:J@a::L=:>UP:?=J:RR`::`^:9NL:8KW:V9I:@99:8IL:S?=:>H7:H><:@SL:?VS:88=8W:S?K:J]R:L^O:N]Z:PJN:<><:@T<:N]_:N\\R:J=a:=HL:QL\\:=_a:@:I:=U]:U;[:<7L:S@_:9<::@Y=:HTY:N`S:9O7:V<^:=L;:8KY:?X=:V=79SH:S?>:V=::S?H9[_:S?J:8=O:I>X:?NO:QL[:U<[:;M<:U<]:P9W:T;7:V=N:S`?:9^M:V=Q:PHT:HV?:T;>:OMQ:?H]:V=X:T]]:HR9:J>\\:9SH:V<_:V=_:@99:J8O:IUJ:J8Q:SZ]:9`V:KQ7:87\\:HI]:Q`;::9[:9`\\:@Y?:O=@:T=X:OOP::V>:HaJ:@P=::98::MH:K\\9:@TQ:Ha?:99U:;HZ:MN_:<H<:HTO:@:J:TJ<:;N99XQ:>8K::a9:<Z7::]L::[O:N7R:K]\\:OP@::?H:JRR:;LZ:T;U9RM:@]V:>;=:>;N::]_:?;S:HR<:@[R:Q8?:=aI:V?Z:H]]:H9M:R[9:O<@:V>[:Ua?:?X=:V>^:8H9:KI_:HSa:H>[:KSP:HMT:K[H::9\\:LMQ:TSH:OOO:=P8:V?I:S@W:J:J:@H]:=[W:NY<:HVV:>8<:V:I:@ZY:I:Z:9P<:T?]::7?:RY::T[L:HVH:>:Z:I?7:T;V:HUJ:<ON:9OX:VH@:=O^:Q;^:::Z:97^:<KQ::>I:I?]:TN7:V@L:H9L:::<:KZ<:P8M:V@Q9KL:V@S::9N:HSQ:HN@::9R:?>=:?HJ:@R=::9X:M_?9X:::9\\:V;<:9[^:V:W:V:Y:HM>:8Z`:V;::?7>:V9>:8KK:V89:?V_98Y8=:8>79``:P[8:V;J:LL8:U;?:M]H:RTW:?YW8<99`9<Z98S9;M8;9=`9VI9J<:?@T:P]W:>K::L;@9WT8L:VJI:RV]:P\\U9VH:P9R:T=W:R\\T:V?H::a9:R<Z:IM?:VH8:IZT:?J]::V>:SH8:R]=:<<Y:=[<:TPO:O8X:=XS:RYH:;Xa:@[L:VH>::I;:N8V:VHI:HUQ:;LZ:<]X:VK<:VHS:VK>:VHV:VHJ9:P:;XP::>I:;XR:=XX:?\\<:<TY:@@]:=O\\:9>S9?::N9Q:?aT:R^K:U>@:Q>J:I@V:M`J:O=`:=;W:Q:<:9;L:JL[:RLa:I]J:V<H:U=Q:98V9=^:?9S:U]a:?aH:>_M:8SN:=Ha:IPW:=N;:LO[:TIQ9:P:;MI:>=9:K`U:M<I:R`V:<:a:J;H:?a=:LI\\:@?a:K`X:J7@:MaY:>Oa:J;H:=NS9>=:;MI:@LN::[T:N:S:VL^:R@O9_U:L8N:VM=:LQ]:OK<:;<S:@PP:V<?:I\\T:>I\\::\\?:?`W::\\\\:U\\V:98=:8UL:VM9:?`O:Ka7:M<I:>UP:VL`:SI::;MO:@_L:@?a:VM<:=>X:L<`:9YV:@`I:QH]:;MO:;MI:LNM:9:_:IR>9>=:VMa:P:L:=U=:;I=:VNH:OZU:N><:K<K:Maa:8=<:;N]9aZ:LSS:L><9>=:LSZ:99P:;XP:NY_9WZ::@J:TOH:=`Q:V>\\:8K[:V@T:HSR:MQP::;[:V8L9_K9@V:S[R:>XK:S?T:V:a:=RO:V;>:=M8::YW9]8:8VT9SM:8L^:8X`:<S_:S79:V??:R\\T:TMM:@[K:IY7:=XX:V?^:L>@:KQ`:::W::==:?^J:;=Y:<`]:SH=:>;]:?\\_:T:7:9]>:VKT:PHS:?]<::M^:<7O:I]J:?]R:=]O:?]@:J7@:L<T:?]X:<JX:>ZZ:=_P:ONL:P`Y:ONO:VI7:U`J:ONS9]N:@LX8K:8VQ:@RX:KK_:NNK:V>a:=aK:IUI:=aM::O7::7^:=7Q:KM[:?U;:H@W9Z@9J[:SY;:8KK::;`:T:T9VH:U`=:VOJ:VIU:?W_:VON:8[P:VOP:MRY9Va:=VS:U`=::>[:?\\U:P;N:I]J:@;H:?9N:VJV:J9I:V<<:<7Q:<7]:VKV:NY=::=J:@9]:L7H:SJV:?9K:R^]:<=U:>?Y:=?L::^H:OMZ:@9[:QHU:HSK:S:_:IY::;WU:SHW:;`R::S\\:9aZ9IT:;`K:L@^:<WR:@:[:9:S:S7K:R]8:8aR:?`U:@Ta:>?L:9TJ:><;:9ON:K`9:9`7:HRM9WK:N=J:S7P:?_X:SKV:V<=:IY?9:P:I@Q:TT=:TU`::<Y:<J_:<9O::]H:;TX:VS7:IY\\:I[J:=8H:9LT::;<:T:89@a:<_P:TS<:U=?:I[X:PXQ:N><:LZ_:T>P:IQM:VS^:;;[:UVV:;;[9TR:=>X:;;[9XQ::Y::<=<:LOP9J7:LS`:99L:VS<:VRN:S7Q:R`H:<<U:9;L:T@T:9L?:;7@:VS=:R`H:LO?:9?8:QN^:VRS:@Q<:I:9:R<=::XL::Ya:VSZ:;a_:9UO9:L:9MM:=<::9=>:8OQ:V8a9IO:Ra?:=VH9IL:RaJ8N9QR:UaQ:KSZ:8MZ:VIN:8KJ:TJY9IK:<@@:TL;:?7>:OSI:QT^:9LJ:=S^:S7J:>JX:I=N:IH::TU7:=I;:<OX:9QY:T9[:V<9:9?X:RYR:O8T:<L8:<]7:VK9:T;L:U:<:<?S:=P\\:Q<_:=\\O:;a[:Q:I:NYN:Q:P:VVI:S>\\:Q<V:;TY:OLX:S;]:U:M:IWS:L:[:9UM9:O:HZR:Ra7::@N:9U::=X9:V99:8U\\:U`^:RaI:9=[:S8O:?RJ:RaM:S8S99=:J78:KS8:M]?:P\\<:??V:U:X:MOM:<\\W:TH8:;>N:ILa::X<:VOV::9=:R>7:==8:>HN:>_]:=7::I:a:9aS:SHN:<V;:NV8:U;V:LXU:L@I:S7X::L=:;>_:9HS98=::L]:OHW:ORS:9:>:U:T:8aO:H_`9OX:V:Y:KYW:S`H:J<]:V@`:VQ\\:QL`:HV\\:9\\J:JZR:KV9::?T:VU::VV]:?7>:U7\\:<[X:8MM:=L=:V9V:VQK:Ua?9MY:KaR:VOJ:VW8:U``:UaK:=9W:V9>:UaO:8]7::@Z:V8::RaR:V8<:VOJ:N]Y:S9<9:J9<^:I<R:=SJ:;`[:<[>:VVS:?_T:IO<:I;Z:T]<:PHL:KU;:<]Z:>R^:HPP:Q<Y:Q8J:VWT:S7I:JHR:R:W9:P:<=N:?TU:PJ;:<N8:PJ=:QJS:S>V:VN]:U_`:VN_:@;7:O^;:QLM:R?8:R<P:?IW:R>K:OS>:U:V:S=N:S_S:M_a:USK:U:Z:T^L:U:<:U:^:QL>:PI\\:S=Y:P?a:>N`:JZ<:L=a:R>=:<Ua:SKI:PK7:SKM:L@K:QM^:9Z<:L78:SKQ:S9K:8@9:TR7:>>U:>P<:L=:::W@:==@::TQ::SS:@=M:;7X:VR8:IOR:NLZ:?9R:>;_:TTI:IO<:SP8:@;I:T?;:V[Q:OL^:IRY::U]:@?T:T7Z:NS8:HS::<OX:OX99WZ:TTN:H8[:OVK:99P:;8@:V[_:?IR:OX9:;7N:O[R:T?>:V\\?:LNN:I7O:NKR:V\\L:IPO:JMW:9_`:?<;:QZU:JM^:NLJ:RKT:U?7:JZ>:N<@:IOH:;U_:SQW:IZH:LU^:LZ8:SMW:9HL:;SW:::H:>HR:H9::P>X9@>:P;X:9L?:RZV:LXX:9P[:;SX9@R:V]@:LZT:OV[:;L^:SV^:<:Q:QZ]:J@H:PP\\:LXX:UP?::]8:PP\\:;8Z:V]\\:U?[:>Va:RM=:OYP:?Ia:@?8:QO\\:>TS:;SU:9?W:;SX:N:J9?R:@WR:IPI:O8@9RM:@H`:PZ<:@>K:98X:LU^:@8>:U[S:;@[:PQR:<<7:UMX:JXL:9Y=::Wa:V^O:OL^:V^Q::T[:V^S:;;\\:;M]:V^V:HTY::Wa::9=:?J<:;T@:S7J:QTI:;\\P:SV>:HNU:SWL:V^<:=]L:;SU:9HL:V^@:?\\\\9?R:KaZ:IPI:KaZ:V^\\:SWN:N@M:V^`:UX^:<O\\:MW[:99L:NW7:V_;:<P@:<`V:L]@::KU:URZ:>\\J:NS_:;UT:JO\\:OQS:MKS:MMP9WK:K>K:NI7:L\\U:PN>9\\X:OI`:TW7:UQP:;7U:ON<:;8^:QW8:;W\\9Y_:La<:UH]:JRa:9Z?:M:Y:@@\\9?\\:M:Y:L`J:@JI:L`9:NVM:TX?:;W\\:LaM:JJM:98`:UWJ:U^W:S``:;OX:;7Y:=^::8X9:;X[:LaS:;W\\:V`S:OKQ:La>:UXX:;Xa:JRI:;XX:JK::NVX::]8:QQ<:J@T9?\\:QQ?:VaX:?M[:VLI:88a:V`Q:;W\\:88a:JNI:>]P:V`W:VaP:M=P:?N>9?\\:8aY:N>X:;Xa:Va_:;Y9:JL@:La<:V`U:;?8:R_K:M9M:;TY9?\\:9WW:U?[9?\\:PT[:Va=:;8\\:;?H:L_]9?\\:QQV:>>L:U]M:8P?:LI9:L`[:9a7:V`S:V`X:8X9:8=<:?Q::M@;:=N::88a:JNR:::@:W7^:=]L:@>a:;9Z:8X9:W88:<`^:S:Z:>]P:V`]:;Xa:97Z:W8J:9a7:W7_:>]P:U[^:::@:W8M::=?:W8O:9a7:W8Q:;W\\:LU=:La<:W8V:9a7:W8X:W8L:MXZ:JR8:<_S:N>_:8=W:88a:JO?:;TY:88a9NT::aM:UXZ:W7X:L\\\\:PP<:;Xa:LT[:;W\\:9\\8:VLI:8P?:Va_:W8J:W77:U^8:=HH:VNQ:W9=:V`]:9H9:88a:RI<:9HT:W9J:;;\\:9?Q:OV;:QTN:;W\\::T`:U\\I:99X:W:;:U?P:>UX:M<I:L]U:;8R9QW::[?:9]=:;9Y:O\\@:9R8:K_X:ROV:PUZ:@`9:?=@:;97:;WP9QW:9W9:W:P::]8:W:R:8RN:PV=:SSa:QY<:9IJ:W:Y:W:M:=\\S:W:]9?\\:W:_:OKQ:UUH:W:V:QXH:UT7:@K[:S?@:>LV:L^N:L_J:PQU:?8`:H:@:W8J:SR]:W8W:PP]:9_M:JHN:OXW:ST;:W;I:>8Z:9?[:M@;:=I?:;QS:9];:;YR:98X:;9Y:?[::M>a:L>@:W8J::U`:9]=:W8J:W:_:?NR:MNP:W;[:MMS:OXZ:SS]:=`I:W;_:9^7:W;a:;XS:J]V:W;=:W;W:W:S:QYR:@L?::IY:W;M:9K9:;YR:;8^:LVZ:>]K:W8I:9a7:I<<:W7`:8P?:W<I:?;Q:SS\\:PUY:=`?:MKR:SU<:ST=:K>7:W8]:>_O:W<S:;9X:9;Q:LO=:W7T:NZ:9TI:LTZ:98I:;8P:UXL9:K:MJL9TI:9HL::@Z:P:9:TY`::KK:W<Z:W=@:PVT:SP7:OQW:QN^:9R89?\\:MK^:TZ8:W;8:UKS:;9T:W>;9TI:J_@:UU7:JP;:@^<9>Y:LXI:@_R9?\\:ML?:W>M:>HK:W>9:JR;:W>R:V`9:W=a:=`9:O?>:O[>:?8_:W>J:;O@:QY9:W;7:@K\\:K=`:>`V::>\\9>Y:=KQ:SLP:;7U9IT:=><:;7U:O[[:9;Q:;:?:V`S9?\\:JSR:W;P::M]:U]]9IT:JZU:9a7:>]9:W;::<aS:L_N:;aX::TV:9`;:9TQ:JSH:U_P:PZ`:Q]8:OaJ:Q];:MP^:PaM9\\a:O`M:HK9:>aJ:8LN:S\\U:S_T:VVa9XT:8LQ9_W:KI_:Pa9:HKK:8XZ:SZ?:H^;:KI\\:U`N9SN:9`L:?=a:Q^U:U;<:TKU:U;>9V9:Q^Z:9U::Ua[:>J_:MRU:S[;:V;J:P]Y:Ua`:HJ^:P]\\:H@Y9\\Y:KHY:Q_Y:P^Z:Q_[:HJa:Q_^:RU]:88L:Q`;:S[U:P^@:V7O:V7]:KJa:V7S:L7a:?@M:Q`\\:8ZQ:V7Y9?;:TLM:>YX:V7]:8Z\\:Qa::T:X:TKN:878:S\\I:Oa>:>a8:S\\N:W@>9P\\:HK=9HZ:OaS9[K:=97:@SO:=9::VXX9K::OaJ:VY9:UaJ:=9]:=9P9S_:=9R9I7:=9Z:H=H:=9\\:H;L:=9X9NQ:WIW:=9U:WIZ:=9_:H=P9?79HI:IX::HJZ9aQ:OaJ:8]_:V98:UaY9XT:KPV:KIQ:8X[9_N:L8::OaL:W@?:KV>:WIH:8\\V:T8W:KI^:9`L:P>8:8VH:M]>:V9K:RWa:Qa^:V9P:>Ya:S_W:R78:UH`:@8\\:@XU:S8=:9`;:VV`:WJ?:RaI:UaH:VW9:?S\\:VW;:8:a:VW=:H=X:VW?:8K\\:WK::RTX:SZL:W@]:RT[:RTW:VWL:T9Q:<a`:U^W:;=]:=7H:IW;:S7H:V[I:==8:NLL:OS::<aM:O@O:R;`:<]N:?TL:QMS:J>a:>^T:>JL:K]L:S``:L@I:><T9][:VX9:OSQ:?R::OSS:LLH:VZQ:?TV:?ZK:WIM:SYO:8IV:9^P:8^\\:WIP:?S\\:=9K:KV`:VY@:IU[:WIK:8QM:=9>:HK7:HJX:WLU:WI^::@S:WIS8=:WIU9>\\:WI]:WIY::@S:=9Y:=9[:VY;:=9^9`?:=9`:WJ78N:WJ99ZK:=:?:W@=:<S[:W@?:<SX:HK8:WMR9P\\:<?L:W@H:WII:WI<:SZX:KIP:87;:KX9:97[:=<V:<R]:R]7:TS::;^?:NRL:TST:I??:WL?:S9J:=WI:==8:QY^:NRI:WK^:U:Q:OS<:T_S:@Za:9T>:HTK:N^<:IXK:9Z7:<]Q:@:7:?_8:K^::?\\=:QNH:OJ::LIP:P@;:OP]:OIS:IOK::79:OIS:<`V:H[>:WO7:R>^:<N=:<_::S8<:9=>:O;U:89>:>_=9]9:WL`:=9K:88W:S8Y::@Z:WI9:O`_:<9?:RVM9>K:U7V:98>9;R::Q\\:NR8:VR[:9UR:@<@:=]K:VYX::OT:99L::XX:WN?::9?:==89:@:>`7:9T9:WKa:S>^:QIQ:R?::<X\\:U7Z:WO=:WJa:WO?:T[X:MRX:>K::87W:?P>:WJM:WIV:WK<:VY::VJN:<S`:WON:=:@:HK>:S\\O:?ZU:WMQ:>XH:WOU9:7:WOW:WL7:?S>:ISP:@TU:N:J:WN<:=<_:IM8:WP7:I\\K:<R]:WP::WNJ:<RZ:P=::<JY:VZ=:WP@:L9V:<@;:T`Q:H=::=QL:WH99OV:8P@:WMY:H=N:=9I:WLV:9VJ:HI\\:WPX:WI?:OaK:=:N:KMS:WQa:H\\R:=<U:WOX:WN8:WNN:S;]:WQ;::OT:WQ=:TMa:VWU:WQH:WP;:WNO:WK_:@;a:P@@:LIL:R;`:S9X:TI>:WPJ:WQS:P7J:=JH9UN:T8T:??<:VX^:W@L9QS:KI_:LSV:=ZK:=JJ:WOK:WMH:9`N99?:WRa:9[X:L_L:<M=:WPa:WN7:>M8:WR=:WQ::?\\\\:LLT:WO^:9O\\:;aW::O^:VY\\:VX8:;SI:P9_:VY`:WKZ:S7J:VZ8:VZ::ISP:QLO:WQN:VZP:P@P:OH[:S8;:WPK:>Ya:O;U:9=^9JL:?TX:KIV:WS8:WT::H=H9aW8H9W?99T99=:9<_9T=99T99>99?:TM;:P8]:IIV:WT=:WPT:9=[:WTH:WTJ:WTL9LJ:=9W:WTP:P8X:HKI:M]>:W@O:HX`:=aY:WM`:WR;:WSI:N9_:WR>:WSL:WR@:PHJ::=Q:WRJ:VZ7:;`O:S9O:TaX:U^W:Q88:;Z^:LOJ::H`:;N;:;S\\:T?N:V?T:WKY:WN@:WRK:S7[:WNK:P\\=:S7`:VZO:R;`:HXK:PIO:R`Z:PIQ:VZU:QK`:Ha>:U;P:H[<:S=T:OSP:VZ\\:R>[:OI::VZ_:OH[:<JJ::SJ:<aZ:OH7:R:X:R@::JIL:L@I:V[=:9T=:QM_:V[@:;a_:J:_:QN8:SW?:;98:J?W:J?M:U?V:9TO:OI^:>L@:J?W:PKK:QN<:J?S:U?X:U?]:U>@:>NX:R@U:QN@:J@I::WK:J?W:QNL:SL9:PKV:J@I:9HV:>NQ:<WN:L<P:>=>:?:`:RH_:>]Y:VLI:QNH:>=V:9;H:W7?:PN?:M[H:MNa:LR]:?MV::V::9?^:RR@:N>M:RRI:=I;:>\\@:N>M:<9X:UHX:;J_:HaZ:NM9:?:\\:=Ha:>S_:PMO:RI`:>^7::SH:WW\\:QSP:N>`:R_K:SSY:L=_:QS;:UI7:M@W:UI79P?:JZY:@@V:W:9::ST:H8Z:L=_:IRL:LOW:PMT:PP`:LQ8:=7K:LR]:WXU:LR`:9;H:9WW:OYP:WY9:>?J:WY;:;U=:W7L:QUI:LR_:PM\\:9;H:JMW:RRN:QQR:>]::JIR:>]Z:SQ>9SM:QRZ:JK::RLH:;W\\:WW`:PPP::NJ:L]<:UHP:O[>9NT:>SV:QS>:WY]:QQ\\:USN:N>`:WY=:L^M:UKQ:UHP::ST9OW:SP_:MW7:;<=:JM\\:WW\\:MYP:LU`:WZK:QSN:SOP:RLQ:MZI:IP^:WZS:WW_:L^M:UIJ:QSZ:QRO:9;;:QRQ:La?:PP7:N`Q:LP@:QP9:>J8:UQ<:RI8:I<[:=8P:=@M:UJ`:RJ@:QOZ:W7::LQ;:MZ^:H8X:LPI:PM8::M^:RS8:SN;9H>:L>?:W[U:SKT:9?_9MZ:RP=:@P_:>W>:9:O:W[]:VMI:9?_::]^:W[a:J?T:NKM:=`L:>W>:W[9:I=::J]=:JK9:PO=:;<S:LNM:>VL:IPZ:?Q::WX?:M[J:@K`:WYQ:PYN:OX9:POO:WYX:;@_:OX9:JL>:LS>:Q=8:;NS:QQ[:>W>:SPL:PR<::Q[9@>:L_L:NL?::L=:SSY:QXQ:@8M:UVJ:W>8:>LO:SP^:QY?:N\\V:USa:MJV:P<\\:>N>:STI:<PJ:W>U:K;@:>\\I:RM<:QY?:W:a:USK:UUR::T`:STS:W]Q:W?8:UUR::^T:STX:US8:W;\\:UTY::[?:PVW:W]\\:W]X:STK:9@::9V@:SU9:W?7:W;J:UVK:9M=::>\\9@M:9W9:QZ]9IT:@YT:SWS:>NX:;9L:?:J9@>:JUO:QQZ:W<?:@?:9IT:QTW:SX<:PPR:9K9:QWN:LTa:P=9:QMY:K@M:NK7:W?`:Q]7:>9L:8^_9>;:SXV::H::N^V:8L_:=a>:8M7::>Y98;:8M;9\\R::_I:WKL:W@U:KI_:SZ>:8SO:SZ@:SaL:TM<:UaV:U`?:RV7:NXI:9[L:Ua\\:Q_N:Ua^:WPO:Q_Q:NWU:RUR:WH=:O`\\:WH?:V7::LML:V7<:MS:9\\a:RU[:V7@9aM:V7I:RU_:S__:>9T:V7N:M_J:V7P:?H=:8ZJ:WHU:Q`Y:WHW:P^N:Q`]:;<W:TLL:S[a:V7\\:WH[:Qa89OM:V7`9SM:W_>:8VT:WJ>:M_H:PJI9XO:W_?:8X[:8L^:N`::S^I:W_N:8JK9TH:?T?:W_L:<PQ:P9N:8KO9MU9Q_:P79:WV8:P7U:M_O:HL=:V9O:KWR:HWH:WJ\\:NPT:P`N:WJ_:U`P:8TL:WK8:W_Q9\\N:WL`:WK?9>_:WKH:WTK::@Z:UaX:M_H:W_Z:VWJ:OO<:WV9:N\\K:S9<:;OH:VWQ:HQI:WUW:WP8:<R]:WK\\:H:Q:WS[:WP>:WP=:N=U:WL8:<JS:WL::=`::=I\\:?P<:;^Q:IP7:=]K:R__:L@Y:O>J::Y;:S=Z:<@;:<UR:WLP:RW\\:NOa:WLR::P`:8L[:WS8:WLX:8LY:Wa>:WP_:WS@:X7[:WQ8:>OY:WO\\:@_<:WO^:QJU:WOa:HRK:S9L9:7:WQI:=UJ:VZ;:WS\\:WU^:WRO:L:V:H;@:X8@:WO>:WT8:WPM9>=:;R9::ZX:9><9R^:8[P:L;T:WS8:X9H9LJ:X7@:W_I:L;T:X8R:WU::X8U:@VY:WN;:WU?:HYM:TPI:WRI:VYa:97[:X8_:KR9:WP=:U9_:WP?:WS^:WRP:?TV:X9<:WT7:??H:@YX:<LN:9=K:<UX9:Q:LSV:WaK:8HH:WT>:<UX:H=Y:WTI:N[_:WTK:WTM:WT\\:WKJ:8M::WaL:@M7:VLL:X8S:IWR:;^Q:X8V:OK]:X8X:WN=:WO_:99P:X8[:WUI:X9^:WRL:H:S:WRN:WLI:X98:X;?:M`L:X:<:WRV:X:?:;[`:T[Y::ZW:8Qa:>^O:WaO8W:X9N:T[Z:X9P:8La9JO:;\\U:@@^:WOV:X9U:X:]:X9W:M[U:X:`:WRH:X9[:X7S:WQ@:9@W:X9_:H:M:X9a:R;`:WS]:X<>:WO;:8a\\:S=L:X;R:J?79WK98T:H7;:H_W:HR>:H_Y:TMU::;R:X<J:X;X9NM:=M\\9P^:X<O:X<S:X<R:OQS:=J>::?U:O]_:X7M:U:Y:TI<:J79:WV=:J>`:VZ[:R>Z:S=X:WVI:WLM:<@;:<=?:R?a:PJ_:R@9:SJ9:WVR:J?;:SKM:TMT:R@7:PK=:=VJ:=?R:N:S:>L=:O=_:LOV:W[Z:NS?:R@J:SX@:VM>:9TO:U?J:U>_:@>M:K?\\:R@J:LP8:HWa:>\\N:HRS:K>K:LP=:>[W:LT@:QVR:9^7:H9::>TV:@QH:JKQ:MWW:>S\\:LQ8:VLL:@?::I<[:L^M:WNW:WX9:9^7:;9@:RRJ:J?T:>=K:QNH:N>W:UHZ:WXJ:RIY:L=`:JKX:O[^:OUW::TX:MWW:N>S:N>`:?J<:WXV:UM;:@?@:=I;:M@Q:=I;:WXZ:OVI:QUV:W[L:LV[:?LZ:RLQ:X>R:LX_:W\\S:=N::RJI:JL8:WW]:WYL:QU=:>U;:QO\\:X??:WY@:>SZ:QQP:;W\\:UJ=:WYW:SOX:=I;:QRa:WY[:RLQ:JK[:JM\\:MWW:R@a:LU`:>>R:W^^:UK>:OV^:LQ8:X@@:SQ?:LR]:X?T:ULM:QWa:UK>:OW@:X@?:UK7:X@I:@Y<:UKM:UJU:UK>:WZN:X@Y:WY^:X@[:X@T:M=[:RK?:UK>:RMN:QRO:88a:L=H:N`Q:WYX:QRW:UH_:PIT:QNN::aI:MYP:PXP:WY^:QR^:?PL:;9Z:?J<:RLN:O[>:UUV:SO;:>JO:OW]:PZJ:W[Z:SO=:PZJ:?JL::UV:QRQ:XH?:>JM:@@7:W[U:LO=:;_W:RO[:W]>:ST=:W^J:QXa:9JN:RO[:9_O:RQ9:SUU:L>?:OWQ:JP8:XIM:UUR:W[\\:@_R:ROU:US8:TYO:UUX:9@::W[`:XIU:PVJ:US=:UU]:9@::W\\9:XI\\:RP8:XIR:W^=9@M:<Y9:RO[:ST_:USJ:XIY9@M:;UY:RO[:SU::W]?:RO_:QXa:97Z::S?:LPO9IT:HTI:RRS:SW\\:9@::9W7:R@N:?P^:SM=:POT:SM?:>[P:RR]:LT`:9;N:TI_:MZ8:RQ`:TQN:H[J:RS?:HQK:98Z:=SX:W_;:L;N:>Z::8M?9_R:8_;9?U:8MJ:W_@:SX_:X9=:M_X:=L;:VX\\9?Z:>^O:U`[:<[Z:WL`9I[:8][:?T=:U_^9HM:M\\W:U`S:88H9R=:;R@99;9I@:U`Z:U_a:WQY:U`_9RT9LP:9MU:9N89]>:9`_9>O:XL7:XK[:X7H:UaZ:M`a:<UX:9`;:HQU:W@J:WK;:WQZ:9=\\:WT?99T:X7<:S8Q:RaN:WKJ:W_S:W@W:?W^:MP`:W@R:H_K:W_X:P8]:X7J:RTZ:>RH:Qa]:Wa;:8ZX:KV>:XKV:9ZZ:WJX:WaY:;Q\\:WJ[:XKQ:Qaa:NPU:8IL:L7U:X8H:X;L::ZT:X:H:R9K:XLR:X79:VW7:WTV:WQ[:XLX:XLZ:X7>:X:V:XMZ9XT:XM;:WKO:L;L:WaW:PIS:U[T:WP`:X;\\:=<Y:WO[:X:_:@<I:X:a:9WR:;P^:=]O:9Y=:=Za::N8:X8\\:R>89:7:X7V:H:`:X<=:X99:S9X:WQ7:?H_:<JS:IPU:T?S:IXK:UH]:>I<:WL?:;^?:?IO:<UJ:VZ]:ISR:T?W:S?7:=J?:WRU:U`Q:XKU:XL;:XKX9IK:XKZ:X9Q:XMU:<@J:=`Q:XKS:S[V9QN9OU:XK`:XLK::QN:XL89:Q:XL::XOS:VY9:XL>:8HI:RaI:8;J:XLJ8U:XLL:XOO:W_]9KY:8aW:PN::<Y9:N^Q:==8:@M]:X<<:V_I:XN[:L9U:XNI:X9X:INK:V>X:P?\\:WSP:>\\T:H[T:WSS:9@H:=K@:WSV:WUX:WUJ:SV=:S7M:R:^:9M<::8O:QHZ:U>::QHJ:VO\\:;9[:>LN:@:Y:R`^:==<:TSJ:9OQ:?aU:N=M:8II:U<T:VZS:NXH:VUW:QKa:XQ>:U:[:HV\\:OHS:WV?:X==:X8<:R\\a:OHZ:?TV:<PW:PHO:U=<:<]@:9X`:Ma[:R@<:LI^:S;U:U=K:WVN:=>`:O8U:H7L:?a@:==@:I[`:TZ@:?P::IN7::HN:I[8:<;>:P;=:U>O:QZ@:I[Y:J9T:QK;:LK]:LO<::OU:LQK:LQN:USM:>\\>:I::::9=:9Z7:HPW::Q[:L=T:TOR:98=:=HN:XNa:?`O:?:>:L9Y:N:_:9_`:;8@:;U;:V\\I:U>W:R=O:;P^9O=:;8@:O\\S:TN\\:TT`:TMa:XR]:@^V:9KR9<<:V<M:=M\\:IP7:9@a:QN8:WVa:PKL:J?S:SL<:9HV:J?W:RHH:U?Q:SLN:LY?:?_`:LXU:MUR:SM9:RH_:QOQ:9a7:I[U:9;H:>\\_:XJ\\:>]7:@?R:<M=:98]:P;H:U@a:V<J:JP7:;I=:SM_:>U@:SN::W\\::U?P:NKP:NKO:MTQ:I[^:?J=:<;>:RS9:Q?9:J@O:P?W:Q8W:QKL:OJ`9[?:<>R:XI@:W]@:>L=:MHX:9_M:PHI:SUJ:UVR:>LO:9\\8::S\\:@_^:U<L:XJL:W>@:>L=:9WW:LP::LS9:<a=:JJ`:<=<:JK8:?Q\\:<\\V:?=<:XJa:HW7:QPK:XK9:98=:XK;:>7^9:O:KZ;:XKN:Q^Q:O^<:TKH:SZH:XM::TKT:@O[:WHP:SaW:NNR:>Z::O_J:KL::O_[:M_J:Q`W:W_[:S?X:8K7:8R7:T\\H9L_:8N7:MSS:P7`:WJ]9SU::_`:8_N:TO\\9_X:Qa]:LH[:S_98H:M^N:?Z=:S_=:?XN:?T^:H`[:8Y<9KY:8<U:RWZ9J\\:S^P9>\\9[Z:TO[:XV[:M_P:P`=9>\\:P7]:8Va:XMN8H9`U:II8:XVJ:M``:XN::NP^:9TV:XWH:LHM:XWJ:WM\\:>:8:T97:S`;:RWa:L:<:@;?:S:`:R`7:<OO:UL=:?aM:WSR:I]M::98:N;H:VS]:?\\<:R^`:VTH:L@T:S;S::SS:VX::HRH:O9M:OQ7:9`7:TRV::?T:9M]:XVX::_a9HV:XV[:TIL:KS>:9`L:O]<:KP`:RSS:XVM:SXS:<I[:XK\\:??>9Qa:S]<:U`9:WaP:S_I:9[>:8KO:=R;:RUU:8OR::O=::O?:>ZP:;[V:SaU:=7\\:X<a:P`S:R?Y:@TO:U=7::`^:L`@:XQ@:TQ]:T><9RM:?^]:N;R:;?V:=HZ:U=N::RM:J9R9R8:9@Q:;@<:>LY:IQH:;_O::7?:>SZ:L>L:U=S:SJY::X[:9<L99=:UHW:=^K::S::UI7:=^K:<`8::`W::WS:>TO::R?:NQ`:=XL:OQI:SM=:V\\S::TH:V\\>:>SO:;`U:@@Z:<7::T;Z:L?Z:XZ^:9TP9MX:=@M:;`@:9;H:T<R:XZ::RQ`:@:;:XZW:RN\\:IJ@:L=S:LS<:XZ\\9>H:XZ;:XZM::;>:L>J:JLN:XZQ9RM:NZ[:X[Q:XZT:IN\\::R[:MVZ:@]X:X\\;:=^P:T?L:HQH::HU:OHP:JI]:>=H:I?U:X\\K:;8_:T;Q:@WY::8O:TU^:L>=:J[`:R;::@QH:::W:;:8:O9L:Q=K:8aR:QHI:VTL:T:_:VT\\::RW:R<>:OOU:>>K:T_^:R`@:;`R:M>]:VWY:XQL:WV7:R>O:XN<:VZV:;?I:Na8:V>P:P>X:V=L:U<^:V>M:KS^:U<a:R?^:?]`:XMS:XKP:VXY:T`S:IK^:>_=:TO[:9=8:8?U9?U:89;:VY::MSM:WTQ:>R;9O;:=X9:X]\\:?RM:9M_9N7::@V:HM9::9Y:X^8:S]P:IIV:X^<:9VO:X^>:9Ma:X;S9@H:=<N:8>N:WPX:H<=:XVY:XY7:XW8:T\\;:9JM:MS[:TS]:U8P:J]P:9P;:<>J:>IX:VYS:U8Z::[T:T]9:9@K:PP8::=H:XNR:HP_:<W]9:7::X8:Q>]:PN^:<U8:SJ=:HWa:NSR:JKY:=PM:VRK::9=:X_@:TI]:X_I:T]Q:U8[:V_I:X_N:=HZ:W[W:9^7::\\L:O\\S:<Y_9NR:X_U:Q?;:IP<:;_^:HW7:T?L:@<P:LMT:PHM9:9:VX;:T78:WNL:QIS:X8>:HZJ:WPJ:VUW:H`9:QM7:98U:XY_:8aS:U^I::IT:HN^::OP:@TS:R<V:9@X:MSa:@H9:@J?:PYW:>IX:99V:MZJ:KTS:M[?:?OZ:=UJ:MZP::\\^:=J;:?:R:W\\=:@K_:>?I:SIR:L@?:>PM:X`[:<a;:;:_:=H^:?OT:MT^:K]H:VT;:?MZ9\\X:IPZ:?I_:Xa=:?:Y:W\\;:MU_:8II:XaK:<9::9?W:@^;:SL_:T8;:QO8:>L=:J@S:RHO:@XH:>\\I:<>R:Y7::RHS:QO7:>_L:>L=:?NR:9_M:9^_9JW:OKH:OY>:NH8:=`?:NU?:MP@::;>:?=M:W^H:UTL:@^N:O9]:>L=:U@@:;[=:OMR:LQN::KU:PMJ:KWH:?=8:@_R:TSR:UV7:?<O:?;Q:=TK:STO:UUR:I_P:XRV9IT:M@::I[\\:U<8:>\\>:LO]9YH:@L=:STT:ML@:JHL:K`Y:?L::@_L:K]Z:LNM:Y8V:>Oa:ON<:=NO:QP;:9_N:R`T:?=::XJa:?<P:Y8]:9`^:<M]::\\\\:@@\\:X_N:Q>Z:=I?:L=<:>NY:>JW:XK<9>>:HQU:H@K9SH:88H::`<:WaZ:UaR:8Q]:S[>:?UT:XM7:P99:WKM:U;=:Q`<:O`?9_W:TIL:TI8:S=M:>Z_:?>]:KL^:?>_:KL`:P^>:>Y::V7S:>Y=:?7K:O`^:P\\`:XVP:?@`:V7]:KJY:W`Q:8Z>:W`_:KJ`:Q`U:?H8:V7V:?@N:H@=:S[`:P^Q:W`^:Q`[:8ZU:>Y\\:X^V:XXa:<QJ:X^Y:NPM:;Q\\:XV=:XV^:NMR:X^W:XW7:<J?:V9M:L?J:8OL:XWO9NH8L:XWR9_X9H`:M_Q:XWV:P`?:XWY:M7M:8@=:Y:_8>::^_:8`R8K:8IL:XW\\:VWH:RTY:XW_:U;@:9U::XX7:H]H:XX9:KR@:HJ?9P^:T98:R\\O9WK:HHK:WOU:I?I:XXH::;=:<OZ::>9::IR9`U:XXM:SLa:K`P:OZL:=NO:XXR:>7M:XXT:UXM:OT_::WN:>\\8:Q?I:>JO:9_O:VPQ:?7_:XV`::QU:XY8:XW`:>MV:M\\a:XY<:P[8:XY>:U;M:U9S9SW:U8::MSI:U7\\:?7::XYK:S\\]:XYM9NN:Qa]:R=?:XYV:Y=M:88S:R>a9SW:R9W:S:\\:<VH:XZ9:J77:P?K:?a?:=O8::\\?:;>J:9?`:XZ`:XZJ:VRL::VQ:XZN:X[^::>=:IPI:U=T:IMM:T]O:<8N:X[T:9:>:XZY:X[W:HP_:IU`:LU_:Y>::Y=a:O`::J;::RK[:Y>P:X[9:JL]:@_::RQV:<VT:NII:X[@:HS@:X[J9WZ:X[L:IO`:9LU9R8:K]T:OQ=:X\\9:Y>I:?:K:Y>K:<7K:Y>M:9UM:98`:J;::Y=`:9H@:X[^:;8K:IPI:;`Y:T<M:X[R:X\\=::UP:X\\<:T89:Y?>:@LO:QKN:X\\H:?<^:PHM:X\\N:?`Y:O=V:P;7:I<::P;_:NTZ:T^U:M:Y:X\\L:P>_:R<I:U7H:;:>:X\\_:@<_:Y@@:I@S:MaS:9a[:OJS:VS>:;TY:WUL:<aN:X]V:X:=:X]X:<LN:@RP:X][:Y;<:X]]9XW:8@@:=9W:UaJ:X^7::QP:X^::Y<`:;RJ:X^=:9M`:X^@:R77:X^J:>MV:X^L:Y@Y:YH9:X^?:9N7:X^R:@[a:X^U:YH7:XVZ:Y:a:XYT:ISI:H\\S::=a:<KH:X^^:JJM:U8R:?9P:LNM:?=<:@U8:X_;:>^::WSN::=Q:X`8:<R]9<=:RS<:TaS:>=>:K^=:=HZ:X_P:T];:P?I:T]=:T7N:X_T:<P@:IPL:X_J:IXN:?NX:X_M:IP]:X_\\:?\\\\:T>S:QHT:P?Q:9@R:YHa:Q>\\:;?I:TI`:U8\\:<U7:HTY:H^Y:IHW:X`I:XHH:QKY:XO>:X<H9:N:K7M:X`W:=K`:IM^:IX>:TSM:S7U:U;]:HNR:SM::PM;:NUH:>=U:K]H:X[M:RI`:>U::MXM:IP9:?;J:N>M:<WP:PLU:H9::>W>:PRP:Y88:<9::9R^:@Pa:XR_:UXX:LP@:>V9:@Y<:L>X:N>X:@?R:QKa:;U_:OV[9SV:QVK:>VP:PM@:NKM:MYJ:Y8V:MV7:H8I:?:J:?=::98`::QZ:?<P:MM`:?:::Q>X:@^a:NR;:WWY:JKS:WY_::TX:W[M:M9=:W[O:XTW:>VP:MYJ:YJ]:9?X:SI8:>_L:I[`:;M]:LP@:=8R:8^J:X>T:<W@:WW\\:UI_:LQ8:N?@:YKa:PR::?MZ:I<[:;<=:=@M:YLL:>^M:;U=:YLO:YJV:9^7:SN7:>TV:YLS:YLK:RI`:>^Z9@>:YLY:?L<:X_^:>[V:>W=:LP^:YLU:YL`:WW^:YM8:?N>:T>S:XT[:YKM:>WH:IOH9\\S:M?=:>O^:UT[:IXN:>T<:POa:>T<:OIV:>T7:K7V:>]J:RIV:>T<:9S::TVS:>]J:Q[a:LY::K;V:Haa:XUO:XU<:USI:;`O:SUa:TH_:9@89OW:YN9:PHI:OY;:@KN:=_7:8aQ:>T<:9LH:YNH:QXR:QY;:>T<::T?:MV_:9LK:UH_:?=::YJ_:X@::YI[:X^`:RJ_:HO`:PNV:<>Z:?N[:YH[::L\\:HW7:<a=:IIV:J_^:IQ]:;]^:>?>:>=K::NJ:X_9:X_L:9WI:O\\a::;R:8aR:YNY:=@S:<[R:MPT::Ya:MPW:<\\_:MPY:WQQ:WPJ:VXZ::>U:WRZ:9[_:=LU:9[[9]>::9T:RXS:<O::P>I:R=@:8PY:>YV:RXZ:O==:=HH:S7::<X`:U98:Ta[:U8I:<V<:@;P:R;::K]>:9OQ:U8@:M`J:VV::I?`:<JK::T`:@Z\\:S=?:S>S:K^8:9R^:VX@:8a\\:XX_9XJ9W<:8:<:8_[:TJa:8MW:;\\P:KK]:W__:P]V:Pa\\:P\\<:OR9:L:a:T8Z:>X@:IS_:MQ@:P]H:O_R:M_;:RU?:O_?:TL9:?@U:SaI:8T9:8SJ:M_@:8U\\:X[V:U;O:S=R:@NQ:9S::R9_:<MQ:NR`::=H:>;<:@Q?:<U9:K]H:@Z_:>_;:LWR:PWI:>NZ:X8::HaU:WOX:9LJ:?_<:=8P:IX_:H;;:TVH:;VY:WL@:N^J:S9a:R:<:Q<?:XTR:9XI:>I\\:I<J:H[?:USS:X[8:S>7:VW[:LP^:YR::9TK:XaW:?IN:9TS:K]O:R^H:P?]:?_;:M<<:YR_:NRM:>\\Y:X@\\:?KX:?IL:RK_:WLH:XQJ:U<M:=;>:YRU:Q:7::8Y:RHJ:JIS:XQK:<@;:J\\]:8a=:NP]:O^H:XYI:@RP:KH8:8WO:8^@:KV_:O;W:O:O9Sa:@Z8:9[^:KIa9>V9[S99`:HZ`9R@:8SS:9>8:>9S:@S\\:SYX98H9?@:8P<:MRR:W`W:>QV:@RM:VUS:S?L:VX[:U`\\:V8O:8RO:@RN:RT;:S_7:XV>:8P8:>WW:8YP:LHS:MQQ:?Za:W@Q:W_V:W@S:M]>:W_Z:S[U:9`;:X<`:WH[:MQI:Y9W:TKJ:ON_:VIL:8[M:YP^9XL:YP`9US:YQ7:TKS::ML:KK]:VWJ9<K:S]?:>Qa:KJY:?>Z:<\\H:HJ@:>X`:P^=:>a_:Y:>:XVT:NNS:P]7:O_K:M_I9VM:Qa::Y:O:>YH:WHS:V7R:TL@8W:P^O:Y:Q:8PZ:Y:Z:>YZ:>Y\\:Y:H:Q_[:MQJ8H:8]_:=ZI:NW`:PJ7:TKZ9_H:?@::TK_:M]T:Q_>:V7X:Q_7:WJY:8O8::;`:8:W:YS^:8W\\:=`^:9[Q:YT9:YUN:RTL:LH_:RST:@aZ:Y:T:?Y9:XLP:R9K:Q_]:O<L:NWR:V79:MS7:RUX:S[K:W`H:P>7:Q_W:S[O:W`L:?V::S\\Y:8I::RXW:N_L:Q7=:X8J::H=:9IV:I9L9ZR:?VH9I7:9I^9KJ:LM=:=ZJ:8SS:T<_:W_O:8\\V:8M79YY:8`K:@;7:<J;9W<:<J=9P9::ZJ:N[a::O79\\X:8_]:P9@:Q7H9V7:Q7M:HKQ:9[<:=R8:XYQ:O`N8>:@J<:R8T:@\\8:@8`:HOT:9:>:IW>:@UY:@T9:J>X:XY^:X]T:IWX:=\\S:NQ]:9K9:@a::N7[:M^;:YVX:@N`:H`V:P\\N:P`;:8W]:L;9:T8`:S`::NW]:?[9:KJQ:W@Z:@O[:YW]:YQR:NQ9:S?N:=@a:8IN:X<M:SaY:HYI::]_:HYL:HW[:J9W:P8@:VVH:>H?:VP?:Y@O:?9K:S7S:NUI:RH[:?;Z:KY8:LNJ:SIO:VN:9?::LJ=:VNI:=NR:LQK:X\\`:L98:?I]:IY::V\\S:?_H:>R^:9HL:9IH:V:<:IZS:>JO:OJ>:>8]:RYR:?[P:=[I:O7M:NTP:T88:O9J:;^]:S;L:LI_:@=H:<`a:?a9:OM>:R]`:P<O:OZJ:?;Z:L@X:Ma^:IQ]:YZX:Y<X:YZ[:>[`:N=J:YZ^:R`M:I^H:Y@O:>V_:RH7:NUJ:Y[;:R`V:=;U:@`L:=X_:K]Z:TJO:9KS:V\\S:9;7:POJ:N7L:N9::?a>:OS::?9;:VY]:>\\W::WN:R][:>HN:SH]:H:K:O>W:TO@:ILV:KYT:KH9:R[J:O;W:LK9:XY[:W7\\:TQS::<N:STT:X7R:@TK:T^L:=K::N[<:U98:?_U:PHQ:PIU:Q8T:<[R:H\\8:Q:U:HV8:K\\;:U9Q:<@;::7U:YT7:8RP9ZT9X@:8[M:Y\\`:NP7:Y]7:X]I:X:Y:Ha>::8O:HY[:U8Q:YS;::LK:TS\\:Ta9:Y]J:U:>:<_V:T^<:S=8:9P<:R=W:T_L:9OQ:Y]S:T:L9RN:YTJ9SY::`I:L??:LHV:W`a:9TV:YU=:V7L:P8\\::=\\:LKJ:Y]`:Y];:YZ?::RW:J:9:T_=:;aQ::<N:MaO:Sa\\:NS8:Y<I:RY?:U<@:@<S:R7\\:Q9=:XXK:;`O:T:`:R:Y:WP?:R:\\:;^Q:>Ma:X7\\:9TI:9?^:KXK::I[:@`N:WSQ:>H^:U<8:Q<N:<J]:YSU:H;@:<O:9U]:9[Q:@RN:@a^:XYI:YT;:8^@:XMI9@L9IZ:8]W:VUR:9[S:=aV:=VZ:?7T:Q7>:8OL:YXX:YP_:YXZ9W@:Q7I:YUM:M^^:H\\K:YUP:8=Q::_U::QH:YUT9:P9QS:H@=:Y;]9:P:Ma7:>@=:YUX:9S_:S]@:VI`9WK:Ya8:YQS:W`[:N]W:YX^:=R7:XYP:=R@:Q7N:>`N:=RP:YXR:?RP:YXT:T\\8:H;Z:@aZ:KS\\:X]L:V>H:TP`:9XV:IN::Na@:@W=:>=`:X`T:9O7:L[S:H98:K;K:@7K:;a_:XZ7:HV::>88:@:Q:NRN:P?\\:<_T:YNY:R=R:OIT:::W:V;_:=>@:=>[:R?R:S@R:=[I:OP<:MOM:Y[L:@;M9J^:OOX:IJJ:<R::@:Y:L:U:Q=S:R`H:JMV:9TJ:H8U::[Q:@Q8:LO]:RQ?:?a?:;`U:OZa:;=[:IK::9L?:IXV:>Oa:K^O9:8:H8W:>=Z:XT<:>^L:WZI:LPP:MZa9_H:=NH::T^:J@Z:9Y=:J@^:U>K:K^O::J[::\\\\:Z8J:PN8:QOR:QRW:@?9:9;Q:NV^:MUK:U>^:UL::N\\`:Y[M:;PT:P<>:<_T:8Z^:=RZ:J[Z:N9S::;=:J;J:::Y:Q=J:MJT:P@::SV9:?=@:I:S:>8_:VH_:?@a:YTN:KQ@:P7J:Y`9:9ZW:XOS:IT9:YX`:>PR:8LX:YTR:@aZ:O<P:8<>:N]K:P9?:N\\<:Y`Q:??=:HSa9J<9VY:X^P9VO9VQ:?7;:RVR:=J^9\\X:Z:?9VM:P]<:?ZQ:=`Q:8WN:Y9[:W@[:Y9]:KJ9:Q`>:RT\\:XVI:WaQ:Y`?:S9::JQW:YaT:?8=:=WV::^J:T=[:VU8:99P:<[O:9Na:YPS:VXM:VV8:@UQ:L9?:N;<:>7K:@T`:>P7:?8:::@Z:@\\J:IM>::Y>:Y>@:Y>9:TPV:N`[:N`@:>T\\:N`P:>:P:V>S:<[N:>7L:KT9:PR@:<@T:YS<:Q9`:KYZ:I]J:=>Z:VMM:?_P:>I\\:9_I:NJQ:N9@:?;Z:IZ7:H8W:YKH:U=I:>VQ::<U:MV?:JQN:9_I:W8T9J7:Z8^9>@:MW=:V<Z:<T_:9P]:JaM:Q?J:JS::KT;:Z;<:@U@:>\\\\:T:^:U:H:KT7:Z:_:?P?:@WM:Y@8::S7:>7L:X]R:>7_::]I:QM=:9O79=M:8YS:?J_:=;>:WUJ9[79MR:=IJ:OT>:>VZ:IY::9;Z:?R::NR^:OL?:HXW:L@^:MZ9:@:T:9P;:R:W:OMN:OL=:OIR:>ZZ:Q\\8:IY::I_;:IJP:Z=W:>[7:>TO:OL_:>LP:J7P:>8[::OS:9L>:TT<:R]\\:M`9:=;V99T9989MS:LLT:<JY:;TX:?JV:L8N:<JY:=_U:SKP:NI>:T_>:NRI:Z8U:IZS::X_:Z=V:OL>:Z>=:PO9:IY::JHR:K]M:K[Y:9Z7:?\\V:KQO:OMZ:IXX:Z8=::RW:HUI:Z>M:HZH:;_::9@7:Z?;:UXX:L::9_H:Z??:9^M:>[7:O[X:M:Y:XSa:@:[9][:TS^:Y<N:U>K:9QL::^H:V<8:U>P:9@8:P;[:<9J9RM:P;[:JI[:XSI:>LN:?;Z:U\\I:?=U:Z<R:Y8;:9S;:Y7R:MOI:XT]:;?@:9:@:YNY:>VV:9LK:;?_:<<X:R79:?MZ:::<:YK\\:MUZ:<W@:U@I:K>W:N>U:9^7:;MZ:>^N:L>7:SM@:RI`:L_]:LYN:HRY:YJV:NKM:SN7:PLU:;^\\:X]:::UL:>W>9NT:L[\\:LQK:@TR:OUO:I[\\:QO@::IS:Q\\I:PPT:JL]:LQ`:@>9:U@I:JL?:LQa:@I?:?M8:OZ>:;?J:9;Q:LR=:O[R:@I\\:V[Z:HQY9>Y:<T@:>`Q:99P:<T@:@=@:SNY:OUY:M99:TYS:QO\\:LR\\:UK<:L_<:W7[:RJ@:TT\\:@WN::V>:<T@:99L:N?\\:ZII:UI;:JM;:LQ8:L_]:LSU:RJ<:LY8:ZIR:PQS:9;H:N@]:ZIZ:JQN::SH:RJ9:>W8:LR]9[S:X?@:9;H:RJJ:@I?:XJ<:9HW:>\\S:QQQ:X@9:V<R:OVH:9;H:?Q::TT[:UJO:UK7:M99:SMN:L_\\:V_L:;9Z:9R`:WZ8:SM`9>Y:UJW:?<;9NT:QRS:YH^:N];:>TV:L_L:PIT:V^::M>M:WZ?:JOI:SPY:RK=:O[Y:X@V:SP]:UIO:RMP:<YY:QRT:YJ7:ZJS:PP;:LRR:>]T:;<S:LUP:IP^:ZJY:XN>:L^M:PO7:X@M:QRO:W]Z:98>:WZ=:ZKZ:JN]:ZKK:LU`:ZK_:WZ`:PP\\:W]_:ZJW:=\\M:ZK[:RLJ:PPP:ZL>:RLN::ST:W^9:ZLI:?OV:ZL;:@?::SP?:QQ[:X@^:QRO:W^?:UKS:ZK9:W[::9P?:@IV:=SO:;;[:NL>:OYJ:9IJ:QRU:=^U::IS:@?Y:SML:SMK:HVT:LU^:PSS:OPP:UH::UN]:9L?:UN_:NaW:=>U9HO:@YT:<<X9\\X:>^T9?\\:Z@Z:;8^:Z@\\:W<::Va7:K:@:L`O:M<M:L\\I:SPV:;9Y:RJ9:Va^:=HH:W9V::L=:L`^:;>Z:Va?:SLP:W=O:==@:9HT:PTV::]8::a[:J]V:I<<:97\\:ZMV::L7:;9Y::RY:;XL9?\\:W>I:;O>:W>::ZN=:QRR:9_;:Va<:?=::XTR:WX7:9LU9O=:J7I::RW:ZO7:99L9:a:PS`:MV[:ZMQ9WK:ZMS:VaH:;7U:ZMW:V]]:M7;:W<_:ZM[:ZNK:;^P:ZH7:;7U:ZM`::]8:ZN7:ZK]:9a7:MX@:Z@^:UQQ:;7=:JY<:U[9:X>7:ZNJ:L_S:;;W:J]V::LZ:ZNO:Q<S:W=O9?\\:ZNS:ZP;:LXK:ZNI:ZNX:ZP@:ZL\\:UWI:;7=:L@?:>SZ:MJ]:UUa:<YY:XIM:OXX:9O7:W]R:ST>:USX:XUL:>[7::QQ:UU[:XIQ:UTM:ROO:HZH:?8_:UU[:W]W:ZPV:;^=:>[7:=KQ:UU[:QX^:W>N:=`9:MLI9@\\:PSW:QYQ:9?@9WZ:OXH:MO7:SU`:>?::@8N:UTK:PVM9@\\:W?M:UWK9@\\:>M^:9;T::V::9]N:UWT:U[S:ZHT:V`L:;9[9QW:ZH7:8aK9?\\:ZIJ:L`W:UQL:L_]:ZN::VaO:RLK:8=<:JXV:;7U:W9^:ZO[:>=L:ZN@::T[:9aK:SLP:9JS::M]:?[K:U\\_:<Z@:UY>:N>P::L7:;WZ:V<8:L_O:JH89?\\:T9<:TIQ:HUH:ZRW:L>@:;WZ:9:^:LY?:<VT9?\\:H\\]:JSa:NS]:ZRU:ZR_:9@R:?I_:9@U:;Y\\9:9:RQJ:TX@:Va9:ZPJ:PTX:9MI:N=W:N?=:MW=:THY:Va[::S`:9LR:<UL9?\\:8aK9K;:ZS\\:SVS:?Ia:88a:SPV:W7I:=\\Y:La<:RLK9LX:W7N:M<T:W7P:SNa:WW\\:ZT8:=]L:W7I:M99:M?7:W9::ZR@:ZOV9[W:>S_:88a:JaI:VaS9YH:W7S:JJM:9S\\:L\\_:HOV:L\\\\:MW=:9M]:>O[:88a::S`:JUJ:>]P:SPV:W8J:RJ9:M@=:W89:;^Q:W8<:W9I:@><:RHN:;Xa:W9K:>TK:M9Q::T[:YRa:;WQ:TWS:>LN:W9N:N:J9QW8^:9JS:Z@;9>=:ZUX:UXO:SQX:L]O:RJ9:U[X:ZR<:L_>:L^[:PL^:W=S:;PV:;:Q:;7=9S::9Y=:ZV?:9L?9_T:;:O:R9a:ZP9:9;Z:;YT:<YZ:ZR\\:ZRP:Y`^:9JS:?RH:<9`:ZS7:Q\\_:ZNT:K7]:99;:88a:L^V:9?X:;Z7:ZN;:9a7:M9N:K^9:8aY:;O:9:79HO:;X<:W9=:Z<W:W?V:>\\M:>]P::RV:L\\P:>]P:;;@:L[;:WXH:@@^:8P?:K7_:>OT:K_X:W;P:L;Y:W?J:;=::>7M:TV>:@HV:TZW:>S;:JYQ:9@8:;^\\:JSX:8aY:OIK:;PR:;7=:U^I:KSN:T>X:ZVa:JPU:9a7:9PR:;7=:I7]:UY_:SSK:M<=:ZT;:MOM:RLK9aZ:QSY:M7_:M8^9OW:M=O:TVO:ZX99QW:98T:;PU:H:^:8aK9QW:JXP:;<X9QW:JX`:ZW9:>7M:;9Y:PX^:ZP>:@KU:J@S:UUH:UTK:YNL:JP::O@V::L\\:W9M:HSM::?T:?:7:SXP:W?a:?7;:8`8:8^S:=LZ:8V8:@O<9U<:=L`:N_L:U`>:@OJ:8K;:U_T:8<U:;\\89`99`;:>9Q:YT=:J[_:?UI:Z9[:XYP:Z9]:YZ7:>XK:8>[9M[9ZT9KO:<IO:>9^:=a;:WPN:>@R:Z:<:YZ9:?YK::7`:<II:ZZM:J8X:YY_:HZ[:S__:S\\P:T8I:>9Y9M[:?ZU:=QL:?8R:P`L:9=L:YO[:YO^9^Z::9T:O`T:YUa:O`W9][:8S`:?7S:R[M8H9O;:@SL:8?<:H@\\:Z[J:8L`:P>8:Z[N9[H:=LY:8>\\:>9^:8?N9I>:=LY:YZ:9Y?::8>:8>^:8?=:8?]:8>M:8?@:8?I:M^L:8?M:8=R:Z[_9[_:8`U9S?:8_;:;\\`:8HW:VQI:>R<9;a9;`:Z\\M:Z\\M9;9:8?Z:RSa:8?^9L@9MW:@:a:8@8:L8::8_]:Y`V:YUO9YW:Y`V:@SL9YJ:@SO:8UO:XKO:?7?:NP?:8<O:8^?:HLO9`K9RW9M=:;[Z9S7:8_W9S7:8<S:8LP:Y^X:Q^U9?89QR:ITR:ITT:ITS9;[:Pa89TJ9TU9T=:8VT:8SN:HLO:U_V:MP^:8_>:?HL9QS:KJ\\:J8S9TL:S^X9PR:HIW:P]U:WTR:SaN:MSH:?>V:XVM:SZa:;R>:YUJ:IUS:?X@9LU:@N^:W_\\:>aX:8T[:YU^:YQ8:O^K:U7]:X:>:?7?:>Z8:?7H:XX=:YVR:8W[:??P:8W8:<J79^@:YT]:W`@:NXP:RV]:Q`?:8SJ:P98:YTH:=:=:S\\9:<J7:KIO:S\\=:H;N:WS<:VI=:V>a9Z>9UZ9>\\:8P7:YU\\:>aU:8SH:8R?:YU9:ON[:M]=:R7>:WHa:TM::P`a:X7L:8<>:MR;:@SR:S]P:?HJ:Z^_:Z]_:O;I:P\\a:YVU:P]8:KL;:NNX:KL?:YW@:NPM:YQM:8R^:O_T:P]I:O_V:TK`:9[L:9M]9Z^:89S9U9:M_<:YV^:HIZ:?@L9^T:8U=:R9?:WT?:T`X:8@9:9V>:9IY:87>:87@:87I:YX>:<NX:@S=9_Z:8;^:Z]L:Q^`:Z_I9@?:KH9:R97::Q::P_\\:Q`N9Qa:YYQ:MR?:S`7:O^`:=>=:TKY:NX79>998P:Ya;9OO98L:=>899=:>R7:YQQ:KJY:9>V:O:V:Y=R:>RN:NO7:Z[99^O:KNP:RVH:KMI:KNS:[7=:ITH9[X:8:O:8QX:;\\>:Z`U:WHQ:W`R:YVH:W`U:YVJ:YVL:Y:[:YVN:8ZX:Qa7:Y:\\:P^U:MQM:YT`:P\\O:KKU:KNI:H@Q:SZ[:W_^:>XP:M]O:N`::TK\\:HX`:KNZ:Q_J:YUK:V78:Q_a:Q]W:Q]Y:Q]S:NO^:8XT:Z]H:9U]:8_;9RT:KaQ:>RN:P^W:W@;:V8I:=MK:WIL:P`<:Z]H:S\\?:KLL:S\\J:WH<9^U:N_[:V7>:WL^:WI@:WP[:W@?:WQ_:WJP:8]H9aL:P^`:HJ9:8H`9_7:HJ<:O`P:S`[9][99P:ZaY::RX:=>8999:8SJ:8:Z:8[P:8<H:88H:8W::8<M:Qa::Z`8:8W9:M_`:S_J:KQZ:<T8:==P:[9=:V=<:?T\\:?W_:?T^:YT_:?>::?U79Ma:8<U:Z_=:ONU:RVI:?V[:[:?:[7]9OO:8?J:=MJ:?7?:88<:?WI9RS:?WK:H=8:8;U98I:8SJ:XV=:YW8:8NZ:YW:9VR:=7K9`8:Z[N:8?>:8>N:P79:[;79ZR:HM?:Z[N:Z[U:8X[:Z[^:8>U:Z\\T:Q[R9XV9P`9SO:N\\=9J<98P9XO:[;M:Y`Q:KQH::`S:S^L:;\\:9SH:Y=;9VR::8>:S?K:[;@::`::V8L:V8H:KP]:N[P:VPW:@RH:N[S:YTX:IV7:KQ;:8YK:V8R:?Z@:=`\\9@9:HMJ:8SN:S?K:[;7:8IV:8]]:8<::8<<:97@:8RL:8QW:I>=9M=:9NQ:=7K:?T7:8W`9\\8:O;>:X9K:HK`:8N<:8Y7:T\\<9ST:Y`V:YQV9XT:?7Y::Z\\:8;P:[9O98S:Z\\9:8Z_:XW<:S_;:?Z>:=a=:?Z@:8<O:ZYS9P`:HS]:<LO:[=O8@::8::[9I:9VY9JU:<O::=U^:V9_:8UV:KZY:Q7T:P7R:[:H:NWR:@[Z:KQY:W<`:V?>:@VX:U9a:KQa:LM\\:KRV:MPO:9UP:HQL:Q77:8UU9K>:[=]:Z]7:?8P:ONZ:YWQ:KUQ:Ha<:WJ_:W;Q:=V`:KVR:S<[:P=;:LIU:V:R:N\\W:Q7a:WK_:;[\\9L>:XX>:X=7:U<Z:@TO:V=S::a9:M[S:879:;`_:JHH:<a\\:?P:::>?:9W>:HW::H\\Z:[=Z:=MK:[>K:8U]:>a<:RXS:[=`:[>R:HY>:[>T:[>9:N^M:8aS:[>X:[>=:L<I:8aV:Q7a:KVR:WQR:U`Q:WLQ9O7:=SX:SY8:X^S:H=`:KV`:9N8:=9T9P8:YS^:XLY9IL98^:@J^:Q]=9SN:8:X:@Y@:9KR:WMa:X8T:X;]:XPO:X;_:WQ<:WU@:X9\\:WSW:WUJ:JaU:?I?:VYS:S9X:9@@:::H:9:Z:N\\[:WSZ:XNX:X;H:P@H:OSQ:WRS::9K::^]:TOJ:[;@:=LY:Z[]:[:a:Z[`:8??:[;I:8_K:SZ::NQ@:[HM:8><9VN:8>?:YU9:[;7:8?_::`Q:8@8:W@U:8U=:88U9S9:8<_:M]7:O^T:XVR:Y:P:[7U:V7Q:W`U:XVT:YQ>:;^Q:8;Q:>[<:Y:U:WHX:ZZ?:?@Q:Y:X:[7V:WH]:YVM9NM:>Y\\:O`H9^H:9ZX:P^a:Q_>::9T:O`M:[9J8Y:?>?:[IY:P_9:HJ>9WK:IL`:YaY:;^>:8aL:J>R:K^Z:V;T:@H]:::<:J^K:WO`::=Q:IV]:T9=:YYM:YYH:>7M:@T\\:N`P:R8<:[J799T:;ML:Q7\\:S=X:TMY:<\\T:VZ8:TP]:INQ:TMa:[JI:9O7:TPX:J>O:L?T:HV=:YN>:L8T:NaP:V=J::W;:U>U::V>:R;89RM:LJO:XY\\:9JQ:?]^:<_N:>>`:V>P9?::[?:::OS:K=S:NT]:S;R:IZS:U?;::V>:U?=:TN]:I=L::VN:IZV:;SH:WL;:<K79][:HU>:N<]:>T7:OT\\::\\H:=]O:<a=:J;H:<=<:V<L:MUW:9K8::S:::U^:N<X::VN:T@H:IPQ:;M<9R8:O?Y:99L:N<Y:99P:O?\\:RJ^:;=;:RJ[:MTM::TH:[K\\:><\\:HVX:[L<:Xa[:LQN:R^Y:HV]:[LI:T?[:NUR:@X@:;JS:=\\W:RR[::VN:Q:`:99P:P<T:RJ^:;Y`:[LW:>]J:;9I:[LZ:NL7:>S`:VN::[L>:NaW:L>?:HYH:9;H:UHI:MOZ::RW:LSS:T?H:O?9:<Y]:LSS::OS:VNW9RM:;XP:T?H:[MJ:OV?:>]J:HP\\:>K_:[L::[L\\:T>@:[MR:[L`:[LH:9;9:;=Z:9Y=:I[<:99L::YI:=>U:[M;:[LN:K<N::YH::RW:;<]:T?H:[LV:[N::>T<:W[9:[LZ:Y[Y:>\\=:N<<:@_U::V>:<>T:U8R:XTJ:IQ]:NZQ:IQ]:;P;:9LK:[O8::a9:[O@:99L:I]<:VN8:N>a:VNP:K`^::=K:>T<:>]I:[KY:;=N:9@::[KQ::RW:[OV:99L:;Ra:;NM9>=:I:^::>I:I:`::`^:[?]:L;Z:IHQ:X<T:TOI:[;?:[;=:[HO:[HK:Z[X:Z[O:Z\\S:8>W:NQ_:[L`:U9O:OX=:VOU:J=^:9P::LNS:Y@O:IZ;:;>Y:VH<:<TQ:<88:?K=:@a8:KUL:OH]:Q^V:L;7:>9Z:@O^:YKV:TIO:O9I:=RZ:V:J:HW<::;R:XX_:S:I:S?O:Ra^:Z\\8:IS[:=ZI:[P^9P\\:?7M:8>R:M\\]9>_:Z\\7:K[7:V?;:@S@:P^7:S\\Z:9U@:O^M9>9:Za[:?8T:ZaY9>9:[:X:8>H:[<L:[HS:X;Y:8TR:?aS:K\\Q:9KQ:R;<::IR:TI;:YZP:9LT:I\\T:NTJ:=?O:VS\\:?;Z9?::@P\\:J@O:;@P:T_W:THK:YJ=:T=^:>H_:9LJ:V\\S:TS9:<V7:Z?Q:Y\\Y:Y_Z:Q=M:TQY:=;>:[RV:9;L:V];:QIM:I;[:MTX:X7_:=?J:[RZ:?9[:HZ::Q:U:[@\\:VL9:N9::[Ra:WL;:VM8:LL?:[RO:U\\=:[SN:=J;:=U;:YJa:[NY:YSL:[S>:PHR:Z?^:[SH:I?W:[SJ:>][:LI[:[SR:>P<:K^?:Q=::QH^:R_`:9XY:MHO:[SY:I;`:S9M:9:>:;MI:9TM:[SP:JKY:<a;:MYW:>N@:WSS:[T7:VRZ:TIU:<MX:I<::J<=::=J:J<=:Z@>:I@S:9?^::@Z:M`::9XY:>>:::<N:N=J::=J:R<>:=X_:9`7:HZQ:[P[9RL:Y^W:W`O:Z:X:NXU:R9::U;M:M;79WK:;@?:9T<:OIS:9\\J:H\\=:>N7:SKL:I7;:VYP:R7W:I=O:=R]:LI`:NYR:SJ8:H7N:?IJ:H;<:Y\\>:@TU:@PM::>9:NYa:Y?U:>JY:=7]:Y=>:Z:T:XVK:Z]M:[?U:L^M:K[]:@9U:RY^:RY9:R;a:WSU:=[9:VK=:JQN:@Z\\:=8S:=HH:VZ8:<aM:=N::@Y;:>8_:OZ]:M\\>:P`<:ILH:;N999S:XN;:T`R:Y@V:T[]:J8Y9TH:V=a:>_99O9:8QM:Y]V:YW?9HI:YTP:V7U:M`S9>\\:WL[:Y`S:H@Q:H@S:Y9Y:ON\\:O`::W`;:TKL:XV@:YU<:XW]:Q^X:Y;^:Ya99SW:SaT:=LN:Z^P:<^O:YV?9NN:W`S:WHT:TLJ:O__:[IH:W`X:S[\\:WHY:>YR:W`\\:Y:Y:[7W:WH^:P^U:O^R:Z`=:O^T:K[8:YYa:8;a:=>898Z:P\\M:NWa:[:M:8S\\:O_7:ONa:XM9:>@@:YV]:P\\[:V:Z:TL7:SZ^9R^:KK]:HH`:Z_@:Oa8:=9?:Oa::[8[:WOP:P8`9>I:<T?:KLZ9_L:Q_\\:YW_:PaI:W`I:WM[:S\\P:[9;:WQa:WT^:HY;:M]>:WR]:8LS:KH@:KNX:H@9:>@`:Paa:P^_9ST:O`K:8T[:[I]:;\\X:[I\\:P_8:;\\X:O`Q:S_M:[H^:;R=:HN9:=ZR:KIO:[I8:TJ`:XL`9>V:=aJ:V>::V==:?T]:?>8:MQN:[:>:?U9:WMZ9PR:[:<:>WY:S`Z:[:J9H]:[:L9[K:>^O:?W@8P:?W;:P8Y:M]>:?W?:V=<:[:S:>MO:[:V:KWN:OaX:>RN:Y:K:WZ=9W[:O_K:TKR:@a>:YQ;:S[<:WPO:Y:T:YWP:P8_:8SU:YT=:[XR:>M<:P^<:8?\\:KLa:O`V9SL:??N:Y:I:W`J:HH9:V7H:?V::[[7:?T[9V[:O_O:KMV:Ma::==P:SZV:P7P:P_^:WOS:LML:L7\\9]?9]H:KW]:=>89_;:P^V:RV<:8:8:8:::RV?:KM::[7>:=`U:KOT9NH:RVL:L7W:Z_::9OL8Y:8R@:RVR:RVT9RT:RVV:>9]:8<H:M]M9N@:[89:Y`7:P\\X98::P]K:V=7:[XI:KM=:>MZ:HJS:[7J::^`::`8:;RT8Z:;QV::OL:X]\\:Y;W:;QV:V>89_X9_J:>PS:V9a:8MK8K:I979LT:VO=:H@O:W@Z:[:]:H;Y98<98Y98?98J98Q98J9@_:8SN:YP89JY9\\<:[][:;\\]9HL:8?T:;\\a:S??:YW7:8^P:[]U:88_:87^9JS:>YP:[^T9Y?:8_>:?@T:[^Y:8^=9TW:;RU9Y?:8YM:[^W:8=:9SO:8^<:KJ@:?@T:[_::88_9`U:@Q[:Z^T9\\T:8<<:8NL:8_[:S?;:;\\X::`S:[;_:M][:[;a:V8K:N[Q:@RI:N[T:P_S:S^`:8N^:;RW9L>9Y_:KZ;:?ZL::<7:[]^:8R^:X;N:;R::KLZ:[]Z:V7Q:KP>:N^V9Y<:XWL:SZ<:YS]:>Y^:P_Y:Y]]:OHK9[K:Y9W:YWM:Pa>:O<R:[WN:[:I:LMK:==V:S__:KO_:8T<9]^:9`;:[8U:Y__:KM>:[[R9]`9^7:RXT:WHJ:[`_9^99^;9[S:[\\N:[\\>:KHW:N_Z:[YK:Z_a:9`^:[\\]:NPI:N_O:[_7:HLP:PaQ:XW[:=`P:L;V:[^K:[`<:[]\\:[_a:I\\H:9SI:P97:WH;:[?Q:[\\@:[`V:T8[:[`X9][:=JX:=>8:ZW>:V=I:X]M:V=J:@U::@@]:X_>:>7L:J>=:LZZ:N`V:O=X:<aS:WUQ:S`>:99V:VL@:?P?:=W7:MTI:WLL:<U?::X\\:R]7:MPM:97M:<>Q:[]Y:[aT:?H=:[`=:8Q>:[aW:[`P:Z]8:N_I:>QV:[`^:[a\\:[\\Z:[\\H:?V_:[a`:8SZ9^7:NQZ:MOH:\\7::V>H:V>P:\\7=:;<N::=H:@;Q:V=O:<?P:V>P:9Y_:TPL:R=P::RW::LJ:MM`99T:\\7P:ZOH:@;I:@\\K:ZM<:9a8:\\7V:>HL:\\7X:JKX:[`::\\7\\:8_J:;\\8:\\7`:?`7:P7R:Z_8:Q_\\:[`U:LMM:[\\K:K[U:[\\M:L[S:K_N:N`U:IVM:N`V:\\8N:@ZV:PQZ:Z;P:Z;V:=PZ:\\7J:V>I:QTS:S;;:@ZX:Z;<:\\7O:HXO:::@:=?9:\\8_:YJS:?`R:YRP:>M7:=SV:8aS:\\7Z:?RI:\\9<:88_:\\9>:HHS:\\7a:[>O:KQ=:[8`:[=^:\\8<:[a^:8;J:\\8?:SaM:[a;9_H9_;:[@P:\\8K:\\9S:=HL:J>?:HXW:\\8P:\\7@:N`_:OJ;:;a^:=WV:U:8:Z=Y:O=[:\\9`:9`^:\\8\\:MXU:\\8^:::@:\\7T:\\8a:[?]:\\:>:Y9M:@[U:\\7[:VUK:[aU:\\:L:HZT:\\:N:9SJ:8\\V:PaO:YWa:\\:S:\\9L9]I:;<W:[\\]:\\8I:R`T:\\:\\:9UV:\\8M:<V::?[H:S9H:ORW:J><:\\;8:V=J:\\8U:LWW:<`\\::RW:RYN:L\\H:\\9a:\\7Q:K]P:K_\\:\\8`:S<>:\\:=:9WI:\\:?:V=\\:=SL:WKT:=OY:9:H:U8H:;98:WO^:U8L:N`Q:Z78:<]Y:9K7:U<::VHR:O7R:9QY:OL=:YPI:@MU:X:a:T;K:TMX:Z7@:NY8:=K[:LO=:Q8`:YP?:\\<[:X[<:Ta[:YQ^:<]X::=H:H8@:\\=7::MW:>\\H:;98:=>Z:R\\Z:9QY9?::\\<]:O>M:V[]:Q9<:T<9:RZI:\\=L:\\=^:H[?::]7:T9R::K::9@Y:\\=`:L@8:X[`:?]X:O7=:PHM:QHK:\\=8:SN;:[R\\:QL9:R=^::LM:SHP:U>>:YRS:M`<:N9::OJ;:T^=:Q;@:THP:\\>Y:98V::Y@:\\>U:XN]:Q?U:R>H:PIL::IY:U7;:R<P::Ya:U9I:?[Y:;`U9IT:=];:XS@9RM:IQX:99P:Q;::@7\\:[SI:Q:R:@<Q:;;P:@7=:;`[:K^O:VL@:9XI:>=Z:J=9:IXK:Z8M:?:J:PK9:>[7:W^`:[T9:PIX:\\>Z:\\?H:<V:9IT:Q;X:\\?L:ZU[::RW:V_]:\\?Q:[SZ:?[Y:<>O:J<^:V_]:9L?:NW9:99P:[NP:9aS:\\?X::7;:\\?[:PN8:K]J:[UZ:J`<:U=I:>[79LX:PHR:T@X:S=7:OIX:<?S:\\?I9:P:TY=:\\@?:\\H:::RW:M\\Y:SHM:\\?R::8Y:[O>9IT:\\H?::OS:\\H?:99L:;W::\\@T:\\;@:\\@V:H;;:NJ`9@M:SN]:?<U:9TS:NYY:>ZZ:\\@^:YSN:YZK:\\>U:\\H8:JH89IT:;QO::T[:99L:\\I8:;^R:VW\\:Y\\O::8Y:I_P:;`H:TRK:9L?:PRL:\\HQ:VL?:\\HS:K`7:YS@:\\HW:SSR:OIa:N9L:@><:PHR:SOW:VV<:\\H7:>H?:@<H:<_W:\\H<:I^R:99P:PSP:\\I<:\\HH:<?S:;OV:;`H:LW9:I_8:\\?W:\\HR:\\?Z:H;;:?O=:\\@Y:IXM:\\@[:L@K:\\@]:Q:U:T^::R:?:=;W:IQ\\:T=`:;HV:;HU:T<H:Y^K:JJT:Z7Z:P;Q:S7L:N97:HUL:Ha?:=OX:9X?:9R^:Q;L:<S;9@\\:UMQ::=J:UMQ:Q<Q:Q=P:TNK:I^V:>TK:I<L:T`7:I@S:\\JO:UQM:9X?:9?^:\\K7:IH::IaH:9L?:Ia>:99L:M8W:\\KK:\\JW:ON>:=>a:\\KH:@:\\:\\KJ:Q<\\:?a`:\\J_:WSI:\\KP:I<:9;]::]_:\\L9:\\KW:IH?:97]:\\KY:>NK:@^;:=7@:\\J\\:V:O:::W:\\K`:>IL:I@7:T;`::<N:NLY::RW:\\LR:\\K=:Q>J:\\L?:LS<:\\LH:;_^:WRP:9XY:\\KL:\\LM:;`O:\\L7:X\\Z:Z9M:SV7:=VJ9:9:Q=<:PYO:QIZ:ORS:MX@:>78:Q=I:O9L:OWN:\\M8:K;@:\\M;:\\H\\:R<O:K^8:\\M?:YIN:<`T:O9L:JP8:O9P:\\M9:\\MM:R>H:TXL:9;7:\\MQ:?TN:T;;:O9L:MIO:O9\\:\\MW:97]9YH:OH;:\\MZ:97]:\\MQ:N^P:\\M^:?\\T:9S::\\MV:W]S:T7L:9II::J;:@NV:W@U:Y<9:8@9:HZ]:9OL:\\78:97N:V=99_X:Pa^:WKN:Y`^:=ZH:@OO:>9S:[U=:SaM:T:V:9;O:[9O:Y^Z:IL^:[Pa:T=Y:VOV:[VK:9]<:;ZK:<\\P:=W;:T9I:OQ7:=?O:=[;:9Y=:SV?:;@W:Z7?:T;_:<YY:TaH:\\>8:[OL:N7<:<=<:J;J:YIR:R^=:JJN:?;N:T?H:H[S:SL9:<9W:9K9:HPQ:LPU:QH_:\\OU:T>@:@?]:I[\\:8<O:[M[:QV::;=;:;MI:<@^:\\P7:?OH:OP::QKN:V?S:XPY:9ZU:>^O:?ZV:K[Q:?YO:S`X:MRL:M^H:8YT:ZJH:@SX:=MK:?8M:MR?:[`L:\\:O:ZZa:SZW:N88:8MP:S\\\\:?SS:\\:J:\\7^9J=:N^W9aL9Qa:?VZ:[ZY:[ZR:Q^W:IS]:[QT9>\\:9`;:>R8:VI_:Ya<:OaW:[[S:Qa::[^M:;\\_:8?U:;]79WK:JZU:9\\;:O9Y:X`?:NU::U8a:V?O:\\H^:LIR:VVQ:PQN:L<K:R;P:NaY:9ZM:Q<_:S7R:>7M:S7T:[RJ:=NO:=KZ:Y<Z:T>?:VN::?_Z:R^<:JJL:U=N:;;[9@a:9LR:WN[9:999Z:879:;U;:SLa:?M;:><R:VS]:@=:9];9J7:;8K:;WW:T>M:9L]:;Ra:9__:J9T:P:W9>=:T>>:T][::HN:Z8K:HO`:@>a:I[\\:;MU:XU^::L=:Q>_:J?X:=U9:9;I:Q9S:9WX:<;;:<a=:@>^:>>U:W8T:>W<:Z8]:?M\\:?N>:<U<:?\\<:LP=9:R:9LK:>V@:><[:UYW:Z8\\:?MZ:NJ`9>Y:N>\\:HPa:YLZ:H7\\:?:M:I]N:>=>:\\T<:>>U:\\T>:T9Q:X?N:Xa;::8>:RR::M:T:>S`:?N]::=?:VP;:I@?:Q=Q:;^@:N7V:H;@:YSW:HIU:[7[:?U@:MRM:[X]:L;@:UaT:TK]:YSZ:[U;:T8[:YY\\:9U@:KSL:\\NV:Y:J:NNT:XVQ:V7]:Y:?:P\\<:>aM:[W^9U<:>YZ:P^K:Wa7:[XH:8>@:YUJ:[?S:P`7:P^;:Y:;:Z[=:??8:[[Y:NP8:??O:O`;:89a:RVR:Y`R:O^W:\\QN:ZZ?:??T:[WH:=98:9>I:Z`[:[W:9HI:=J`:WaM:WJ<:ZaH:[Y9:S\\>:WJ::[8\\:WI::[\\?:@O>:9>I:[Y@:9NO9_N:[YJ:RV\\:YWX:\\VU:WQ`:WI=:=:K:WM[:S?W:T=N:H9N8H:8U=9H`:8[`:8\\7:8\\>:HT=:IUS:9M]9_7:8:::<J=9JU9VO9>K:Oa::[a@:\\Va:KLS:P]T:WH8:ZZO:<S`:?@P:[9O:8K7:KIH:YT?:Y:79VR:8OQ:[^Y:8`S:Z\\=9[a:8Va:Z^I9V`:88H98<:@O;:8=]:J8X9RL:W_\\:@:a:P9?:M]:8P:\\Q9:[a<:[[T:HHM:>XT:O_;:M]R:YQO:[X_:H@=:[7S:W`Z:9>\\:[X>:[IN:YZ7:?@W:8S[:?@W:[9O:?H9:;RP8=:;R[:XML:89\\:XV=:[W8:Y;;:Y;U:T\\J:;QW:RX=:MP\\:\\X=::8;:Y<_:8TR9LQ9>_:8X?:=V=9Q>:8\\7:WJY:?7`:[WI:8`T9K@:I>H:[_X:TLU:KSR:V8J:O_H:Y;O:M_S:\\X?:[]M:Y;X:Y;Z:[P[:ZZX:[WV:\\NZ:WKP:\\QS:9U@:Y;a:=OQ:Y<8:[ZW:XX<:\\UK9PR:L[S:9S=:XX@:Ta`:XXI:<R<:>[>:<a<:>H^:K]Z:XQ`:Y<R:H8W:Y<T:?;]:[Ua:YZY:N;Q:J@9:=@P:;KO:>U@:Y<]::;R:JRK:=Y^:\\YR:8Z::[\\V:O]?:HH`:\\YY:H9V:N[`:Z:8:??W:Z::9V7:SaO:KMU:[W>:=JT:SaS:SaJ:S\\W:P8U9V?9<::P\\8:8M7:[V::XW^:\\ZL:T=I:\\VJ:WKR:QH7:X=8:XQR:Q;I9ON:U<P:NU?::II:QJ\\:T>::IH::TNL:TN@:T^L:Q>J:J<O:P;O:9Q\\:T9`:?_P9WZ:OTJ:@MM:<P>:=T[:U<7::Y>9>@:\\\\^:J>J:Z>L:=?J:U<K:?N^:;VZ:>=[:\\[@:KWH:R^L:\\T`:[PM:ML^:9Y=:\\S@:X[_:TQ7:97[9:I9NO:X>M:9TI:MWW:;Y;:IXK:YJS:=@P:>_M:;Y`:X89:OSQ:OJR:98`:R]W:Y@=:WNP:Y@?:<aN:9[V:\\X::;QU::N_9[^:8?Q:QaL:\\Y]:P_]:8?Q:\\[N:L7W:\\^K:J]R:M8T:[?8:J=\\:X]O:V>K:V>M:\\7H:9\\^::`Z:VH;:[PP:WUU:[JQ:R?Z:@TR:Y^a:9II:QM;::L\\:Z=H:9K9:OV9:T\\Q:KT?:ZO?:<KJ:IXK:H:@:?9=:>_I:?HZ:<J]:>N:::\\_:=HN:?KO:?II:IXM:TVJ:L=T:Xa_:LLN:V[`::IU:@?J:9@K:IWP:YIU:U8M:R:Q:MZ<:HQ99@M:U<>:[JZ:\\\\_:LH;:MLI:VL;9XQ:@<Z:H:Y:>NL:>_;:>S_9`U:?Ia9J7:K^O:>[U:Z8Z:>^Z:X>^:L8U:>P@:J@>:OT^:>\\@:SKL:<N8:N9^:PO9:X<X:<ON:9_`:\\`L:=?Z:\\`N:=HH:SN::\\`Q:U^7:;LJ:IXM:\\`]:Z8Y:?I9:\\``:\\<7:>K^:\\`R:U@;:\\`T:P;9:Q?Y:OS7:RR?:>KZ:V=Y:LTa:OUS:;U=:QPR:NHP:RNR:IPU:J@9:L_<:>]9:SQ`:Xa[:LXJ:TUH:PR;:\\;M:LQ::\\aO:LRY:PY]:JXN:ZUP:RN8:>=Z:<H@:Va=:H:@:L\\X:=aZ:\\a[:N?S:MW\\:W^`:IPX:?8J:TW>:QOW:IP\\::8I:MXP:YI9:WWZ:ZH::IZa::8I9H`:?Ia:MW;:9Z?:LY^:;^\\:L\\U:>^Z9QW:X@L:QV`:=N::M[K:V`S:]7\\:QW=:QNR:L\\U:TVJ:V\\W:L\\I:>^Z:TWV::>]:ZV9::T[:?:_:=_M:WO8:L>W:JKQ:?M8:JM^:=aa:YKI:[LI:T^Y::V>:]8Z:NJ::97[:;>U:;TP:S`=:;T_:;9@:TX>::T[:9LH:>=O:;9@:TXa:L^M:\\HL:9L?:\\H?:L]@:;]S:PT9:UW9::VN:\\HN:99P:N?_:SMW:HQU:LZP:9;;:UVV:;9@:W\\Z9?R:9:O:]9V:9;H:UQ^:ZI_:LZ8:O_L:?KO:]7^:L\\::OU\\:;7=:\\]\\:]89:;TY:]8;:LU`:NYQ:L[L:?LO:L\\U:LS^:;^P:UJH:]:<:QW@:]8P:LZP:W^`:SS::NHK:=I7:ZI9:JNZ:SMM:W\\R:9_;:W]<:@?T:Q>::9L?:<<J:99L:IPN:9]N:;UT:99;9?R:OW<:U[8:@>T:LZ::LU_:TYZ:ZI::UR::9LH:UQa:;9Z:9;;:O[J:UX:9>Y:W\\Z9O=:9:O:Z<H9HO9>Y:UQ^9O=::]^:UQ<:UP[:SQK:L\\<:L]7:L[Q:TX8:;8W:U_J:N?I:L^M::^N:VLI:MX;:RI::L\\X:>=Z:OTJ:L`7:NXX:VaI:YLW:9a7:LZI:U]a:9HS:JZ<:SQ::]<;:XN\\:TXM:]7_:;^P:O\\::L`7:RMV:=XO:]<8:LVJ:U_H:TW>:L\\X:PP[:L^M:9V@:URW:\\M<:UR<:SP\\:L9H9>@:UMQ:IO?:UMN:TQ]:N;O:UR\\:>P<9?R:@YT:U[8:;;a:];>:;9L:UQU::\\Z:UWU:?N`:TXM:]<?:];`:W>=:=HH:88a:>^Z:ZWQ:U_J:ZOZ:LS`:];K9O=:@@::PQ^:TYT::[Q:]<_:;>Z9O=:I<<:]=8:W^`:ZJ_:M8R9H>:UR?:];8:]:X:UM9:U[V:UHa:UR7:\\_M:8aK:]<<::7::L\\X:;^\\:HR[:UO=::RW:]>Z:99L:K_Z:=>U9QW:JQT:98I9QW:]>^::OS:]>^:99L:\\LR:UW@:>^M:MYZ:@_[:UXH:N?I:UQR:HR\\:W[?:MYV:M<<:]<>:];_:TVJ9?\\:H==:UQL:]=\\:JJM:TUP:]=_:XSV:TYZ9><:POO:]?K:@@::]=a:QUU:?8_:]=T:9QL:L\\X:=KQ:UQ\\:ST\\9:9:IW79O=:=KQ:QW^:]=9:ZK`:;a`:RK_:];8:@?::\\@[:8<O:LIU:@>[:QWT:];^:N?=:9N`:J<8:W?O:]<7:?N>9O=:;:?:]<R:\\`]:]?P:]@V:L\\\\:ZRI:];^:L\\M:;7>:]@I:<:L:V`8:=XI:L9Y:U@a:?NO:L\\9:]=R:?J7:];[:?KO:]>W:];_:>^Z9?\\:W?U:]<Z:]@[:]?L:L\\::?LR:]@`:QZX:L\\\\:]8K:];`:8P?:PU;:=XO:L`I:]@?:XSV:QW[:]@J:WZ`::YU:]@M:]77:TTY:=<T:QWR:IP[:PQK:J@=:]@a:US>:L\\]:9_;:QWZ:]I7:]?P:JHO:>8Z:UR=:9_`:]I=:HY?:WZT:S=_:K]J:]@S:];]:]IK:SNT:9KR8_9TI:UOa:URT9O=:ZT>:L\\::]@_:]@U:]I_:L\\I:]J8:MY]:L^M:]@]:]J<:>^J:]HY:PP=:L\\\\:]JH:]<[9O=::M]:]@^:URN:]J>:]JO:UQI:L\\J:TUP:]JR:;KV:]>@:?;O:V_H:>HK:88H:?;M9R89K;:>JO9R8:J<8:I7I:9;H:=\\Y:@:>:@_@:@?[:9N^:Z7\\:;>W:@?[:LRX:]JX:@^<::Va:UIQ:M7[::WR:@?[::RV:LOP9R8:;;@:YN9:>>[:OY;:K;a:@K[:@^S:@?[:@HV:OYI:VH;:@L?:OXL:YKV:OK8:Y7Q:@?[:99_:QQ79H>:Q[V:JLM:8a9:V`<:\\MU:P@::NIX9>=:RQP:NLH:IPZ:Q[^:;U=::X\\:N<_:W\\S:O[W:9;H:ZW[:O[Z:9K9:@_@:JK_:M=?:=_V:]?\\:=8H:W\\P:PQ8:9US::J<:VZH9PS:[^]:=<R9JT:Q^U:\\VQ:Y`::8;^:]MK:KYW:Q<^:YOQ:@^;:MT8:=P;:>LO::8K:>L=::LQ:?ML::LQ:<SH:@[99:O:V=]:8X::]M@:\\NV:?YZ9YU:8Q]:8;]:\\VP:=Ja:[>T:O@Z:XQ]:\\JZ:]MS:9P<:>PH:J_M:MP?:9:H:>PL:>8Z:=@T::@I:K@M:TJS:\\U9:[ZO:[7\\9[K:HSa:>:8:\\U?:L9`:RTW:\\UI:[YY:Y<=:\\UL:VUU:=7a9US:YV9:Z`=:YV;:[Z@9NN:[I=:\\QR:I_I:8MR:>Y?:[7P:[IP:W`T9X[:S\\8:\\U[:W`8:P99:Y9X:YU::W`9:KL]:>RN:[[V:=a?:[[X:P^?:Z^\\:??R9_H:\\VJ:M^Y:P];:[\\9:[WK:P7_:Z`K9U\\:NN_:Z`N:M_;:NO79ZR:89I:NO::Z`P:Q_>:M^Z9U\\:[_N:;]M9S99O;:Y9R:;RQ:P7`:\\YH:[_I9SO::ZJ:8P99SH:IUS:[]P:[]V:Wa[:NPR:>Ya:R9V9QU:WIJ:=99:8QM:\\X@9IX:YUJ:S[@9\\a:]NZ:NXT:9U@:W_Z:[XN:]O]:[WZ:=aH:OR9:\\XW:YV[:[XV:YVY:XVH:>@@:M]_:\\VS:SZU:H_N:Z_J:Oa;:\\VX:WOQ:8KK:[Y?9_J:[YH:\\V_::`P:RXX:S[M:[97:\\W9:WMV:\\W;:\\W8:[9<:Z_[:T:Q:[YT:V@V:?>=:8IL:8LW:ZZ?:?8U:HZX:Y:N:XKH:TL?:V7]:TLI:??;:XVU98\\:=>8:=MI:[XJ:Q^a:8SH:]RY:8SJ:[XZ:Q_=:[X\\:?@I:Z^^:\\V=:Z^a:[[L:WQU:W@X:=JT:?@X:]S?:HKN:[V9:]O9:?XR:YV<:YV@:]OK:\\UY9][:\\Y=:[IM:V7[:[X@:]OK:Y:]:T`<::Z\\:;R[:\\YJ::`?9S::Y;:::[9:XVa:;RK:P>M:;]O:8:O:[_L:8:H:WV9:;\\W:]PN9S::TLT:87\\:N[X:\\Z9:YT\\:Y;N:XWU:\\Z=:@OX9SJ9L>:XMR9RN:]PM::`R:]PY::_I:8_[:]Q?:KRa:H_N:[8;:]Q@:T:W:\\[_:R7>:SaW:\\7a:VUW:@@\\:\\O::[PN:T\\U:@<K:VOS:=XR:@;M:OOW:P<>:S@R:IJH:NZ>:@:?::aT:LJ@:T7T:HNU:=[K:TPP:?^U:@_::H^^:?^U:T^W:?\\^:]UW::SI:IMR:S>]:R@I:X<]:TRI:<\\T::TZ:XX]:KaK::@K:]TY:O^@:9Sa:]T\\:]TZ:S`W:]R@:W@P:HZL:<RK:]TT:;\\Y:9_T:I>Z:[V@:K^Z:IJ@::<^:9T@:>:N:=[I:VU_:IOI:?^T:]UN:@PM::>L99=:<N\\:9Q>:N^I:IaJ:<WO:LS<:?[P:H_W:T>_:X<^::@K:]VL:M]X:Y;\\:\\NY:Y`_:Y;_:XWa:LHL:Y<7:<Q8:XWK:\\ZS:Y<;:S`;:8;U:8?J:O@K:[Pa:S>7::;?:;W^:;=Y:V?K:IM?:IW`:<@T:\\>O:HZ8:\\Z]:\\O^:YL<:>[J:Y<S:VS]:JZ7:N:]:HO`9]M:\\[<::UW:\\[>::SI:\\]@:K]]:9KQ:9ZU:Z8H:9Ya:VYO:S7?:;V_:Q:P:]N?:R`R:Q=::TQ`:?9L:MS`:>TK9\\S:OJL::\\?:M\\7:@\\a:[OL:]:@:=@@:>^L:TVJ:]W;:?KV:\\T[:Ha`::<N:R]?:H7^::=J:9<@:N7@:\\\\a:LN::PHV:TJH:I[Z:YN>:MVM:OUL:UQT:?NR:XSa:\\RO:>]J:XI8:XT\\:@:H:[UY:HYP:T<7:\\OT:99L:TYW:YKO:[S_:MNa:IQ>::ST:PLU:RM8::W@:H[X:>VP:@>R:]Z>:V<S:[NK:TQ[:R]V::RW:9YU:T?H:8Z^:[LI::]V:;U`::RW:J@^:RJ^:<O::>W>:LQ=99T9;J:L=U:?=K:N>M:9\\8:UHT9IT:V`_:9?_:9WW:LPX:9^7:<W?:>=Z:QQQ:IPP:JKO:]7V:N@N:9^7:;^\\:IPU:MZ`:ZLJ:=@M:IPU:SQR:LQ8:N]9:YLP:<;P:MZL:YM=:<W@:IPZ:L8H:;U=:@`K:\\TL:N@\\:W[V:L_M:Z@P:M8R:=S9:=PS:9HP:>Ka:;:X:;;S:H8U:JHR9>@:@I]:YK8:SM=:YO;:W[I:9;H:W<<:\\O_:RLQ:NI=:]7N:=N::T?8:][`:NZH:Y8V:NW::\\SX:S7J:]\\H:RH^:URL:Y>\\:JQN:=@M:]\\O::UV:W[M:W7[:YLP:9;;:XT[:]\\W:YMM:]\\?:97[:=MS::]]:X>H:9?_:N>V:SLZ:][W:][@::]P:O\\>:V<S::ST:@JX:9L?:;ZI:99L:I\\X:@?Y:HQU:UW8:TX\\:9L?:I\\X:ZIX:HY]:POH:W]7:=\\]:YKI:>W>9OW:[MO:][N:RJ7:]\\a:RI`:Z8^9@>:?O\\:LR]:Z8^:\\aX:=_M:K]9:I^^:KTS:X>]:HXW:]]M:H9K:]]M:RHH:>TV:UO[:=@M:JNX:JKQ:W\\V:9?_:XJO:WX@:NZH:>[S:?ON:=NY:H8W:?QX9M;:98`:OUR:<ON:HJ::O[Y:]L`:]\\O:TUV:N>`:JRY:ZJI9R8:JM?:RI`:?LR::SH:]_K:];`:MY?:LU`:Z8^:U\\U:LRR:QP_:SNa:JM@:]_S:9;Q:]_U:Z8^:]_W:N?9:TVJ:]_Z:LR_:]_\\:<ZY:>[[:LS;:JHI9H>:PP<:]_?:?IR:QOJ:?J::HJ::?KO:TTP:RLQ:TVJ9?R:NXX::TV:WYR9R8:ZJ::MUH:ZI[:M=R:;U=:]`7:];`:]J::LY8:LZI:ZIS:JLO:MU_:@>W:JV_:O\\M:SU>::R^:]XJ:[N::SI?::Q[9R8:URJ:=I@::[O:JOI:QR@:TZK:LR]:TVJ9O=:WZV:RK@:<_P:XI7:L8a:UL;:T>Y:QV::]\\I:>=?:YLH9UT:YO;:LX=:]\\O:]^N:L\\U:RNL:UMH:;<S:RN?:LR]:YO;:;<=:LU^:^78:];`:RN<:RNW:QU7:9;;:RNP:^7@:LX_:^7J:]`::R<::^7M:UL[:QUV9?R:]\\L:^7R:LU`:^7T:^7;:RNX:I<<:N@Q:]YY:RPU:PQZ:]`K:]a9:<]M:]a9:;9T:?\\<:<Z9:@?[::LZ:]KL:P=T9R8::QQ:^8J:K;V9R8:?8_:]L8:TYJ:OK9:>>^:W<M:K<V:@L9:OXK:]KQ:QV;:^8R:NaK:@^O:^8V:W=I:ZQP:^8T:;Q@9R8:;:;:^8R:R:T:TYK:UT::@_X:]K^:US9:PV?:JL?:;:?:?_Z:]L_:IRY:RPP:@?T:UOM:<MM:K9T:OX9:LYT:OX<:HUN:;TX:W?R9QK::SH:?RH:NIH:QV;:]`V:V_I9>Y:]H_:MTJ:MYL:9Z7:NM7:WX`:WY::]JZ:V=Y:>=T:@`O:MPN:T^Y:\\_;::@<:97M:?HS:;a`:=HN:\\_@:K`=:=I^:\\_J:==@:\\_L:]=S:<8Z:\\_O:LH?:\\_Q:?IL:?I::V<Z:I7Y::[_:L8^:ZRO:WOR:T[9:T7O:I7?:[OT:Y7V:9Y=:;HX:R^Z:V<[:Z<X:H;=:KYY::IR:9S\\:@^;::[O:\\`K:LP^:\\a<:@`?:\\a>:]:;:>\\>:RH>:\\=Z:\\`U:QTQ::I_:L:X:[VQ:]Z9:>>`:LIU:^;P:QM[:J?X:^;S:KTR:\\a?:]_8:WV[:\\a9:Z8V:^;Q:^<8:X>@:^<::Z8`:\\aH:Y7V:R@N:=_R:VU]:Y=Y:VK[:>TI:<a;:?NO9HX:MT8:RH]:M@::>IX:]:@:IR<:>TV:TVJ:UI_:?PO:IO_:;8Q:>J::=_R:Xa_:TH^:K]Z:^<S:9@8::KU:M[^:T>W:K^O:JJL:K^Q:@>S:9K8:NLR:@>L:8PS:SOT:?:O:@><:LOP:@`I:?NJ:9_V:I7?:H_::9_I:>^<:@_L:VWX:?P::S9U:R`S:^<U:M9V::WT:Q\\I:=^V:RJ7:LLM:?MZ:^<^:]<K:;TM:W\\Q:QRa:>U?:M[_:Y?U:^=8:9II:^=::;a>:^=<:MZ=:NaW:MZ?:=>Z:L=I:JJ;:K8]:VT7:ZHJ:@K_:PQX9:7:XJY:H:@:;;[:ZH_:>T`:TW]::\\^:QTP:MZQ:UR@::YU:XSX:WWV:L@\\:;`I:>NX:K]a:J@I:9;;:8II:Y7H:9@::]9>:Y7N:K^L:T:@:TZ9:Z@N:W>@:^97:ZQN:MM`:>L=:>U^:L8`9MZ:P<Q:Q<9::a9:^?_:?_`:LNI:OYN:=@<9><:?N[:9Ha::TM:;@<:\\I8:>Oa:OYR:Y9=:9@8:NJ=::[_:9TH:<=<:?O?:N<O:\\a@:KR::RS@:H;@::7U:S^L:[_>:HS`:]Ma:VP]:[Va:@M7:9:>:RQ_:S87:@`N:9T=:\\_L:OIV:<JV:>NJ:[WX:S<M:]TS:RW_:[^`:]O7:S`<:KJQ:]MN:TaO:^@_:T`M:9K9:KQO:^H8:NZ=:Y_U:WNO:NNO:]M<:8a`:]W>:[;X9\\::\\[U:Q7@:Y`P9V7:]V>:]V<9>H9WM:KLY:YX]9_T:]VH:WU7:KKU:Y=W:U:I:K\\<:=K=:OY::V>L:QH=:Y@L:NaY:Y\\R:?]U:?_P:^?M:<a>:P>X:J;_:H7W:\\<L:N;a:P;]:Q>X:9Y=:9@Q:XR@:@^<:9HH:N@S:XXW:\\K>:LNU:^I?:J:L:TNJ:@?L::V>:IXX:X]8:U:;:\\JY:R<V:I\\T:^IQ:9^_:9\\;:]Y^:Q9H:9L?:9WL:I[`:^IX:TNZ:V[V:U;]:PVM::O[:^I_:Y=]:>>K9?::Y^M::9K:;QS:^HX:[W9:R[^:]T;:Z:7:P9>:\\[V:P9H9V7:]V;:SaH:YZ8:WaQ:^H_:^I::]T_:WI79_T:8P]9YJ:[;R9V7:]VJ9`K:;\\^:[^O:;]7:;\\S9S7:8IV:Y=Q:;[[:XYW9RR:QLL9VX:Q89:VOT:VXO:[PO:U8_:V@^:KRQ:<R::]UH:Ka\\:@9^8::II_:VVV:R<J:<JV:=J::8a::>NQ:=]^:Z99:KRR:N^I:9`9:O7Y:O>I:L:U:L9W:L7I:?P;:N^@:PKR:9UV:P<;:<\\T:^LQ:TRR::L[9WZ9><:NSZ:99L:HUV:9]<:;KZ:^LT:=UJ:R<T:MU`:^LL:PKT:9R^:^LO:^L]:TRQ:=\\\\:NYH9><:T^R:K]W:<_^:Q>N:RZO:\\KN:K_<:XJa:L7K:9WL:@YN:X[@:?`Y:=]\\:Y[M:N9V:]UI:IMR:QJN:QOM:X<[:P=H:Z8;:^La:QUU:9Y=:;[Q:IQ<:?^L:P<@:R`?:\\IX:Y@P:H^W:@[L9U<:8KK:^H[:O;::^K;9>;:^K=:Q^U:\\\\9:^KH:KLY:^I;:??_:XVM:[;O:[;Q9S9:N\\=:^J_:8aW:NJ=:@;L:SMZ:S<<:NRK:TR]9[7:@^?:>NQ:H_[:^MK:9J_:9?W:TRV::KW:^O;:@WZ:^O=:T_T:^O?:^MH:N^H:^L[:KRS:>8^:^OM:^L`:=[W:TT;:Z;J:Z8<:O=@:^M<:[UM:^M>:N\\Z:R`@:Z7]:XT8:KTS:8a::^L\\:^OK:^MM:@U\\:<8N:PRX:^=L:^8S:OQ7:]V7:H[<:]V\\:8a^:]I?:P=O:Y^O:KNJ:8VR:P@=:TS@:IJR:Q7\\:N^Q:N]<:^L_:HOH:NPM:^PV:OXY:^PX:[>::YPX:H:M:TS>9;H9ON9:7:;Z>:N:::QMZ:@_8:\\`Z:N:J:\\_`:\\9V:9Q@:XRJ:Z?=:Z?T:8KO:<VT:^QL:J9T:^QN:?I?:JHR:>`::=TP:^QQ:\\`I:?<Q::;>:<7X:K_M:X_R:U=U:P:S:?[W:LJV:=>`:=KK:Y>^:9;@:N:::<a;:8aW:^QZ9][:?\\V:^Q\\:L;[:[SX:^R?:;[>9WK:^RI:?\\U:^QR::LW:<a<:^QW:[S9::TZ:^RR:=TT:^RL:^>P:HVT:QZW:>Y_:]H@:QQZ:9HL:PSH:ZKN::>_:]I=:X7[:^PR:[V>::RN:L^M:]@S:L\\Q::]8:=>Z:VLI:RJ7:L\\X:?LT:ZX8:L`7::OL:]<J:^SS:>]P:M9=:]<N:]>=:V`T:;9[:L\\a:8JS:TYT:MLI:SP@:?;H:]I;:9:@:]>L:S7J:POX:;?H:8<O:@PP9HO:TV`:UX::]_Z:]?>:;?_:ZY8:PS8::]8:[T^:9L?:N=J:99L:NUQ:MX>:U[T:9L99?\\:=];::=J:=];:^TT:Ka@:]H9:9HW:;9T9O=:W9T:L\\::TV`:U^]:;J_:ZSV:Va@:=[O:;7U::W_::=J::W_:99L:UHI:^TT:?LK:^TV:M=?:9Y=:@X7:]?@:>_K:]?I:>J9:^T_:JJM:]<R:^U8:TXM:^SP:^<;:^SK:>]S9?\\:@XV:9L?:;ZN:V_\\:HY]:ZUa:^UM:@X^::=J:@X`:^UQ::L=:QWZ:^UU:9S`:^UW:]@T:^TI:M=W:^U<:^U]:Y`^::]_:<9a:99P:TY=:^UK::Y>9?\\:TY=::OS:TY=:]]X:^V8:LQO:^US:>JO:OW;:L]7:]?K:MI`:9_;:UR=:NK\\:JHR:]aT:>TK9Y_:QP9:J@=:?MT9VW:?MV:TV>:JN8:;7U:IIV:^ST:ZV8:?N>9HO::T?:TVR:MNa:OUX:TV>:?LT:ZRX:?:::88a:;]S:La<:QTU:U\\K:JIa:ZT@:TV8:;YT:TV8::=>:L^<:JL@:@JP:W9\\::]^:<Y9:97\\9QW:>H<:ZX`:@?L:^XL:]?]:;;\\:;UY:R`?:ZX8:H[=:TV>:;Q@:QWS:U?P:SQ^:^;I:TWK:9IH:JP<:;`H:O\\J::=J:O\\J:99L9<9:UN@:^W<:NQ`:L]J:HP`:;<X9IT:JML:9H9:ZWK:@QL:;NZ9IT::^T:;:99:P:PS]::RW:^YP:99L9=7:TUa:UK8::Y>9QW:^YT::V>:^YY:9L?:PT=:]?>:NM;:TV8::T`:@QL:]Z\\:NX\\:]<`:;;\\:9W9:@QL:;^P:W^P:;TY:ZO>:TUT:W;Q:^XH:;^P:^XK:TW9:W;U:L]O:SR_:=XO:@@::^WU:?;Y:=8P:TV>:ZNN:W?@:]=Z:>PO:W:L:L_7:ZVO:ZX7:@?S:;7=:;IP::RW:^[7:99L:Ia>:^XI:]:Y:^XL:ZP=:UXR:LXK:]?79:P:\\KR:^[:::RW:YI8:ZU]:^XK:;NZ9QW:^[?:TV>:LXI:^YH:OQW:^XX:=P7:9K]:UP7:]YP:>SX:QT=:;WU:LU^:>M^:PRH:;`>:LY^:LY=9QW9Y_:]K>9HO:=KQ:?JL9HO:;:;:OWH:MX;9?::L]^:IMJ:UMT:V_>:PTH:;7=9Y_:M\\7:^WH:L]L:^WV:^ZV:;7=:^ZX:^U\\:^W[:^Z[:M8U:^Z@:TV9:;9[:QWS:?9`:^Z_:PU]:^XY:Z<J:^X[9M;:@;>:R;a:L]@:ZWN:<<X9Y_:>^T:^XJ:TV=:;7=:9LR:TVa:L\\@:^\\_:?RH:^ZI:ZRX:N?=:^WK:^\\Y:L\\I:^SU:M8_::L=:^Z\\:^[V9K;:;ZT:W9\\:]K=:^\\a:IQV:M<::MWW:RJ7:^WX:L\\I:]:K:;W\\:L^9:^W^:=HH:^W`:>TK:VaR:IW7:ZW<:PM>:=XO9P?:9:>:TWK:=I;:?J<:V_`:L^M:Q\\_:Va=:]7:9QW:^UX:^^>:^SR::Q[:]=[:^]]:^\\^:TV8:;:;:^[X:UHW9:P::QZ:L^J:\\<J:PPP:PQI:LU7:;7=:^^^:ZXI:^]Z:^ZZ:>]9:^Z\\:=XO:TW<:ZL89VW:^_M:TV<:^^`:^\\\\:^_Q:^_9:=XO:K9<:];_:TV`:;<=:^^_:ZRJ:^_P:^WQ:TVP:9S`:^WU:TV`:^\\X:^_X:^`8:^_Z:^`::^\\_9OW:^_<:SS99UT:QI<:^]@:SMW:ZWV:^\\R:^>7:^\\U:^X<::VM:UR9:^[V:^_=:^\\M:^`P:V_`:^`R:^W>:^`U:^U\\:^`W:Y7>:;;\\:^_=:^_?:^\\N:VYY:RK=:ZWN:V=H:IPU9QW:PW@:L]O:^WY:QPL:;Xa:MW=:^_R:;;\\::WR:U>J:;7=:^[P:^[@:^]P:^[Q:L\\J:TV8:^]T:^^9:^]V:Z`a:^]X9QW:^\\Z:V`\\:^ZZ:^aP:^_\\:;;\\:^]`:];_:^ZU:L]O:_77:^aN:^]\\:^Wa:]8N:^WS:>\\M:^^7:Q9Z:W9\\:=\\Y:^^;:^WV::J[:^`7::]8:^^@:88a:^^I:>]P:^W_:^U[:ZXW:]@>:NVW:^^Q:^a::LS<:^^U:9;Q:^^W:WSH9O=:^^Z:V=H:?Ia:^^]:^]N:^`@:TWT:^^a:]?H:]:::>U@:^\\H:QNY:_879R?:^`\\:^Y9::Q[:PQH:^``:>I>:ZX]:QO]:^XL:?J::]?@:^SS:98]:^_7:<O\\:^Z\\:97L9HO:^_T:N?=:^_W:^U::^`H:]?U:^`J:L_7:^_^:_9<:_8I:_9>:_8K:^`I:_7K:^WR:9T::^`=:_9L:^aM:^][:_8a:ZUN:_9Q:^`L:^\\_:UJ::LWW:TZV:^^X:;9Z:^`S:V=H:>O[:^`V:=XO:^`X:_9[:@_[:^_@:^a>:LU`:_9a:SW;:_:8:^a7:_:::^HR:^XY::IY:_:>:QTS:LR]:_:H:8<O:?:J9HO:^ZM:TXM:^]P:^U9:ZR8:L^M:9LR:ZWK:J@7:\\`[:V`O:]I]:@M8:^U;:]JY:;;@:]J[:]HU::T?:]<R:?MV:L\\X:^\\Z:^SQ:_9?:W7V:]HU:U[Z:J@T9O=:9W7:PSU:SQ\\:LS<:]IU:QUV:@Y@:X7[:8=<:_:H:8OQ:V`M:;N\\:J<_:M8?:^WV:>7_9aZ:^WM::=K:>^Z9P?:MW=:M@_:MOM::T?:>^9:>^9:;I@:;H;:?LT:?ML:M=>:X`V:J];:^][:9\\8:_<<:JW@:MOM:88a:MU\\:;KV:QS]:@Y@:MHH:@?::\\9Q:JR[:99;:8=<:ZXH:M@H:Z=S:;H;:^T@:;IW:_8]:MHa:9K8:^W8:9X<:JW9:98T:M:@:ZM^:MH=:8a9:U@>:_<W:;8_:9:8:UYY:9]N:J`I:98X:J`K:M:J:J`N:>][:9LR:UYY:Q<I9Q<:;?_:Q\\R:_<\\:S7J:8=<:ZWN:M9`:@HH:LP[:ZRX:M@R:<7X:M7U:8XZ:?MV:;I<:^\\Z:_<L:JV`:>PO:_<=:;KV:_<U:JQU:_7T:;H;:;HO:JXK:^][:_<;:JUM:\\<7:JSV:^U[9aZ:JWX:;>Z9[W9K;:JS^:LP[:PVH:9YV9aZ:^aV:;I<:=MS:K?[9aZ:ZR8:IW79[W:=MS:_<V9[W9P?:9HL:UYY:MSa:JRY:_<]:<`^:PN>:8OQ:K]J9aZ:^UX:;I<:_<K:_>X:]Ia:JYS9_H:_>M:K?W:_<@:_8[:_;a:_9M:M;`:M=>:QSY:_?^:JJM:_?`:^_`:_>R:_@8:_>X:J>T:_@;:_=J:MOM:9S`:_@>:M@X:_<J:M<I:_>U:UUS:_?]:_@L:;KV9OW:_=M:_?K:;Ka:_=P:;KV:_=R:_=`:UHN:;7=:8OQ:OJL:ZM\\:=>Z:_<H:OUX:_?X:M<I:QTU9P?:PZ9:_<O:JVT:VKO:_@U:_>\\:MH=:_>O:M@R:QPR:M@V:M@N:\\HR:;I<::XR:JXK:T=V:_>K:>[::J];:>[::JXI:U@Q:MH=:;77:_>`:;KV9MZ:;;^:M:7:_?::;H;:QR9:;I<:^XO9[W:;UY:_@Y:=P7:Z<J:_?N::IT9?\\:_=_:JHR:8=<:;\\Z:;?H:_;[:_?8:^[=:J`T9aZ:;<I:_?=:UZQ:_>]:J\\S:;H;:M:7:N`>:9O::VL@:_HU:M<I::HL:M=>:^][9YH:_<R:_H^:9H99[W9QT:>]7:_HR:_I;9aZ:U^_:_IW:>PN:MH=:9:Z:_II:JX<:9_;:_IL:9?X:M8Q:9PT:_<]:98]:8=<:@VW:_>8:=I;:M@R:^a^:_>?:=]L:;I<:_<8:_@9:_>K:W7[:_@<:_<?:_>P:?;Y:JSJ:_@Q:JXK:_H?:PZ8:_>W:_<P:_>Z:JW@:_J@:;W\\:_Ha:M@a:TV[:LP[:_I8:;LK:^R`::Y@:MH=9P?:^aT:_?9:M;^9aZ:_I=:;H;:_I?:@?L:_JJ:;H;:_JL:MK[:9O::;;^:;I<::>\\:M@`:_L>:;M]:_JV:>]P:_?P:WSH:_IQ9_H:_IT:_;_:_:W:;I<:_IY:_@7:8a@:MH=:;<I:JS^:;77:_JH:@WN:_LT:_K8:;H;:U^_:_@7:9JL:_LJ:_JR:;TY:_@Z:>Ua:_=Q:\\:[:9?W:;M9:M8^:;Z>:8UL:Ja@:K;V9LX:8`]:_MM:^<;:M7S:J_a:_MR:M:Y::X_:QOO:MII:@_[:>HR:UZ>:M9I:OZ8:8UL:;=_::OL:?H\\:8=<:;=9:<79:<UL:8=<:9>[:_N;:<`^:_;Q:J@T:8=<:@J[::QZ:_N<:;H;:Z@^:;J_::J[:MI;:Y;S:TH@:@K\\:J^U:ZPW:@K\\:MKW:J^S:NIY:USZ:@K\\::aM:K=_:K:K:@^<9LX:<>T:_NR:K;K:OY;:UU::>][:K8N:_Na:]9M:_O9:OX=:XI^:UTI:=`9:K<@:\\8J:K<8:=`?:Q;?:M8N:;Za:_OH:9QY:SU_:TZ=:ZQ8:@_[:Z9O:USa:;MU:USU:K=Y:N=<9LX:I]::_OH:Y8T:_O>:;Q@9LX:_Ma:@_R:W;Y:LT;:^R7:_P::=U?:SL^:9R8:W<J:<YY:O9]:USL:V`?:TZ::_N\\:_P9:@8N:_O_:;MP:_PJ:M7M:PHI:_NU:_O?:K9[:_P=:HYQ:_PZ:_PH:K=S:_OH:RS>:W=>:_PS:K=Y:@KN:MKN:_O?:K>K:_OH:9O\\9R?:\\NI:OY<:UUJ:_QK:RO7:@_a:K=Y:XIX:UTK:XIX:K8O:;J_:;Ra:_OH:;<N:@KH:YKV:YN=:QX@:_QM:W;K:^9H:RO9:M8N:9@K:SJM:MHJ:M7P::=?:;>U:;N79:P9;_:MN?:99L:_R?::=J9;]:IHZ:MHK:_QU:;^@:M:Y::<Y:JHN:MaH:_RM:8=<:J@;:9R8:LYI:MH]:UZ<:M7M:9Q@:U\\>9:P:I]V:_RT::a::9_M:PU?:UUW:_RZ:_M]:_R]:>\\S:_R`:J?K:K?[9LX:K?L:UZ=:HTZ:M8L:;^S:M7Q:[VW:_P\\:^Q`:NM8:M@=:>8_:_I`:YSX:[VZ:K[?:[V]:Y=J:[V`:]MK:Y9P:^J`9QM:[W;:8RO:[W=:VQ::L7`:W`W:8\\L9T::\\VK:[WJ:\\V@:[WL:TK@:[`S:NWR:[WP:Q_T9_N:^K=:\\\\::\\ZK:]WI:^H<9^M:Z^O:WPJ:Z^Q:H@9:]OI:[I9:\\UX:V7R:[X7:=MT:=>899N:[II:W`Y:[X<:S]H:\\Xa:]ST:[IO:[I::V7^:8>@:]R[:KIO:[XM:\\VH:[XO:8;a:\\XV:Q_9:?8T:]QQ:H_P:Q^T:TK^:SZZ:\\X[:\\U=:Q_H:SZ<:[Y7:\\VT:]R::]QZ:[Y<:Pa=:[Y>:\\V\\:]Q_:\\V^:RXV:]R7:YW`:[8a:S\\T:]R<:P]9:]R::]R?:^KJ:Sa@:Z:V:>9T:[IS:[9?:P_7:P7U:[IZ:[Ya:_VN:[I^:8YU:[Z::]S\\:[H`:>ZK:[Z?:\\UR:88::[:8:88>:[:::]NU:[:=:[:K:\\QK:YT^:?U?:[ZV:\\PX:8YU:\\QI:?V\\:;RO:[[a:?W::8HN:[:T:IKU:H=8:\\YT:O_I:\\UP9W9:Z`M:]P9:P]K:M]Z:8:a:KJY:Z`R:[7M9[Q:P]K:Y;::;\\8:[;W:@7W:[^^9TT:8_J:\\QW:^KT:[^Q:Qa]:[_@:8`L:Y`Y:@SM9UJ:[;P9US:^J_:8H`:@R7:[_R:XWM:_XI9`M:[_V:IUZ:[<8:V@Y:]TH:HMV:XV=:]TL:P7[:Y;P:[9^:]PV9PX:?O\\:Waa:X9>:XOP:=QM:?ZN9IX:>`\\:KaP:WS8:=QN:Z:Q:O_a:XLa:]OS:MQ7:_UQ:\\UH:[WU:TKV:[WW9>H:Pa7:WTR:NNQ:KIL:S\\`:8_J:]Q<:RUS:WH>:S[I:WHH:\\;Z:[8a:WHL:[[_9aX:[8H:88P:[8J9RL:8IL9TT:8T<:[Q]:O^_:P8\\:KKV:_US:]PI:[X\\::9T:P\\_:\\UV:\\X^:H@=:_T\\:9`^:_U9:8ZV:Y:Z:TK?:S[7:]S<:\\W\\:V?::S[S:?>P:YU>:=JT:HLY:@N^9HX:SY89IN:?YS:8Y@:HM[:[<>:_XL:Q7O:@RU:8VO:VPY:@LZ:?W_:K[8:R?W:MH`:IMR:SH::J:<:<Y\\:]WY::a9:\\<`:9J\\:O=N:O8Q:H[;:L8Z:S`V:Z>K:VJZ:TXI:U;a:T;?:Q8>:RYR:@WW:RY?:P`V:LNW:KaK:MJQ9:7:[@R:X:\\:XNH:9TS:X9X:SU::X9Z:XPZ:X7T:9@W:^Y8:WQJ:X8a:]77:Q=H:NZN:J@T:9@\\:>^T:I=?:R_M:[UZ:YRN:>\\::>SW:>]Z:\\`H:>SO:>NH:N7P:@M`:@@^:NTV:>8Z:\\`>:\\`X:@X[:T?T:=I?:>NQ:OUU:>NQ:8P?9LX:>NQ:>]I:>NQ:_KU:IXM:?_<:>[U:WYJ:N;O:=Ha:NJ`:>=U:IPZ:?J<:Z8Q:J@I:=HZ:>NQ:WX\\:[UZ:^UX::\\\\:TW8:=?Z:][=:<8Z:Y8J:^;W:\\`V:L<R:HY?9@M:SQ>:?MS:>_M:MXW:>>U:WYJ:?MY:>TV:N]9:>^]:9_`:ZL\\:>=>:_^H:\\OW:?NY:QRW:_^M:_\\\\:9_`:YN@:>^R:<;_:NYX:^HO:]779@M:TX:9\\S:IPU:@J@:IZ`:;>\\:>T^:?LX:\\S`:\\T[:YNT:OT`:;L`:<UL:>[R:_]H:9_`:>]I:>=>:_]N:>>U:]\\O:^P<:?QI:?N\\:>^R:9JN:?N_:__O:_^S:_\\Y:QRW:ZIO:>T8:W[M:Y\\Y:MTL:>]J:KTS:>S=:RKJ:\\]>:_][:>T<:K^K:I]S:NSW:JNO:M[T:XJH:@_R:@J<:MM_:UU;:>ZW:_QO:>?Q:SU=::L\\:^=^::J;:H\\H:V@M:_`U:H9L:^HW:QJH:;\\Y:^NQ:^K9:^H\\:N]Q:PaS:^KK9[S:^I7:K[=:^I9:[YQ:KI[:MQ8:97Y:^I>:QH?:H[>:^IH:9@>:\\<=:U9N:>7V:^J?:VRZ:?a9:Q>S::[S:Q=X:=\\a:U;`:HY\\:HX::Q>7:UNZ:?N9::V>:>7S:]YH:^JU:^I]:\\KZ:Y<[:^Ia:^J[:^J8:TO8:9P7:Z?I:NS]:T>9:\\L=:^IM:^<R:?9<:L@O:_aS:L?X:NSS:^IW::>^:@K<::]_:T<::=?J:^JV:@_\\:]XK:Q>J:`78:\\Ta:^J]:^H>:RUK:_`[:]T::?7;:YXV:8OL:_`^:Y`Q:^NV:N\\H:^K@:_``:_VH:^N[:HHZ:^KQ:^KM:[;L:^N`:Y`Q:_Wa:;\\`:^KU:XYL9RJ:^KX:T\\;:[78:8<P:XYX:PJ8:8<>:^K_:V@_:I9[::OS:T9W:VXM:<OX:9_O:Z7U:9]<:^L?:N^9:WU;:L7H:^LJ:^LX:XT8:^LN:^:R:TYa:^P@:Ka]:OQ7:S<K:>PO:^M?:^LK:8a^:>NQ:IRT:=P8:;H::QX>:IN::?8=:V;Z:97^:T>L:?;V:J9W:^O`:;a_:[>[:`9M:`9<:>NQ:X_9:^OJ:`9T:TRM:K]Y:P:K:KT\\:TRW:=XS:;9<::OS:`:@:9WL:>>J:9]>:?`Y:\\LN:<7J:TZ@:^MY:_NT:9O:88:9]>:9S\\:^OY:HH\\:L9N:^N::IJR:P=I:9TP9><:NU9:99L:L<7:@;R:<R::^NK:\\@a:^NM:Z9Q:I=V:WPJ:`7`:Z:9:^NT:Z_W:[>Q:XVH:NW_:N\\I:PaR:[XW:_YH:NXU:_a;:KZ\\:]T`:[V9:^N^9JT:^KO:Wa?:`7\\9SO:8aW:PO7:@;L:`97:=\\R:<Ua:XPJ:^OR:`9`:>N]:Y_J:`9?:^8]:`9U:[JT:KRR:PIH:VR[:SJI:9MI:^O@:N\\^:?:M:`:8:^OX:^PO:^L`:8a^:TQI:99P:L@`:@;R:`9\\:KV]::Ya:R]9::I[:^OS:`9O:^:X:`<N:`<<:`<P:MS^:P=999=:^PJ:]Y;:TR`:9J_:^PN:^LR:9;I:H_W:^S>:KaK:<aP:^PU::MN:^Pa:N]8:H]=:^P[:U;8::?T:_X::^P`:?:9:^Q7:[?X:[>;:NR::TS>:]Ia:9KR:^Q?:WSH:WL>:YIN:>>`:^QK:HTX::=H:^QV:NUI:^QP:^RJ:^RT:U=a:HTX:N:W:9P;:^RO:^QY:T[I::ZK:^RT:JH]:N=>:\\NK:\\_[:K;>:R8I:R]Z:=N;:9K[:^R<:XSH:^R>:S7J:`>M:<WL:^RK:H;7:^Q_:T]V:;@<:TNH:OQZ:9@9:`>L:@_[:^RZ:<R@:^R\\:?K>::HN:`?=:^RY:`>N:`>`:T@_:?`>::Y>9IT:^M8:HUU::RW:Z8>::@<:9HL:TS^9PX:\\I[:?^]:\\H<:?^]:N<?:]Ja:HV\\:>]9:IOY:@@]:HR[:Q:?:TU_:`?`:K=K:XHH:]L`:9S\\:USS:X?V:=_M:WSO:9aU:Q:9:WYW:@?Y:W9L:]a^:SQU:RHH:LXZ:88a:=>Z:JH[:M<<:V^R:LU`:TWM:PT`:PN8:ZNP:LY>:]?J:>Ta:@>V:8=<:PPK:K`\\:`@I:UL]:]7K:YLQ:=_R:9:@:R]]:`@O:@?R:U@U:`@R:SQW:Y8^:V_W:UHM:;@[:]>:::Y>9HO:SJ`::OS:SJ`:99;9HO:LKK:;=O:_@T:9Y=:;:X:`HY:]?W:9_;:QU]:PQT:N@P:;SQ:U[T:UMV:V^`:OU_:TZU:^L`:97a9HO:I[>:9L?:I[<:`H`:LKK:`II:[NL::a9:[NN:99P:;YX:`H`:WZ7:^[[9:9:ST8:JK::RNP:Va_:`@Z:PN;:U_J:`9W9HO:J_a:9Y=:`J8:]]^:HY]:`HZ::>^9HO:N?\\::=J:ZIY:U[S:`IW:`I8:;<S9OW:VL=:SMN:`I=:`HQ:9K8:OJ[:=\\W9HO:K>K::V>:`JW:ZMP:SMX:`IP:`JY::OS:`JY:[OY:`J<:`Ha:MXH:ZJ8:MWN:W:<:QS?:^[Z:SRI:PQ7:LQV:]a]9H`:QP99?R:`@V:^_U:]``:9TH:LY^:M99:@=::SN`:M9=:UWJ:QW@:]9U:]_X:M<<:LY^:M8`:_^[:];_:__\\:^WZ:UQL:`KT:^_9:NJO:W8X:LZP:9K^::RO:]9Y:QQ[:`L<:SPM:PSQ:UO@:LY^:JNX:SRS:NJW:NJO:LZN:PSX:;`O:HU>:TUO:SRU:;`<:SSV:JZ`:_<9:L[^:9IH:OPX:9;L:PT=:PS^::RW:RQN:ZH`:98>:]8_:QRX:LWW:9^7:QW=:IY@:]:=:SQK:]9<:9;L::[?9WZ9O=:I`:::V>:`ML:UHM:NM;:]9L:`MN::OS:`MN:99L9<T:HY]:SRT:;Q@:QVT:=NP:LYZ:^Z?:LZP:<_P:]9[9IT:;9L:LZP:;9L:PTN:@@::LTL:L[I:OUW:SSL:QW\\:L\\::QTU:^XS:ZSS:]8::W7a:`LP:T<<9O=:JRU::OS:NKW:`N=:`LI:;9Z:W=9:`LL::RY:]9L:`NQ:9L?:JRU:UNP:9P;:];>:PSS:]>>:PTI:ZNV::T[:I<<:`LV:^;I:TUK:@_L:9N`:NL8:ZHX:[LJ:L[_:9P[:JM\\:>M^:UT\\:]K>:PR_:\\=Z9?R:ROa:SRU:^P<:]:S:`La:LQV:W?I:<<W:;KK:MXY:ZKZ:LY^:<79:]8>:;7>:QW@:ZQU:QVS:;W\\:LIU:`KN:]7]:;9Z::U`:L\\U:L]R:_J^:ZN[:ZPL:SRU:?RH:PTN:9LR:LWI:`P=:K]H:LY^:`P@:U^T:SN`::8I:`KU:]@O:SSM:@?I:NQ`:<Qa:PRH:P:<:POX:N7M:`O>:>?<:9PT:LYR:XTO:L`N:PR?:SRN:`NT:SR[:;9Z:JT^:`LL:=\\Y:LZP:J<8:LZ8:8YU:SQ::`KO:;9Z:`K[:`@]:L^9:SSS:`NL:ZQ;:LU`:`O^:;9Z:=8P:`Oa:`QL:@?::SSL:LZP9YH:UL_:_8::]L^:S``:RL@:T9::`P<:`I<:QW;:`QT:`PI:>PO:`PY:ULU:W8K:`N=:ON<:`N?:TV?:;;\\:`RJ:`PX:`PL:QW@9OW:`O<:T_a:NM7:]_?:QVL:@_[:]a9::VM:]KS:;X7:PW7:OX^:RN_:ZQQ:UV>:_Q;:Y7S:^98:O8M::SK:^8I:YN>:]KY:<Z=:`SI:MLI9R8:]L7:N@^:9]V:_`L:@KO:RI\\:_O^:RO^:W<O:`S?:]L@:`SQ::8K:_QI:O:=:_QN:_QL:_Q=:USY:OXO:@_X:_QQ:^8Y:`S?:9PR:^8R:9?@:_QY:`S_:QXY:_OW:`Sa:_OJ:=TN:TO>9R8:8a9:^9L:IRK:9;Q::X8:@=M:KW`:[T_:^9S:9;H:ZXH:^9V::T@:9@::<7X:9]=::SH:Q\\H:US^:>8::_PO:NLa:V]S:RQT:_@T:`T_:9;Q:`Ta9UT:_PY:]LP:?=@:NLH:PNJ:Q\\N:]:V:_?<:OZI9R8:ZXH:`OW:@?[:;;^:>J<9>Y:O]8:IRM:`HI:<:N::L\\:NM7:LQR:9P[::SH:N`>:NLV:VP>:8`a:V<R:9ZU:Y_^:WQT9>H:X9O:=`T:II=:@S<:P[V:_NS:8[V:8=?9`M:8=I9QS:@;;:8R\\:8N=:8R^:;\\8:8<\\9VR:_[;9YP:8;^:V=?:9J@:8]W:>@U9TV:8P::N`8:@S\\:8XO:Z\\_:@SQ:H>O9Y_:LH]9>_:8IX9OI:9MU:8\\N:[Z>:KJS:QLY:HMK:Y]Y:Q@I:W@V:8LU:K@S:8]K:H=@:\\YQ9>K:KJ\\:U_\\9K9:K@S:KJI:KOU:8Y?:XY@:IKW:Z]V:K@U:KSM:?`H9QU::OL9WU9TL:KPM:`W79SY:`W99XX:@SQ:P@=:X]L:R?Z:OQJ:QM<:_[a:97M:H`>:`VY:8QV:`V\\:Z\\^:`XI:9>I:Z\\a:\\V?:M]?:YYa:L;7:>:8:\\[Q:Q@R:Z9a:XP<:>ZV:`VL8N:`X=:L8=:`X?:8>@:;]H:`W:9X^:WOT9>H:`;]:8aR:Na;:<PJ:[Ja:NU?:Z;O:<\\=:V:L:I?;:Na\\:YPN:]UO:I;_:?]N:NZI:>U@:HTK:[K9:V;O:HRH:?]^:T9W:\\8R:HP`:=WV:HQ;:U9=:@T@:P:79>H:TJL:R]H:HQ<:>7U::[Q:=8H:`Z9::VN:?;U:[O\\:Z==:=8I:P:<:`YQ:;^=:NaN:Q\\X:?:]:N8S:LUN:NaV:9S\\:KSa:`XP9WK:XQ[:U8?:R>8:\\R=:;W[:WPH:]XS:T\\[:S=`:>ZZ:R?K:^`P:>[<:R=T:9YW:U<P:SU>:\\\\N:R>U:R\\I:U79:^HR:R_`:X=>:OS<:@N8:J>M:<OW:RYW:T_K:\\>_:?[Y:]K>::SS:\\\\O:L?`:\\K8:@:R:U8`:OQ^:\\>::;TN:97]:<YU:9L?:;8>:NT\\:=7;:VHT:JKY:YRI:JOa:<^9:=TM:OXY:<^?:P>^:=S;:I;Y:>==:>H^:N7?:U>K:I`T::\\\\:UVV:VM7:?`9:_`J:`9@:UU8:_N\\:_O]:MNT:_QP:UTJ:T:H:I=T:?QS9HM9[;:99L:TH]:XZ7:R8::ZQH::VN:NU;9RM:`]>:VP>:XQ;:P;P:XZ7:8>P:\\OS:[Ma:Y=\\:>[R:P?@:N=`:J@\\9RM:N=`:N;R:JQ]99O:IQ]:;@[:L@S:?NW:N:U:>=@:MH`:L@S:98`:VKR:N><:8P?:P?@:@7>:Ia9:TH>:9L?:SJ`:N;R:`^>:==V:;XP:JRS:`]S:QJa:OMS:`]^:IQa:QKM9O8:@WR::>I:O8>::J;:VXW:^K8:Q7?:^NS:YX[:>K>:_TI:TKI:TOJ:8U[9K=:[>M:[aY:N_I:\\9I9_N:^I9:O9::9KJ:Q7[:[?Y:X;^:VVW:_^;:X<L:=a_:R:Z:XS;:^@N::WT:HO`:UL::^:^:S7K:^[Z:XPJ:`ZX:`78:\\_8:9U[:[VX9>I:^NR9@S:\\[W:`^a:_Y?:[WO:`_=9TH:`_?:>X<:`;M:XX?:8`^:=WV:=ZW:X\\I:Q8>:YYI:KS_:Q9N:KXH:\\H`:Z<L:P;R:LJP:KX_:?`[:LO=::H\\:`_Z:?\\=:`ZX:H_<:X]T:@YV:U7J:KaR:=Ua9Z9:=V8:HLK:K[8:[HH:[P<:[PI:TP7:KH>:_[9:^S?::;T:VI;:=VO:HSa:=aQ:9J9:`a79Z7:`a9:PZW:H<J:Y`K:`;@:`^`:]OP:``<:RXS:``?:>a<:_a::@[`:=aU:@8_:=aX:`YJ:=V^:`_K:9aR:YaX:OQ7:H]U:<]S:>_O:T9V:H[K:\\^U:N`\\:?_S:[K9:``]:\\]P:Q:;:N9:9?::>UN:^;;:LJI:;IV:9_I:NT9:I7K:9_;:`_[:R?Z:<L=:KT7:IW>:>7\\:P@::@U?:<_K:9LZ:TNN::RW:I:`:a87:\\9Y:R^M:PH;:9Y=:N;L:XSP:@Oa::@9:`XQ:;^@:KT7:YYL:=Wa:9?W::`^:]U9:9TU:_[K:HU<:_[X:Z;7:V:@:O@T:VH7:P:K:VKW:<_9:=\\S:TJ;:]:U:HV9:_[L:=XY:O>I:V@H:Y[?:>P7::;7:@;M:9H@:\\La:K=X:IW^:OWS:SV<:MN::`]8:@_X:H[U:[VU:=Y8:TJQ:=YS:`X`:P>>:`Y7:M\\\\:@aK:Y`H:@\\9:8KJ:K[8:=ZI:8OQ:N[\\:[<M:8>=:[HV:WJU:<J9:[P?:=LY:[Q=:Z[[9ZR:<IJ:a:<:[P=:\\NV:8?O:Z[J:8?@:\\Q[:`8X:R7N:=:S:Z;Y:ZYJ:Y[L:=[I:a:S:^a>:`YM:@H]:a:R:?^K:I:H:V?U:a7`:a8a:T7K9><:XQ7:K9?:P:J:I?;:R8::a;7:>;;:a;::Y[M9JW:OOX:R\\X:@YS:O>I:@M@:=>P9><:;7@::OS:a;P:TQa:U=J:L?V:R;Q:a;O:;7?:@MQ:=7T9I@:Q?P:O7^::NQ:@^[:9QY:YPZ:U9H:XS::Y_R:9TP:`M=::V>:K]X:9X?:=U<:V<7:XQ^:`]9:VJW:<R_:JPN:S7>:NTM:;=Y:OL79RM:I<@:a<>:9`^9<V:=]M:\\]X:Y_L:^R_:`=a:N;O:L=8::TZ:YR=:YaK:;`O:a;R:?[X:IX^:a=7:ON?:LJI9@R:^<P:TI7:U<W:8@;:P8>:XY]:9^;:Ya\\:_^]:[ZK:8@J:`a89aT:`a::QaM:8[X:8=>:[_Z:[`>:MOO:K;_:S@J:XZ79RM:\\^a:H^\\:<\\P:<OM:S<a:Z7K:a;`:J<^:IIa:XZR:I^T:^TM:NZ9:<Y?:Y_H::L\\:`;<:[P9:_WL:YP8::O?:_[H:YNY:H`::``U:\\^_:R?]:`_^:UM::Y=?:8OR:P`Z:J8>:IU\\:J8@:IV@:S\\a:XYI:Z]::=YU:Z]<:H>H:Q^P:P=_:Q@L:8\\[:IT@:8=7:]N8::JW:R[H:[;Y:@M7:`YK:`8]:J9?:R\\V:_[\\:TP=:<PJ:HWN:9\\;:U;Z:TPN:T>7:;[R:<_T:TI;:\\=K:;SV:@:P:I:7:<Z7:;@<:V@<:VXM:OJ;:IJX:HTW:9<@:VNU:LN::U9=::]L:=KZ:Na<:U:::::Y:Z9I:V@7:U>Z:HTY:;8>:a@<:XQ9:P?9:a@I:;8>::>I:`\\=:JH<:IK<:=RZ9@a:VXT:@:^:9RR:<SX::<8::89:IV?:OS7:PJM:IWI:RZa:`=Z::7a:a@\\9Q\\:a@^:YRP:a@`:;[T:aH7:9K98>9`U:S7N::HO:T@[:T__:?_P9ON:[RQ:YPR:]W]:V?_:a@O:T?]:?[V:a=8:9a>:IYR:J<^:`<T:TQ>:<]Y:>LI:9JP9IT:9M8:IPI:;SM:VVM:SOZ9NO:aI7:NSJ:U;R:\\@::9KU:9Q8:9aS:[R_:VM@:WJ9:YJ?:98J:;P^:;_Q:\\9V:9]::KU9:;L=::YW:aIQ:WO^:aIS:MS]::UW:;@P:YRV:IY=:<MR:@P^:?_J:_aP:9@9:SI;:U=@:^aT:[S`:HO`:@XO:<?=:JJL:VT::@_\\:?=<:8aW:[MK:<>K:I<[:JJL:@XO:<W=:XJ\\:UVV:][P:T>\\:<R=:X?7:`>O9\\S:K@<:\\aX:R<V:YJI:?;Z:PU@:IWP:Q\\I:RHW:LJI:LWI:I[W:?;Z:OLP:<=U:RY::HO`:OU?:\\]7:PP9:I=8:X_Q:JJ;:V<Q:;a_:]`?:=R[:[TL:VN::aK<:@KV:U\\V:IR<:JJ;:^S]:HV]:L>X:W:?:JK99]M:IO9:=`I:L=T:`?N:>J9:;LH:RY::K]J:\\HV:JIL9><:=aZ:K`X:9OV9@M:Q;X:9\\8:`]=:`>K:M:T:I\\T:N@L:9@>:8PS:[@`:M7?:aL=:NUH:OI^:9O::;N_:I<]:><O:J:>:>=>:SQ>:Z<V:97^:K9L:P@N9><9NT:aL@:^R`:=\\7:9L?:J^a:N8_:97^:K7T:K^X:9S`:NTJ9><9OW:9YP9@M:<9^:SN=:99P:<9^:^:a:JJP:K^X:9LH:VML:YK::?_P::T?:9@X:I`T:98=:OZO:H7T:K]]:aMV:KTK:aJN:?9S:aMZ:<a;:YO;:aK=:HOU:\\_T:K^X:9;;:aMW:aN8:9_I:OLP:J[I:9Q9:>_M:__\\9H>:W7[:>=7:P;8:?9;:=HN:aNJ:9@::aN::O[S:SI=9><:?OQ:aN?:`9X:9P]:^JH::\\H:J:>:>L=:N?Z:^JH:_`H:JLN:<;>9><:<U_:M\\;:LH;:H7P9><:QR;9@M:97Z:\\RH:_aQ:L@8:L8`:OMH:L9I:]UO:N8]:9@>:O[=:XJV:aOU:[KS9><:;`<:>L=:;`<:>LL:;Ia:9?@:SSN:I[Y:^<79J7:JON::\\^:]<I:9^7:]`U:^<<:9TP9@M:<=P:YI@9>=:aPK:99L:=[W:=Q=:<P@:<N8:9J^:\\?_:97\\:SWK::7::_=U:O\\7:_R::aK>:_R::>]I:M9]:M<`:=?::M7M:8=<:@]^:9:_:JRI:;?V::<a::IT:;@H:9PT:K@9:8aY:QV_:8aY:K:7:9]=:JW9:QSU:98]:9\\8:W<`:9LR9P?:9\\8:aOS:87=:9W9:aOS9aZ:9V@:K`\\:JTH:_IZ:9V@:M:I:@QH:=8P:JT`:MWW9P?:PQ^:JSS:J]<9][:MHZ:;TY9aZ:@@::aKX:aQ]:_JO:aQ_:MHP:\\<7:OUX:aR8:_>K:aR;:J];:JQT:_>Y:JSH:J]J:J]V:aR>::SU:JUS:OQW:aRJ:;^S:;I<:UKW:;H;:JU\\:MJ;:QPL:J`W:L[S:ZQa:=^::K>N:X\\[:;7Y:J\\N:QV;:K7X9P?:QV@:;9[:JUL:W?R:99X::<S::RY:JYV::RY:MVI:9><:RY::JYV9LX:aSK:[LJ:^[a:@><:PU]9P?:?RH:^=P:;H;:;MZ9:P9;X:9@8:K@9:K?J:M=<:L`8:I_<:]7:9YH:L`Z:J\\Y:;7=:_>Y:aR;:9T8:<KQ:MX@:J\\a:=N:9P?:<W?:aOS:aS`:9TP9S::MIS:_;_:WL]:9T8:;I<:UPQ:?J[:JUH:87=:RRY:=P7:QTU9YH:`QV:H[8:8a^:8=W:9\\8:?RH:9R^:aQT:>_O:VH_:9];:aQ]:98X:;I<:>R[:8XN:MJS:MK9:]YM:JY[:?^M:;I<:JVV:aUS:=\\]:Va?:?KM9:Q:_<Q:=]L:9\\8:9\\8:UYW:9WW:aRS9>=:<W?:WZ_:9\\8:K9Y:;TY:J\\Z:X?\\:?=K:>V;::J[:aV7:aTM::=S9:P:aP>:HR\\:aV;:?LO:aVT9NT:aP@:?=K9NT:>JO9YH9LX:>^<:JYH:SH=:aS9:QT8:87=:ZV]:aS=:QVR:J\\R:=KQ::WR:97\\:_J=:J\\K:M:Q::IT:9\\8:XTN::SU:aR;:JXa:aR[:JZV:OQW:J]::J[R:aRO:J]>:@><:MWW:9\\8:aVT:9WW:aVR:<W?:aVR:;^\\:J[T:J]S:K8<:aWQ:aSZ:aWQ:aUI:J]Z:ZM^:>`;:Z@Z:J`T:PW\\:;M<9aZ:;aZ::V>:aXK:aUN:QPL:M8W:JX::JXM:?9T:JWQ:aXH:8=W9P?:99_:TV^:@><:OKZ:JZJ:aP<:?=K:aWZ:aRY:WU8:JY8:;TY:JWO:ZUJ:8YU:aW@:9TH:aX\\:JWT:aVQ:=HH:aW[:J\\`:aWP:aXV:;J_:aXY9YH:9IM:9T8:JZJ:PX^:aTL::X8:aYL:9PR:aS[:<7X:=MS:JZZ:_@T::T`:aY[:@H;:;;^:JYV:aX;:MIR:LN::K?[:@7Q:aXI9W7:UXL98K:UY>:M9H:;@\\:;H;:I<Y::=K:J`S:QaS:Z@K:JWa:>]_::7::JW9:8JS:;MI:JW9:98V:JX]:JW9:JZ\\:99;:J\\W::L7:Y8J:U\\V:aVN:;IV:aVN:aZT:?=K:J_]:JX]:aVN:N`>:_=I:_HM:>T7::RY:JT?:;H;:aW7:M7[:JY`:^>7:_?\\:W:>:aWT:aVL:@><:@@T:aY?:aVR:aV::=HH:<W?:aVT:;^\\:WZ_9YH:aX7:aSY:J]W:aSI:aZ7:_=I:aT9:aQI:H8V:JT`:<PW:8XN:Y8R:;_;:9\\8:;M]:9@U:QRa:9@U:R:@:?=@:87=:J:9:_>J:99;9P?:aW9:M:T:MT89YH::YP:a[P:aVK:aZ]:?=K:aZK:a[W::X_:<W?:aWL:;^\\:]<I:98]9NT:aWN:J_\\:JJM:aV[:;J_:9\\8:9HT:JZT:;MR:JT`:U@Q:H8K:>]R:a\\::QT89P?:_HX:ZRL:_8Y:?=K:aYP:99X:aVN:UVY:a]W:?=K:;\\Z:a]H:@XU:QU=:8aK:9\\8:a]V:aU_:?=K:_IY:a]Z:9\\8:;77:a]]:;<I:QOX:a]`:M9\\:a^;:_I[:9?Q:aVN:a^=:9H99YH:8a@:a^@:?=K:L`Z:=8P:aVN:MWW:a\\^:::@:<W?:QUH:aV?:?N>9YH9QT:a]@:a^O:JSa:T_a:J_L::<Y:9L>::HL:9L9:87=9=V:U[M:a_?::=J9<\\:J\\8:a\\Q99a:QaS:]L\\:J]S:L^P:?=K:MI]:9Z?:<KQ:_J::H[8:R=N:9\\89=O:U[M:a_Z::=J9=>:JaP:NR`:9KR9VI:9WW:UY@:aVP:9WW:J^a:J]M:[NT:9TH:<]X:a_V::SU:aX7:`Z>:P?H:98I:9\\8:a_^::V>:a`O:9L?9=9:a__:>:_:9?Q:a_U:IQJ:@I>::<Y:aVN:JMS9>8:9><:99_:_]_::\\L::XK:8=W:aV\\:]Z^:JWQ:?RH:U<8:a]L::ST:Z<Y9>H9<M:a_K:aS::=P7:U_7:a]S:LOY:a\\W:aY@:a^L:97^:aa7:a^a:aV]::7:::\\L::YM:9]=:aVN:;Z>:JaV:aY@:>P<:a]7::L=:9\\8:a[^:a^a:<79:9\\8::RO9YH:8`]:J_a;877<:aS\\:;>Z:a]I:HU[:aR?:<YX:a]N:I^U:@W=:JT`::YY:9?Q::<S:SXO:8aY:?L[:aaR:9\\8:O[;:a^8:aQU:=>U:K8;::L7:PQX:MLa:K8^:HR\\:=?R:a`@:;M<:;^\\9;\\:UXL;878=::<Y:<]X:K=>:99X:;^\\:PYU::7:;878K:J_7:UQS:;^\\:;9T:98I;878<;878>:ZRU9;]:U[R:aVU:=8H:K98:?LO:@P^;878[:@Z@:JT`:aV@:9O8:MIN::Q[9YH:aaM:JaQ:>S<:8=<:9\\8:a\\X:9YV:9WW:J@`:JXY:aTM:98]:a[Y:;_;:;^\\:N?<:a]9:aa^:=>U::S`:a];::SU::S`:>JO:aWK::SU:a`V:97^::YM:9HT:9\\8:<79:@@X;879>:P`I:?LO;879_:a_7:9_;:aUK:ZPM:SSR:aQK:aaK9YH:ZV]:87W:>^O:K]J:9WW:\\]T;879K:MWW:aW]:=HH:;^\\:ULY:a`I:?N>:J]H::SU:<UL;879?:aY@:aRX:a[R;87:Q:a^Y;879S:8X9:;^\\:YJ<:8X9:K78:=HH;879U::N::JK:;879Y:OQW:?NT:8aK;879I::L7;87:`:aa]:]`U:;MI:;^\\:\\TW:;@P;878N::QZ:@P^;878N:W:>;879R:a]8:JK::=^_:K8:;87;@:;>Z;879Z:@JI:K8P:JSa:JTO:=P7:_>\\:RR_;87:@:aU:;8799:M@T:>TK;87:M;879H:a^I9:Q;879K:a]Y;87<M::SU:a]\\;87<8::XV;87;J::SU:a^7;879K:a^:;87<P:9WW:;=U;87:;:;<I;87<U:JXZ;87;M::SU:8a@;879\\:9WW:a^N:?=K:8a@;87<_:^:>:K]H;87;N:aV<:aX`;87;8:Ka<;87;?:a[^:H[89QT;87<7:?=K:SUR:;_^:aUK:9]N;8798:MHW:a[L:;^P:>^O:MT:;87;L:9X<;879K:JOL;87879><:I]::98I:<W?99O:_R@:V\\I:K?;;879M;879S:9L9:<W?99L:MOW:9:N;87>>:HR\\:aRW:98]:aa`9>H:OZ];877^:=N:;87;a:J@T:9\\8:K7Z:H[8;879@:aU@:JSa::TZ;87:>::>]:N?@;87=W:aR<:;=_9][:>^O::[O;87<`:98V9J7;879K:K=;:a`::TZW;87>\\::@>:][8:aUH:NaW;87=U:=V]:aU;;87<H;87?::^:O:aVP:aYP;87?I;87<O;879K:K=S;87:;;87<T;87<K;87<W::SU;87<Y;879K;87<\\;87<8;87<^;87?^:9`^;87??;87=7:a_T::SU:a^=:H[8;87==:;TY;87?N:9S\\;87?P:I_<;87?R:K>K;87?T:ZKX:9WW:aTK:JX^:aTM:ZO;;879N:?:::;^\\:S9::aVP;87=N:?=K:;Ra:RJ9;87@T:=]L;87=H:aVS;87:T;87=L:S9K:J]T;87@K9:P:9@K:?NT9J\\;87H7:9TH;87H9;87@Y:::@;87@[;87=M;87:X9:P:;>U;87@a;87=?:=8P;87HM;87=J:X^_;87@\\;87:W;87>U:O@L;87=Q;87@L;87=T:a_`;87:H:QT8;879:;87<I:_>9:?=K;879@:PPI;87<P:OKZ;87=_;87:a:aW^:aX`::<=;87@^;87>V:aRX;87?W;87@V:_S?;87?I:QNH:9\\8:J?K;87:7:JXU:;7>::RO:9\\8:9>[:I]V:97\\;87?=::7:;879K:_S=:99X;87@7;87;`:IZ<:LQ@;87<8:`PN;87:=:JVX:9?X:^XY:9PT;87?7:aZ[:Y`Z;87I;:_J_;87:8;87I>:8YU;87=];87@?:9WW:aX];87:S;87@Z;87IL;87@];87HR9LX;87HU;87IQ;879K;87IS;87@V;87IU::a:;87IX;879`;87IZ;87:8:OZ];877?;87:8;87I];87@;;87=^::SU;87J8;87<Z:]9M;87:;:>\\S;87K::MPV:J]<;87:;;87J?:SM<;87<<:8XN:aW::9];;87JL:MH_:;QM:;?H:>^O:;;a:9\\8:=KQ:I\\N;87I[9:P:T^Y:IZ[;879\\:N\\];87:;;87J]:;9[:9\\8;877>;87Ia:97^;87>8:99@:9WW9=9;87>K:99P;87LP::R9:T7V:99P9=7:K?89NR:a\\K;87<P:NU?;87>X;87J=;87=R:XTT;87<;:M8R9?R::KU;87I8;87<@;87?9;87=Z:_=7;87I`99T;87@=:9WW;87?H;87@V:@<Z;87?K:OVS;87L_:;II:>:_;87<?:?::9YH:^:7;87?;:J\\^;87=?;87?I:aZK;87HN:9?Q:<]X:=OX;87;^;8778:?=K:K8_;87J;:?RH9@R::QZ;87@N:J>T;87@P9_H;87<J:aRX;87@U;87HX:a[Z;87H<:<@N;87H>;87>\\;87@`:^_U;87HK;87JU:aVO;87H:;87JY;87H[;87>T;87H?;87HH;87MW:L`Z:;<=;87NJ;87H;;87NW;87NN:H[8;87HT;87N[:LP^;87N^;87NV;87HQ;87H]:MaH;87H_:JSa:a=<:QaS:>;<;87K[:@><:;NO;87K^:PQ`;87:8:<<::]KU;87J>:_=O;87OJ:9WX:aQL:98X:JW9:PRV:99;:9\\8:J>_:<O\\;87>_:9L99P?9;=;87LQ9RM;87P8::=J9:S:K?8:J[?:8aI9<8:?=K:a_O:aVP:`M;;87=I9P?:;LY:8=W:9WW:99_:UPV:aVP:<<L:MSZ:9T8:<W?9P?9=N:;TY:9WW;87PZ:I`P;87PM9:P:PJ:;87PP;87P`:HR\\:<UL:9WW:@H;:ZNN:8YU:M=N:=]L;878[:aX];87>Q:::@:aVW:TIM:a]=;87P[:M:];87:a;87IQ;878[:9:_;87PW:HR\\:<<X;87Q7:9:_:][=:9H9:9WW;87N9:;_^:J\\a:JZ@:_aY9YH99M9O;::a9;87R8;87Q`:QT8:9\\8:a_O:_8H:UM;:8aK:M9K:JQN;878[:MWW;87QJ;87;;:aR=:J=Y:aVZ;87QO:@@::\\K`:aL`:9X<;878[;87PO;87Q[:I[?:UPV9;a::SU:<<L:QYX:HR\\:TXL;878[;87PZ;87Q7;87P]:J=Y;87S7:HR\\;87Pa:aVP:PJ::UJ`;87Q?:RI:;87RL;87HO;87;7:9QV9:P:<;X:?::::S`:aRW:9S8:aWN;87=I:9S`:>JO:9WW::RY:JK=;87Q>:aRO;87=I:<W?:UYW:;^\\:PS?:?::9NT;87T8;87RQ:?N>:9WW:M<Q:a`=;87QR:HR\\;87QT;87S_:`O[;87QX:TW:;87RZ:?RH:8?[:9:8;87Q_:9];:\\N9::Q[:9\\8:a\\T:HN<:9YV;87RJ:?OV;87SL;87=K:aVV;879S9>H:K9I;87T=:R<::K8S:9R8:T7Z:`\\L:aSH::SU:=KQ:JK=9J\\;87SJ:9Z?;87QH;87SM;87T_:aVX;87U7:=N:;87SZ:HR\\:a`=:J@`;87T];87>P;87;7;879R:aRS:98];87;>:9X<:?[L:K`a9:Q:9S`:9S`:a[=:HR\\;87SX:;>Z;87T>;87TN::SU:a\\7:@><:aY7:9O8;877W:98X:aVN:aUZ:K9U:aU\\:JLT:^WI:ZUM:9TH:K7;;87NT;87U\\:::@:9S`:aVX:JJ=:?N>:;^\\:@@:9NT;87RO:a[R;87VT:MWW;87VV:8X9:9S`:aVT9OW:aVR:9LH:9?[:K7N:;`I:K7Q:OQW;87V^:8aK:M7H:M<<;87Va:::@::S`:aVR;87W::=HH9OW:aVT:9LH;87VY;87WH:;>Z;87;R:]?W::QZ;8777:9K9:9\\8:QTU:9WW:ZV];87=I:ZKX:;^\\:\\]T;878N:MWW:a]:;87;=;87T`:X^_;879X:;TY:J]N:?LO::RO:<W?;87I>9J\\:;^\\:OKZ;878N:aX];87X?;87SR;87XH:?LO;87XJ:8=W:<W?::RY:]<U:?LO:a[R;87X=;87QK;87SN:JK::aVT;87WS:?::9OW:SQ>:;^\\9OW:>JO:a\\`;87:::9H9:<W?;87V?:a^\\:@TR:9WW:QT8:<W?:PU;:TX@:URL9NT:L`Z:99X;87WO:99;;87VV:9?Q;87U^:9_;;87VZ;87WI;87U7:K87:aSa:;_^;877^:9]N;87YP::Q[:<W?;879;:SMX:;9[:;^\\;87I>;87WL:aRO:=8P;87VT:aX];87WQ:=HH;87VX9_H;87Y_:;TY;87W[:JK8:9LZ:;@?:K87:<799NT:K7[;87KH:K7[:<=7:I<<;87Z7:RI9:9:8;87Z:;87LK9><:9XV:9L9:9WW9=J;87R9:<<=;87R9:99L9<@;87R9:JaS:aaK:<W?:L[S:87W:JaZ;87Y7:\\]T;87YY::T7;87Y8;87Y;:WM_;87V::8=W;87V\\:JJM:<UL;87ZI;87:];87SO:J@`;87YY;87U[;879S;87Y\\:aL_:[SL;87Ua:9`^:JX];87\\?:I^^9:7:ZO;;87WU:=HH:9LH;87SV:JJM:K7P;87ZU;87WJ;87Y7:OKZ;87ZN;87WP;87[X;87XX;87ZT;87[\\:M7@:9YV9NT:a^7;87VT;87QT;87YX:JJM;87QW:9H9:;^\\:9:_;87Z\\:Ja\\:PTJ::M];87[7:>^<;87M_:M8R:W7Q:9K8:QP]:9]=;879K:OT7:8XN:]>X:;_;:TW@:MJ];87XJ:9R::K>Q;87[9:JK:;87Z;;87[O:J<_:;?H:>_=:JZ7:RMQ:98I9NT9;a;87[M:9L?;87^;:9]N:RMQ:9?Q;87VT:;LY:9L99NT9;^;87[H:9L?;87^M:@X@9NT:L[;:K87:99_;87]>:?LO;87PU:9];;87^8:97a9NT9;W;87^<:99L;87^];87^?:O\\N;87VT;87PZ;87^K:=>W;87^N:99L9;U;87R9:K77:SW;;87^H:JJM:<=?:K87;87PZ:IaM:JJM:9L8:99@9NT9;N;87_<:99P;87_S:;K[;87[M:8aY;87^@;87]89NT:PJ:;87^99:P9;K;87^^:99P;87_`::=J9;I;87_?;87ZK:X\\W9NS;87_J;87WZ;87Q8;87^V:;^\\;87Q<:^_U;87WM;87VS:JJM:UYW::S`:_I`;87W9:_HS;87W@;87[[:X^_::RY;87V^;87\\7;87WN:JJM;87W7;87\\Y:PS[;87Y<;87Y8:9LH;87`_:WM_;87\\R:K879LX:aM@:?LO:QW?;87Z9:T]V;87[N;87YQ9:P:I_9:MTZ:JLT:>^T;87\\_:=]L;87VT;87Ja;87VT:QNH:;^\\:<=N;87Z\\:X^_:=KQ:99@;87V_;87aQ:JJM;87ZO;87HY:9T:;879V;87\\[;87];9:P:^YT;87WK:JJM:>V;;87ZM;87`O;87\\X;87Y:9:P:PS_;87`U;87V[;87\\T:K7[:P:]:`P@;87ZK;87\\8;87`\\;879T;87IL:8XN:9S`:aWL;87W<::Q[:9LH:<=Y:<O\\:K7O:>U@;87ZV;87`@;87V?;87NX:_JW:QO];87aI;87Z=;87?S:;^P:KZ;;8887:>>L::QZ;87[:::<=:QTU:<W?;87X8;87Z@;87RO;87[U;887T:8X9;87ZP:?::;87[Y9>H;87\\[:X^_;87V]:@_R9NT:STO:MK`:;^\\:=KQ;87`I:ST\\:VYO;87_@;87V`;888S;87[W;87WR;87a`;87\\M:?:::9LH;887K;87a9;887`;87\\T;889:::L7;87\\9:JK:;87;P:9T:;87;S:9T:;87ZR:99;;887Z:>P<;887\\::L=;887_:9HS:IW7;887a;87\\\\:aZ7;87J[9[7:8P?:a\\K:_7I:<W?;87@Q:U;N:U]M;87YV;87a]:_9J;87[W:aRS:]Ia;888W;87SO;87`V:?LO:;Ra;87`Y:JJM;87@U;87[V;87Y9;87ZQ:QUR;888X:9T::=N::;^\\:9@K;88:R;88:@:ZLJ;88:U;87W8:9S8:QUH;888Y:?LO:;>U;88:^;87HV:JJM;88:I;88:V;888V;87JZ:JKR;887M:MaH;87a=:;^\\:?RH:O9=;888K:K@8:>\\=:MO>:ZQ=:QXJ:T9=:JUa9:P:NHH:J^P:<_L:ZQL:K<7:9_9:;M]:_`P:`UJ:UU7:US::MI_:S>9:K8@:@^<9aZ:=IX:?<V;88<;:XJK;88;`:Y7T:=`?:J^Y:;JH9:P:;HR;88<H:QaS:MK=:9_9:P<8;88<O:<=R;88<R:UHW:K_[:W<N:@K\\:NH9:`TH:LS<:V`>:=`9:K:L:_NZ:@L?:>]R:MI@:=`9;88<N:;H;:;HK;88<Y:@@]9XQ:K<`:W>7:Z@O:@K\\:UTa:W>?;88;Y:?HO;88=H:\\8O:@L?:W?::Y7Z:;KK;88;Y:9aZ;88=H:::O9]M:_QJ:^9@;88=8:<`^:_OL;88<L:@_X:9?^:`TM:=`?:J]a;88<O:a<U;88=H::>=:`S]:`SU;88=^:_N`:=`9:K8H:KaX:K=Y:MMQ:H_T:@L?:;M];88>;:;Q@9aZ:I`::K`\\:K:7:K>N:9KI;88>I:K=Z:^8`:@^R:TUL:=TN:NIZ:_`M:^S?:K=Y:MNS:Z9N:ZT]:JYV:`MV:aSV:9<@:I_@;87Oa9:P9<Y:SK=::RW;88?M::`\\:JR]:aZR:IK8:9O::=\\Y::<S:UH_:JW9:OVQ:SH=:;]^;88?Y:WU8:JaR:QRa;87TK9][:;^\\:QTU9NT:L^Y:WZ>:?:J:^VI:=]L;87\\?:MWW9OW;87ST:;`I;87\\P:9S`;87a:;87[W:W;U:<UL::S`;87I>:9S8:OKZ;87\\?:aX];88@I;87\\N;88;J;88@M:?N>::S`:ZNS;87VW;87S^;889U;87NT;889@:::@:9LH:QJK:8X9::T?:aVR:9;;;88@L:@M8:=N:::S`:JH\\:J@T::S`:<79;87]H;87[W:?RH:9?^:;^\\;87XJ:9T89NT:;^\\:=HJ;88HU:JJM:Q88:9_M:^`<:OK7;88>R:^8X:^?T:?=@;87VZ::<Y;88HV9:P:O@_:9]=;87VT;88H[:9R8:^?8:UUH:?L::`\\`:PUX;87]Z;87`>:?[L;87_I:;^\\:IPN;88I=;88HZ:@_R:9S`::8T;88=]:R>R:USa:K8K:a;9:J]`:=`?:K8M9RM:MX@;88IK:^8a9?H;88I8:WM_:IJR;87VT:<>;:=H[::J]:9S8:9S`:;IN:9T8;87\\?;88I?9:Q:9LH:;7X;88>]:O:<:@UN:K8Y:=`9;88Ia:X;Z:@K\\;88I[:aU>:@L?;88<^:ORN:9_9::KU:9?[;88@[:=I?:=X9:T[H:aQL:99X:9<@:<JJ:98I9P?9:>;88?R::OS;88K@::<Y:=PP:9LU:QPa;88?R::=J9:?;88?R:9PJ;88?R:aQM;88=?:aaW:97^::@7:9:8;87?P:aZP9><:<=J;88K>:;JJ;88KH:9L?99a;88?R:97\\:_9\\;88?S9P?:HaX:9O8:PMZ;877S:@><:`MV::]I:;MZ;87=V:;^S:JW9:UJ8;88K_98@;88Ka:J<T;88KH;87:H:?^M:JW9:;IZ;87O\\:U[N:JOa;87V<;87]Y:8aR:a\\L:\\Oa:=P7;878a:J[?:?^M:JZJ;88LY:98]:9WW:<?9:MJ];87Q?;88L^:[JI:HNT:aWO:aX7:aaR9><:9YY:9YP:9\\899K;88?R9<@:Z8=;88KR:99P98L;88KT:a]Z9P?:YI8;87I_:aWU;87@V;87:R;87Y8:;^\\:;Ia;87T9;87a`::S`:QUH:9WW;87XZ;87<8::RY:N@L:9\\8;88M\\;87<K:aQa;88M`;87IJ;87H;;87\\P;87NX;87>\\:@@:;88NI:@><;88M];87;K;88M_;87HX;87IK;88N9;87Y7:aVT::S`:M8W;87H=;88N?:?=K;88NH;88KW9YH;88NW::SU;88NM;88NZ;88NP;87O=;87H?;88NT:@HX;88MZ:a^8;88O;;87<K;887>;87@V:UYW:a^Z;87H;;88N`;87NM;87IN;87;I::J_:_?L9:P:XSU;88LZ:JXV:RI_:_>\\;88KU9P?;88JM:aV8:\\M7;88>^:UUK9Ha;87OV:97M:aQL:J>T9P?;88J>:H[8;88J@:a[99:P;88IR:H[8:9\\8;88JM:<W?:R:P:_OK:@8N:9HL:9?[:a^\\:=I?:8Z^;88LM;88LW:=P7;88J>;877V:U>L;877[9:P:^Y8:aaZ:?=K;88PR:U<H:W=>;88PX:U[T:9?_;88P[;87KZ:H8V:JW9;88P_:?=K:I`T:aVN:?:7;88Q:;88PQ:@_R;87PX:9S7:K>Q;88Q?:MX@9H>;88QI:NM8::=>:H]]9:N:9MM:V@O:L?P:`WQ:8^@:T`?:8^T9?S:SXY9JH:SX\\:`;M:RSO:R?U:T[a:SY7:SY9:8JK9JT:<^Q:SY>:SX^9WK:OW<:Z=8:QL]:J=]:]U<:NH::``N:TRR:<^=:K^Z:97M::N;:SH;:NaY::N=:`]R;87SO:`^R:;`U:QHS:X:a:=[L:HXU:`^R:PHY:YHW:N;7:K9J:QHa:LPH::WW:Y?8:NR`:TJM:RY[:N<a:][H:@]S:<<M::X\\:YN[:QI9:IMJ::I9:H\\Z:J=I:a>V:ONO:M\\a:`W_;88R;9R@;88R=:SX[:V>`:SYL9QK:WaJ:S^N:J`7;88RT:N\\N;88RV:U<^:Z;8:N`T:9O7:9\\]:@9V:HR>:TR8:_@]:^Q]:<VT:K?T:aIR:XSI:9LT:N:`:;7X:;@<;88S=:OP=:<OX:]X`:H8K:=79:?<P:S@`:HQ[:\\9^:<7N:==J:\\^<:8`Q::`H:\\^?:8`U:QaL:9NH:97W:P=]::`K:8Q8:\\^=:TO]:\\YU:@NY8J:O^::_`Z:L7N:\\YZ9V`:HH`:\\[L:\\^N:IT9:H>S:WJJ:\\Y_:HSZ:@9<:<@M:S:Y:WV;:S=R:XXH:\\R8:H\\9:<`S::HS:^M9:`]T:9_<:[N`:`?S:X[a:YN\\:@IW:\\SJ:9:J::^H:Y>U:I:^:PZ<:L=Y:UNK:`>U::OS:XZL9UT:L=Y:LZP:;V`:OZI:?L>;88VV:R8<;88VT:X>7:IQP:TIP:P?H::OS:T>U:a@T:LYJ:WX?:V^X:>;O:U9=:9:N:N@H:V\\S:UUV:ZS::V_O:9YP:^7Y:?^J:^R=:VSK:<OX:TZY:;I=:;:L:=79:L^J::>?:HP=:QI;:HXV:RQ7:_\\@::J;9:=9\\S:VLN:HQV:H9<:IMa:^:L:@MK:>8\\:KV8:9P;:<R9:II_:XXJ;88X?:OTM:?TS:V;S:P<@:Y<K:>8Z:=YN:[KJ;88XI:_aM:KRT::@<:a9Q;88X@:@VH:9@>;88XP:_[S:<R;:I=K:=WP;88XN:><T;88X^:Y[M;88XR:U<8:@Y;:`Y`;88XV;88X<:H]X::@<:USM;88Y>:@VH:=>N:`^X;88XQ:Q9J:?I:;88YL:IPR:HQV:UT<:O>[:HQV:_:T:=:S:?^`:O?<::=J:T^8:@WR:[M\\:97^:`:@:>UZ:T^T:9<=:O?Y::X_:YR7:VM@:9O::PS_:aI]:WVO:O>\\:SKL:X7[:VL;:T_T:LVQ:@M_:WU=:WNN:=HN:><J:PS_:?\\N:S<7:<M_::KR:^Q@:9@8:><^:=?Z:QNP:U;X:NUL:X=M:YKW:>IY:PS_:[L=:`^8:9?^:VM<:XO8:><]:MZ]:MT`:>=K:IOa::KR:IPL:]7N:HRT:VS^:aJT:X_::<\\Y::T<:9@9:?:U:@>9:>I\\::SH9R?:Y>Z:OUV:@X9:@>;:<8`::OS:<97:;ZP:9WJ:`SI:?9P:X?=:9L99@>:^V;:9L?:NW;:;NU:`\\T::T[:9M]:V^X:`J:::=J:`J::SQW:S_\\:UN[:MTT:]]V:N@H:R`O:N@M:;J?:N@=:MNM:`J9;88\\7:L[^:PSQ:N`a:UH::N?\\::OS:N?\\:<:7:QX79P]:Y8H:K:U:TYZ:]Z?:U[J:_PI:9Y=:[K[:UX:9IT:aNL:UQZ:8JS:UWZ;88[R:;8I:W:];87JJ:?\\S:Q<=:<R@::PQ:;^P:?I_:M9O:>TK:\\@[:TV<:^Wa:;M9:99;9[W:=aZ;88;S:^Wa:9^P:`R]:8Z^:M\\79P?:9WW:UPV:J\\R:IaL::IT:aWI:>P<:_]_:I\\7:a[S:]Z^:aSI::S`:aS[:VaW:JX9:?=K:8?L;87KY;88^=::SU:9;;:aY[:a[[;88^J:MJZ:?=K:;]^:9:Z:JZJ:a^`:=P7;88^R:aSN:SNa:?M?:9H9:87=::T?:;HH::LZ:@@<:JOa:JZ`:ROV;88=;9RM;88>=:;H;9MZ:Y8R:9R8:a\\?:MH]:9^P;88;Y:9:O;88_T:9><:RQ7:@K\\;88_O:J>T;88>V:QQ[:?KI9YH:>]R:9J^:@I>::OS:=IX;88I9:;H;:?OQ:8XN::S`:MX@:9;T;87RR:;NM9YH:NVL::>I:NVL:;=W:QaS:^Wa:8Z^;87=Q:M@]:]YT:=P7:<Y9:QQ=:J\\R:M\\9;88_<::Y::9W7:aY[:;`<;88`\\:=P7::^N:SR9:J\\R::T`:97Z:aY[::^T;88a?:J\\R::[?;88a99P?:9V@:@IY:aU]:@^<9P?:aQX:;^P:PMZ:JYV:<_P:8PS;88aP:;Q@9P?:;9L:aS[:@@:;88aL:J]V;88aO:\\TY:aWQ:I<<;88aX;8977:aST:ZUJ:aWT:]?T;88LH9YH::QQ;897@:9SZ:JYV:;9T:aWS:@><:M=V;897J:;:;;88LZ:ZWV;88M^;897?;87J9::SU:`O`;897W:9WW:RP[;87RI:`OJ::7:;878[:^9\\;8787;87YR:J`=:HR\\:J]U:=KQ;897N9YH;897P:aSQ:@><;897R:aQP:`Q=;87<K;897V;87KM;897Y;87KM;897\\:HR\\;898M;897`;897_:HR\\:M;>:J_L:aV@:JYV:aWT:aY[:J<8;88aI:=P7:=\\Y:QR;9P?:9N^:NZ<9P?:=8P:RHJ9P?::VM:SLU:=P7:;X7:_]H:J\\R::WR::RV:aY[:;;@;88`a:J\\R:@HV;898^:aXW:LU_:aY[:9PR;899R:8aT:9R`;88aY:aWQ::X8;897:;88aU:aSI:<7X:J]::J\\V:_@T:aY=;898H:aY?:_HH:aVP:S@I:JWQ:aY7:aYL:=MS:aYN;89:8:?OV:JZJ;897R:H[8;89:<::SU;89:>;87V@:J]7:JZK:aS[:JZ\\::XR:aY[:;<=;899O:=P7::XV:MH::J\\R:;<I:9R`:;=U:<O::IPU:9\\8:a_V:9T8:aVN:9:Z:aRX:_\\8;87=I;89;@:?LO:T9O;87W^:=N::a^^:aVJ;89;::aUa:a_R;87MW:U^V;87:a;89;T;87=K;89;T:a`K;87@^9YH:J^a:QRI;89;P:9TH;89;=;87MW:U_7:a`=:SXO;87SM:@;`;89;Y:a^]:_L>;89;]:;=Z;89;_;89;R:aRX:J_a:?:::<W?;89<K;87SM;89<N;89<<;89;M:@JW;89;O;89<@:9Z?:aVN;89:N::SU:`Z_;87=I;89<Z:?LO:XQ[;89<Q:aVH:OZ8;89<?:@T7;89<V:?=K:;=9:aRX;897?;87?I:MLa;87?I:HOT:_>\\;89<R:aVM:aY?;89;;;88PP::IZ:aRX:@;`:a`=:MO^;87=K:MO^;89<_:aa8:9:?;89<T;89=M;88PM;89<X;87<[:a[X:]9M;87JY:V:7;89=V:JWQ:<>T;89<?;89=Z;89<W;87MW;89<\\:<W?;89<\\:;^\\;89<^:H[8;89;Z;87=L:a]@:J>T:8a@:=aZ;88aU:J>T:I]:;89>P:S<Y9P?:;=_:ZO\\:=P7::@>:OLP:JWQ9>R:;MQ:J]S:R=N9YH:<OM:99L::@:;88LH9J7:^@=:JZ::S`9:<8?:U\\O:a\\?:K=S:J\\=;89?>::RW:=OU:JHM:=P7:;UY:LTQ:aWT:Q\\K;89:L;89:::_>Y;89:P:9WW;88:=:J]S;89:@:J>T;89:I:9L?:VL@;89?N9P?;88`^:aW?;89:K:K]H;89:M;89:;:aYH:_HK9][:aTS:aY8:M>J:K9R9RM;89?_:9YV9YH:K?L:@_R:9\\8:TPH:@K\\::KU:^8W:9;T:U@Q:9T79@_9YH9P?:^ZK:?=K;89==;88PM:K?Z;89=N:_R<:JWQ9?H:a;=:]]X;89?@;88`Z:9YV;87L]:9X<:aVN:K?Z:a^J:MaH::7?9YH9X`;89H::^VS:ZRU;89H9:9@R:PN>:9@U:=[Q:JYV:;UY:aSV;89@Z:@?L:J[J9OO:UXL:LMY:J\\I;89@9;898@9YH;898I:?=K:_HH;88M=9OO::L=;89@@;89H\\;89H_::a9;89IH:99L:9R<;89H`;89?S;897Q:=>U:9\\8;89I;;89:Q;89I>:aYK:aSI;89?]:aaN:N?=:\\PR;87LH:_R^;87KN:a^a:J?K:>^<;879<:OUS99\\:a^8:OZ];89:X:H[8:<=7:;QM;87:[;89I\\;87<\\:JWQ:>\\S:?KU;87MV;89J?:T^Y;88a?:H[8:I]V;87@8:@><:I\\N;89I`:RIa;89?N:9\\8;89JQ;877I9:P:IZ[;89JU;87=[;89I[;89JY:XZV:a^8:;NO::J[;89J?:<<:;88`a:H[8:PRV::YY;89=W:@<Z;89JK:?:=:?=K;89JN;87>W;89J@:8S\\;89J8:9\\8;89K8;89KM;89K;;89KM;89K>;89<`:J>_;89KI:W9R;89JX:]9M;89J?;89KR:9_M:][::UUW:8Z^9:9:J[=:9\\8:<<L:@@X:H[8:MSZ:UJ]:?=K;89KV;89=W:;LY;89KY:V_I:9WW;89@^;879K:PJ::aTP::SU:9:_;87>\\:PJ::][89YH;87PZ;89J]:9?a::^T;89LM;87H8::SU:<;X;89LQ:9WW:PS?;87>\\:<;X;89LV:`O[;89LK:J_V:H[8:;@?:9XV;89J?:I^^:9^@:aRX;87a8;89L`;87aK:98>;87@X:VZ9;87H;:<=N;87H=;88OW:<=?;87HU;89ML;87?I:I_9:a`=:^YT;87JY;889J;87IM;87HR;87LN;87<K;89ML;87HW::SU;89MZ;87=I;887];87SM;89N=;89M_;87H]:P:];87KQ:VYO;89:[:9\\8:NHH;89NL9:P:=IX;89?Q::SU;89N8;87@V:<=R:a`=;89>@:M@S;89MT;87HR:;HR;87KQ;88aH;89I[;89:];89I[;899K;89I[;899N;898L;87<a:9WW;877a;87KM:K7a;87<8::J[;87=>;898M;879K;897I;897Z;897K;87<8:;9T;87KQ:;HK:?HO;87L9:9aZ;89NO:a<U;898^:9\\8:I`:;89NO:`MV;89OX9:P:I_@;89O]:=HJ:Q88;87L9:O@_:IPN;89Ja:9\\8:<>;:;IN;89J?:<JJ:<=J;89J?:HaX:IPN;89=W;88Q?:a`K:UHa;89L=9:P:UJ8;89J?:;IZ:97Z:NS_:WYI:K8Z:^[J:aR[::LZ:9WW;88YV:9\\8:9YY:@@X;89KP9:P;88MU;89JO:?=K:YI8;89Q9:9\\8:;Ia:JL`:JWQ:UJ8;89LK:LX7:?=K:MSZ:M8W;89PS:SQK;87L9:XSU;89O]:^Y8;89O]:?:7;89NO:JRW;88a<:?=K;87PH;89NO:;JN;87R];89PV;88=X;87<8:<?9:JY8;89P[:MT^9:9;88MU;89P^;87:Z:H[8;89Q;;89KM;89Q>;89<`:M8W;89LK:RM=:9\\8:MSZ:98];89QN:;=U;89J?9;_;89K\\:H[8:RQJ:\\L9;89J?::HR;89RQ;87:8:NLL;89QX:9\\8:aT;:9YH;89Q^:Q;Z;89Q`;89PZ::SU:W>]:?=K;89P_;89I[;89R?;87L9;89RH:a]];898J:V`N::]H;87R@;89PX:RQP:Q>U:QP];87:;:NLP;87KQ9;T:@K`;87L9:=>X:WPa;89R8:8SN;87:;;89Qa:MIT::SU:P<8;89R;9:P;89S=;89J?;89S?:H[8;89SH:JWQ:97a;89LK:JQ8:H[8:IW7:QQ=:H[8:;KX;89TJ:?=K:N9Z;89K<:?=K:O[U;89TP:9\\8:RQ_;89O]9;M9:P:]Z\\;89S@:`LM:@><:KX;;89LY;87JP:?=K:<=7;89R];87__;89K\\;87K=:]9M;88M^;89;;:VL@;879K;89<X;89>?;87H;;89<\\9NT;89>I::SU;87RR;87:;9;H:?LP;88NX;89IN;89OM:;@P;87:;:;LH;87=>;89US;87KM;89UU;87<8:LWZ;89OI;89O;9:P:SVN;87=99:P:;?];89R::?=K:SVN;89L<:?=K;89TW;89TY;89T;:NJW:JWQ:<=7;89LK:QNN:9\\8:9H9;89L?:9\\8:;LV;89Q<9:P:UPJ;89VS:9J^;89J;;89V>;89TX;89I[;89SH:9N^9YH;87<8;89PN:Q9Z:H[89;8:;`I;89J?;89TW:LT>;89J?;89T<:@><:;NJ;89LK:N=Q;89QK9:P:ZO;;89QN:SV^:JXW;89PX:;M>;87KQ:QY^:UJ8:^_L;87]^:8a[:99;:;^\\;89WT:=>U9NT9:[9WK:>HR:9WW:9LZ;87:;:;MI;87KQ:HU>;89PU;89R8:=7K;89S\\;89S9;87V<:;Q@:9\\8:PXV;89R7::SU::OL;87:;;89S=;89Q^;88=>:9\\8:QZ9;87=Q9YH:ZO;;89T^:\\=;:9WW;89U=;87KM;89U@;89NY;87SM;89UJ;89X]::<=;89UN;87<8:;IZ;89XK:9WW;88_Q:9\\8;89S];89Q^;88_X;87<8;89S=:a]]:UYQ;89XW:`R];87VH:=>U:<W?:V:7;89WX;89X`;89W_:T]V;87:;:JX];89SP:LW;;89UH:aa_;89=_:IQJ;87[:;87:;::RV;89YX:9_7:LaN:LXU:;^\\:<=J:>P<;89UK;89W^;87VN;89Wa;87RZ:?HO:=OX;89Z8::Q[;89Z:::Q[;89Z=:JHT;87U7:NK_:9WW::RV;89ZJ:U[T:MT8:<W?:@J[:;ML;87XN;87=L:\\T:;89Z[:<>T::KI:JaY:^>7:;^\\:;ML:@J[:K7[:\\T::;Za:K7[::KI:<>T:9_M9NT:9<@:OY;:MX@;88J^:=`?:>_=:NS_;88_;:OT8:9T:;87K_:9R89OW:VHY:@L?::NJ;89[M;89[R:9LH:^UL:9R8::T?:NS;:@K\\;89[Y:Z;H;89[R:9;;:=X9:NS_:9JN:=SX:NS_:JM`:8a7::LZ9MZ:@9J:9_M:9:O:IK9:_`Q:MNR:JOa::]^:HS=:@K\\:>>::9R8:<Y9:O>S;89@S;88aQ9QU:<Y9:9_M:<Y9:;8>:QYS:LI9:9_M:;UY:=Z[:9_9:?O\\:9_M:97Z:;8@;89\\`:JOa::Y::I@O:@L?:]^K:98]:@?P:>?U:9R8:;`<:;`Y:@L?;89@T:JZO:=`?:;]^:9_9:>H<:TZW9P?:9W7:JO?;89]L:8a\\;89]N9:Q:;`<:=[Y;89]R:Q\\Z;89]Z:NQ`:99;:9W7;87[M:9_M:;`<:IXV:QYS::KU:9Ha;89^:;89]\\:LU_;88?N:@_R:;`<:HUI:MN`;89]S;87SO:<ZZ;89^L:=>U:9W7;88KH;89^?:\\>J:US8;89^T:P=N;89^K:LU_;89^M:XJW;89]_:;`<:Y?:;89\\Y;89^V;89^a;89S^;89][:97[9K;:9W7:W=Y::HN:9W7;89@O:NS_:;`<:ZKM:9:J:9W7:T<Q:=>U::^N:V>V:9_M:9YH:TR?:@L?:L_L:9_9:LWV;89^`;88a;;89_U:9:`;89]_:9YH:R^O;89^8;89_=;89_`:99;::^N9:?;89`8:=]7:MH];89^J;88a::SQK:9_M::^N:;VI:OY;;89^^:>>R:9_9:SOJ;89_X:PP]:ROV;88JY:QRX:9_M::T`:;aJ:UTW:=`?:]ZQ:9R8::^T:>8O:@K\\:]`U:ZQM;88=N:TYL::X_::[?:NK7:99;:9V@:LWV:W:[:L_?:98]:]aW:=SL:98]:PQV:8YS:9Ha:JQ?:W;Q:99;:`M_;89aO:W;Q9:;;89aR:NTM:SRX:=>U:<_P:QVM::9?:[?W;89aS:=\\S:?[::JV^:NTM:L@?:9V@:NKY9:Q:9W9:RMV:9;T:@WV:]NK:=P7:;`<:PPN:98]:9V@:9_U:9K::9V@:JV_;89aV::8P:8YS::YM:9V@:9V@:<_P:9_M;89a];89`J9WK98H9:Q;8:7[:9K9:9V@;89a@9>=:9W9;87O^:a;K:\\;I:;9L:XQ[:8=W:<_P:OZ]:SRY9>=:SRY:9JQ:QWP:>8]:JQI:::@:;9L;89NT:;9L:;9L;89NV:J[M;89Y\\:8X9::U`;89=a;8:8N:J]V:=N::<_P:99@:SRY;89aP:;IT:\\<Y:R<:;89UY:@@::@@::;@P:TZW;89a]:@@:::RO:<_P;89L>:=>U:;9L99`;89aX:@@::a_M:<ZZ;8:9J;8:9O:;@`;89a[;89a]:@]^:87=;8:88:;WK;89aT::X_:;9L;89a@:98]:@@::J?K:;?H:aR;:>LU:98]:I<<:]XO:9YV::RY;89UY::RY::RY;89I9:;9T;89Z;:=>U::LZ;8::O::=K::RY:OT9:O\\Q::U`:M?a:99;:I<<:PJ\\:JK;;8::W;87=L:97\\:I<<;89NT:I<<:I<<;89N;:OQW;89J8:?:::;9T;89UL:I<<:;9T:=N:::U`:99@:JQM:9@U:ULY:9HT::U`:;Ia:ZNN;8::>:99Q;89aX::RY;89aZ:<ZZ;8::]:J`V:J]<99^;89a[;8::];8:9[:W;Q:R\\`::IT:9W9:W<`:8XN;8:9a::Q[;8::9:>TK;8::<:=>U;8::?;8:9<;8::I::L7;8::K:ST\\:99;;8::N::Q[;8::Q::L=;8::T:O?@:ZNM:OQW;8::Y:98a:@:T:9XV;8::]:<>T:>TQ;8::`:=]L;8:;7:Y<W:8X9::RY;8::O:8X9;8:<N9][;8:;?:?N>::U`:<=?:^\\Z;8:<]:RI:;8:<_;89<X::RY;89<\\;897M:_NZ::LZ;89<\\::QQ:;OY;8:=;:QUU:>JO;8:;I:SSI;8:;R;8:9Q:>P<::RY:\\RZ;8:;W:J]<;8:;Y:I<<;8:;[;8:=^:I<<:M\\=:9:8:;9L:;9P;8:<9:];\\:=>U;8:<<;8::;:?P@;8:;R;8::@:97\\;8:<I:9X<;8:<K;8::M:U^J;8:<O;8:>R:<O\\;8:<R9ON:9Ha;8:;X;8:<?;8:<W:98V;8:<Y:J]<:;Za;8:<\\:^YO;8:<^:J]<;8:8Y:OQW;8:=89>=;8:=:9WK;8:=<;8:;H9:P;8:=?:::@;8:=H:?OV;8:<_;8:;9;8:=L:=HH:;9T;8:;;;8:?>:LXK;8:?@;8:;J;8:>Z;8:>7;8::V:J]<:M\\=:87=;8:><:M8R:@@:;8::7:J]V;8::::;^P:JSH;8::=:OQW;8:>L:8aK:;9T;89UY:;9T:;9T;89I9;8:<P:>P<::QQ;8::R:87=:;9T::QQ;8:>W;8:=_:LXK:99;::RY;8::[:<YJ:M?a;8:<[9J\\::RY;89MX:OQW::RY;8:?9;8:?=:8X9;8:@J9WK;8:>V:;TY:I<<:<=?:J\\[;8:@[:M<<;8:>P:::@;8:;=:=HH::LZ;8:=S:::@::QQ;89<\\:?8_;8:HL9>H::RY:?8_:>JO:I<<:99@;8:;Y::RY;8:=Z:=>U:;9T;8:=]:O\\Q:M?a:UOP:98]:a[H;89a[:M?a:?[::9:8:@@::P;[:9?X;8:?_::Q[::U`:>\\S:;?H:JSH:;>K;8:Ha;8:9;::HN;8:@>::L7;8:@@;8:<L:98];8:H7:99;;8:@L::L=;8:@O;8:<S;8:H_:=>U;8:?O:;Q@:I<<:OZ]:JQQ;8:@Z;8:>a:9TH;8:<K;8:@_;8:>T:::@;8:H7;8:HR:[LJ:=N:;8:H;;8:<U:OLJ;89NT;8:<K;8:;9;89OP;8:=O::T;9][;8:H9:8=W;8:HV;8:<U;8:IM;8:HZ;8:<M:@I@;8:I8:OQW:<O8:9@U:]>O:;>Z:I<<:;Ia;8:HX;8:9X:<ZZ:M?a;8:?[:R<::I<<:L@?:<_P:Ja9:9J^;8:8S::X_::U`;8:?`:I<<;8:@7:;7=:UM9:H[Q:LXK;8:@<:[LJ;89UY::LZ::LZ;89I9;8:HN::Q[:?8_;89=a:87=::LZ;8:HT:O\\Q::RY:;9T:ZP8:98];8:HI:;Q@::RY:OZ]:UOP;8:@=;8:J8:RJ7;8:IR;89<X;8:=P:=HH::QQ:@]@:?::;8:K\\:=HH:=KQ;89MS:IS`:QV;:>JO::RY:<=?;8:L?:LXK;89ML::J[;8:LJ;8:J=;8:8[9>=::QQ99V:_NZ:?8_;89<\\:=KQ;8:LO;8:LU:=KQ;8:LW9:P:99@;8:H`:LXK;8:?X:TZW;8:L7:^YV::=K::U`::RY:L@?;8:?]::HN::U`:>OV:>P<:W=9:8YS9MX::U`;8::]:9?Q:I<<;89>V::IT::RY;8:?`:;9T99U:Z=K;897^:@X@::QQ;8:ML:9Ha:JU\\:?[::9?[;8:<R:=I?:aR;:;NR;8:KL::Q[:I<<;87PZ:;?H:UM9:<OZ:;9T:;NX::HN;8:KW::Q[::QQ;8:NW:9JR;8:NY;89OL9:Q;8:NY:JVM:9Ha;8:MN;8:L9:LXK:K[@;8:NX:?P]:@:T:99X;8:NY;8:KY;8:8[:98]:?8_:WOW:<O\\;8:K_;8:<S;8:O9;8:H[;8:K9;8:Ka:LXK;8:7::J]V;8:MR::IT:]>8;8:I@:ZRV:MJ]:I<<:SMZ:@K\\:@YT;89^`;8::]:99;::U`99N;89]_:I<<:;9>;89^S:=`?;8:Oa:=P7;8:P8:98]::U`:`]];8:O]:J]<:MH];8:PH:aR:;8:=X:J]V:;P`;8:PN:Y@8;89_<:O\\Q;8:PR;8:;Q:J]V:=V_;89S^;8:=<;89_=;8:PJ:J]V99J:9R=::LZ:I<<:]?T;89]Y;8:<T;8:P9:?PY;8:Q9:J]<:JWV;8:P7;8:PS::U`:T9<;8:PN:@V_:QYS:9?^;8:QK;8:P[::U`:VZa;8:P^:^9^;8:PY;8:Q>;8:PK:J;9;8:P<:ST\\;8:7_;8:P`;8:QL:@?U;8:Q]:@<_;88=J:P:X:=`9;89^^:@KN:RMV:9_9:@VW;8:QS:=>U::U`:QN:;8:PN:I<O;8:R::U>U;8:R<:`SW:@K\\;8:R?9RM;8:RH;8:PI;8:Qa:H>N;8:PN:;7@:OY;:?KU;88JT:@L?:PP<;8:RI;8:Q?:87W;8:PN:N^7;8:R_;89^9;8:QZ:J]V:@UR:@_R:I<<:^TO:@K\\;8:R`;8:RW;8:QT:UK8;8:Q]:K^];8:S;;8:Q`;8:SM:;=];8:PN:;:V:QYS;8:SK;8:PZ;8:RJ:JQ>;8:Q]:NUQ:OY;:PP<:9_9;8:RT;88_`;8:QY;8:Pa::U`:Z>Q;8:PN:=];;8:S^:=`?;8:Sa:SSR;8:Ra;8:Q[::\\S;8:PN:Q:^;8:T>:=`9;8:T@;89`K;8:SY;8:@T;8:S[:?YK:J]V:aY9;8:TS:PP<:JWZ:OQW:=@J:;9T:J[=;8:TU;8:P=:PR>:9@U:QUH:9:8;8:=<:@X@;8:P=;89]_::RY:NUU:QYS:aWN;89^`;8::X;8:;R:J[P:MJ]::RY:P<X:@K\\;8:UH:=P7:M?a;88`S;87\\P:9J^;8:M\\;8:NP::RX;8:U=:M7[:UUH;8:S_9RM;8:TP:=`?;8:UQ:JVa;8:JV:^[H;8:7X:J]<9P?;8:MJ;8:@@;8:MZ9:Q;878R;8:@S:98]::QQ:;OJ;8:TU;8:IR:PRS:9R8::QQ:;X?;89`Q:=`?:OW<:9_9:aWN:9?[;8:IY:=I?:W?_::IT:I<<;8:?`::RY:@<Z:;?H:JQT:IZJ:[LJ:@@R::HN::QQ:]?T:99;:?8_;8:W::9JR::QQ::QQ:]@7;8:OK:JWR;8:V?;8:WI:9SZ:TZW;8:L8:QUU:99;:J^];8:<X:LXK::LZ9QT;8:WT9]\\;8:WV;8:WR:J_Z;8:IT;89X]:9HT:;9T:I]V;8:O:::LZ9OU;8:@K:MPT:<ZZ;8:WR::QQ;8:WZ:>HR::9?:I?9:O\\Q;8:X?:;7H;8:Q<:;>Z:;9T:;Ia;8:X9;8:;S;8:X<:a7_:9Ha;8:XM;8:WZ;8:N?;8:WW;8:MO:JU?;8:?T;8:Ma;8:>?;8:JY:X<N:;?H:]?T;8:KR::QQ98U;8:9<:?8_::S<:9X<:?8_:?8_;89I9:=KQ;89YQ:98]:;:;;8:HQ:JX>:ST\\;8:@Q:JU\\;8:WK:QUU:=TR::HN;8:Y>;8:O?9:Q;8:YH;8:IS:QV;;8:YL:ST\\:_IR:9_;;8:YI;8:<S;8:YS:=>U::QQ9@_;8:YW;8:O>;8:Y@:9SZ;8:YJ;8:OJ;8:Y_::L=;8:Z7;8:YR:]?a;8:Z::`>O;8:Z=;8:Y?::7:;8:Y[;8:ZH;8:Y^;8:YN:8YS;8:YP:\\M;:TZW;8:Z9;8:IV;8:OS;8:Z[:QUU:JQM:9:8;8:<R:9;@::RY;8:MW;8:OR:@J^:9K:;8:<K:LX?:99X;8:?Q9:P;87?9:8XN::LZ;8:?`::QQ;8:N::;?H:L[P:@X@:=KQ;8:XZ:PR`:aR=:9?[;8:OO:=I?:UM9:@X@::LZ:9R8;8:TU::RY;8:Q;;8::P:L]H;8:ZX:OQW;8::U;8:WZ;8:VL:L?>;8:@]:[LJ:9_M::LZ:N=\\;8:P?:=`9:QTW;8:[7:[LJ:<@S;8:<K:>P<:;9T:R_?:MJ]::LZ:N=`:TZ7:OLJ:=`9:aWN;89[Z:@L?:W=H:RX\\:^8U;88>M;8:S<;8:WR;8:JY:IV\\:@_R::LZ:@H`;89^I;8:]7:[LJ;8:JY:<RJ;8:\\U:I[?:UUH;89^^;88>N;8:MO:W>[;8:QY;8:]8;8:VJ:9;O;8:V:;8:[I;8:X@;8:]S:@\\?:<O\\;8:IY:=@J:?8_:V>V:@WN;88_J:9SZ;8:W>:aZ=;8:ON:9SZ:=@J:=KQ;8:]^::YM::QQ9P?:=KQ:99;:aW=;8:\\9::QQ;8:M?:=>U:;:;;8:^=:9SZ:aSL;8:^N::V?;8:\\9;8:ZL:=>U:;:?;8:^P:=KQ:JVP;8:^W:8RH;8:\\9:=KQ:;:?:=@J:;:;9a<:MJ]:;:?::Wa:K<U:TNa:=`?:LWV:9_9:JQW;8:\\\\:@K\\;8:Q<:9_9:JWV:9_9:L[S:9_9:O=?;89^`:aSM:;7=:`OZ:;^P:_9a:99;:<79:VX;:MJ]::M]:@7>;8:\\X:SSR:9_9;89`Y:@KN:UH_:9_9;8:U];8:?<:MKY:<ZZ:;:?;88HN:;^P:ZRI:99;::M];8:Y^:?RH:`Z_:98]:9LR:ZWV9:L:88a::M];88MS:9;@9K;;8:[;:99;:JT^;8:V?9K;9K;:L]I:8XN:J<8:JSU:8aK:=\\Y:?\\S:9X<:=\\Y:=\\Y:=><:8XN:9N^:L`=:8aK:=8P:a_V:99;::VM:8]@:9K::=8P:L^>:9?X::VM:L`=:98]:;X7;8:`M:L_=;89<^:9?[:=8P;87R`:=TR:aU9:9^7:WL]:99K:@]@::M]99Z;88L9:98]::M]98<;89]_:?RH:UHI:=_[;89\\8:K8J:=`?;8:`:;88J]9RM:JXV;88<a:@L?:@I]:MKQ;8:\\`:J^L:Q\\Z:;:?::M];88;P;8;79:S`9:<ZZ:;:;::M]:JSL;8;7X:8YU:MJ]:?RH:<8@:QYS:^`S:NLP;8;7[:JSa9\\::8aR:_:H:Y=V:HY?::M]:<8U;8;7`:M>J:ROV;8;7J;89`K;8:`?;8;7W:;7>:<M];8;8K:THU;8:SQ;89`;:@L?:`OZ:9_9:9S=:9Ha;8;8P:=>U::M]:LII;8;8K:VNT;8;8V:`U9;8;8W:@K\\:>_K:_`O9RM:NIO;88<U:Q\\Z;8;8];8:`I:?=@;8;8K:;XP;8:_^;89^^;89`Y;8;7J;8:_H;88;W:H@Z:=`?:>Ua;8;8\\:;7>;8;8Q::M]:ZUX;8;8K:@7R;8;9N:=`?;8;7M9RM;8;9P:`T;;8;8X;8;9U;8;9H;8;9X;8;8^:JZ];8;7<:_HS:ROL;8:T7;88JX;8;7I;89]U;8:`<:O\\Q;8;9I;8;7X:>7W:9_M;8:`L:_NT;8:_I;8:_`;8;:K:=`9;8:VU:@MX:W>\\:=`?:NI=;8;9=:_ON;8;9W;8;7V;8;:=::YW;8;8K:<8`;8:_<;8;:I;8;:V:=`9:?O?:9_9:PO7;8:`9:=`?;8:_K:[K?;8;:M:TZW;8;:O:;7>9S:;8;8K:;ZN;8:RO;8:__;8;9a;8;:W:XUL:_P_;8;:N;8;:<;8;9J:Q]P;8;8K:KaZ:Y7P;8;7@;8;:J:=`9;8;7J:;MU;8;:`:JSa;8;9J:T<[:@_R:?RH:;<I;8:]L:=`?;8;:7:=`9;8;<:;87]@;8;<<;8;7X9>W;8;8K:NW9;8;9:;8;;=;8;98:_Q:;8;<;;8;9Y;88`S;8;8K:@X^;8:TN;8;<T9RM:^`S;8;<X;8;:=9NN;8;8K:I[<;8;<];8:PX:@K\\;8;<`;8;<N;8;<Y:=OU;8:`=:;7>:QVV;8;7^;8;:?:;YX:QYS:JXV:9Ha;8;7U;8;8<9HM;8:`H:98]:<799MX;8:_[:>PN;8:Q_;8:QY;8:`?;8:_X:>Y_;89]_::M]:aM=:YN;;89^^:W<`:9_9:Ja9;89^`;8;=];8;=V:K<N;8;=`:[NT;8;:H;8:>?:@K\\;8;>:;8;;a;88<8:MKL;8;>=:;7>;8;=^:8N^;8;=Y:;<]:8>P;8;:U;8;;V:`T8;8;<V;8:U^:=`?:O=?;8:_L;8;:8;8;==:=`?;8:_O;8:R;:@L?:NM;;88<\\:9_9:UL?;8;7Q;8:\\L:=`?;8:RV:aSO:@_R:<79:I\\J;8:VS;8;;>;8;:M:9_M::M]:<T@;8;?N:@L?;8;;H:_P@:98>:aZ?:I[V:9JQ:?RH9P?:RR9:[R7;88]K:::@:J<8;8:\\=:R9V:8aK:UPQ;8:`_:Z?T:SVS9][:U_O:::@;8;?Z;8;@?:=P7:8aK:99;:8aK:S\\@:9JR:>IX;8;@L:98];8;@7;8:V::8aK;8;@:::IT:J<8:ZWN:9?[;8;@W:=I?;8;@@;8;@M:99`;8:V:;8;?\\:L\\J;8;@_9QK:9K:;8;@Q:=>U;8;@T;8:TU;8;@V;8;@>;8:`^:;7>:9?Z:L\\J:UPQ9H>;8;@^:98]:?RH:=Q_:@_R:9LR:<9^;8:]>;89_=:?RH:M;>:8XN:?RH::IY:97J:N\\T:=@J:9LR9>;:<ZZ;8;HX:K`::8`a:aT9:<7N");local H,I,L,J=1,S and S.bxor or function(H,L)local J,I=1,0 while H>0 and L>0 do local P,O=H%2,L%2 if P~=O then I=I+J end H,L,J=(H-P)/2,(L-O)/2,J*2 end if H<L then H=L end while H>0 do local L=H%2 if L>0 then I=I+J end H,J=(H-L)/2,J*2 end return I end,126,function(L,H,J)if J then local H=(L/2^(H-1))%2^((J-1)-(H-1)+1);return H-H%1;else local H=2^(H-1);return(L%(H+H)>=H)and 1 or 0;end;end local L,T,R=function()local J,P,O,K=K(M,H,H+3);J,P,O,K=I(J,L),I(P,L),I(O,L),I(K,L)H=H+4;return(K*16777216)+(O*65536)+(P*256)+J;end,function()local L=I(K(M,H,H),L);H=H+1;return L;end,function()local J,P=K(M,H,H+2);J,P=I(J,L),I(P,L)H=H+2;return(P*256)+J;end;local function X()local H=L();local L=L();local P=1;local I=(J(L,1,20)*(2^32))+H;local H=J(L,21,31);local L=((-1)^J(L,32));if(H==0)then if(I==0)then return L*0;else H=1;P=0;end;elseif(H==2047)then return(I==0)and(L*(1/0))or(L*(0/0));end;return U(L,H-1023)*(P+(I/(2^52)));end;local H,S=L,function(J)local O;if(not J)then J=L();if(J==0)then return'';end;end;O=P(M,H,H+J-1);H=H+J;local L={}for H=1,#O do L[H]=a(I(K(P(O,H,H)),126))end return Q(L);end;local H,M=L,function(...)return{...},N('#',...)end local function Y()local a,P,H={},{},{};local K={a,P,nil,H};local H,I=L(),{}for J=1,H do local L,H=T();if(L==0)then H=(T()~=0);elseif(L==2)then H=X();elseif(L==1)then H=S();end;I[J]=H;end;for H=1,L()do P[H-1]=Y();end;for K=1,L()do local H=T();if(J(H,1,1)==0)then local P,O,H=J(H,2,3),J(H,4,6),{R(),R(),nil,nil};if(P==0)then H[3]=R();H[4]=R();elseif(P==1)then H[3]=L();elseif(P==2)then H[3]=L()-(2^16)elseif(P==3)then H[3]=L()-(2^16)H[4]=R();end;if(J(O,1,1)==1)then H[2]=I[H[2]]end if(J(O,2,2)==1)then H[3]=I[H[3]]end if(J(O,3,3)==1)then H[4]=I[H[4]]end a[K]=H;end end;K[3]=T();return K;end;local function Q(H,K,R)local H,L,J=H[1],H[2],H[3];return function(...)local I,U,P,a,L,T,S,N,X,M,J=H,L,J,M,1,-1,{},{...},N('#',...)-1,{},{};for H=0,X do if(H>=P)then S[H-P]=N[H+1];else J[H]=N[H+1];end;end;local N=X-P+1 local H;local P;while true do H=I[L];P=H[1];if P<=196 then if P<=97 then if P<=48 then if P<=23 then if P<=11 then if P<=5 then if P<=2 then if P<=0 then local K;local P;P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;elseif P>1 then local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];do return J[H[2]]end L=L+1;H=I[L];do return end;else local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]/J[H[4]];end;elseif P<=3 then J[H[2]]=J[H[3]]/H[4];elseif P>4 then local R;local M;local S,W;local P;P=H[2]S,W=a(J[P](O(J,P+1,H[3])))T=W+P-1 M=0;for H=P,T do M=M+1;J[H]=S[M];end;L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,T))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]={};else local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2];do return J[P],J[P+1]end L=L+1;H=I[L];do return end;end;elseif P<=8 then if P<=6 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];elseif P>7 then local H=H[2]J[H](O(J,H+1,T))else J[H[2]]=J[H[3]][H[4]];end;elseif P<=9 then local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=(H[3]~=0);elseif P>10 then local M;local S,W;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]S,W=a(J[P](O(J,P+1,H[3])))T=W+P-1 M=0;for H=P,T do M=M+1;J[H]=S[M];end;L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,T))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;else J[H[2]]=J[H[3]]-J[H[4]];end;elseif P<=17 then if P<=14 then if P<=12 then if(J[H[2]]<=J[H[4]])then L=L+1;else L=H[3];end;elseif P>13 then local R;local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])else J[H[2]]=J[H[3]]+H[4];end;elseif P<=15 then J[H[2]]={};elseif P==16 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else local I=H[2];local P=J[I]local O=J[I+2];if(O>0)then if(P>J[I+1])then L=H[3];else J[I+3]=P;end elseif(P<J[I+1])then L=H[3];else J[I+3]=P;end end;elseif P<=20 then if P<=18 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=(H[3]~=0);elseif P>19 then J[H[2]][H[3]]=H[4];else local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];end;elseif P<=21 then local T;local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];T=J[P];for H=P+1,H[3]do W(T,J[H])end;elseif P==22 then if(J[H[2]]~=J[H[4]])then L=L+1;else L=H[3];end;else local L=H[2]J[L]=J[L](O(J,L+1,H[3]))end;elseif P<=35 then if P<=29 then if P<=26 then if P<=24 then J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];do return end;L=L+1;H=I[L];L=H[3];elseif P==25 then J[H[2]]=-J[H[3]];else local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};end;elseif P<=27 then local O;local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];O=J[H[4]];if not O then L=L+1;else J[H[2]]=O;L=H[3];end;elseif P>28 then J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]==J[H[4]])then L=L+1;else L=H[3];end;else local K;local P;P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][J[H[4]]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][J[H[3]]]=J[H[4]];L=L+1;H=I[L];L=H[3];end;elseif P<=32 then if P<=30 then local H=H[2]local I,L=a(J[H](J[H+1]))T=L+H-1 local L=0;for H=H,T do L=L+1;J[H]=I[L];end;elseif P>31 then local I=H[2];local P=J[I]local O=J[I+2];if(O>0)then if(P>J[I+1])then L=H[3];else J[I+3]=P;end elseif(P<J[I+1])then L=H[3];else J[I+3]=P;end else if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=33 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];do return end;elseif P>34 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3]-J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];else local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=41 then if P<=38 then if P<=36 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];elseif P>37 then J[H[2]]=K[H[3]];else local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=39 then local O;local P;J[H[2]]={};L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+H[4];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];O=J[P];for H=P+1,H[3]do W(O,J[H])end;elseif P>40 then local P;J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];else if not J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=44 then if P<=42 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]~=H[4])then L=L+1;else L=H[3];end;elseif P>43 then local O;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];do return end;else local K;local P;P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];do return end;end;elseif P<=46 then if P>45 then R[H[3]]=J[H[2]];else J[H[2]]=J[H[3]]+J[H[4]];end;elseif P>47 then local H=H[2];T=H+N-1;for L=H,T do local H=S[L-H];J[L]=H;end;else local K;local P;J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];T=P+N-1;for H=P,T do K=S[H-P];J[H]=K;end;L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,T))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];T=P+N-1;for H=P,T do K=S[H-P];J[H]=K;end;L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,T))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;end;elseif P<=72 then if P<=60 then if P<=54 then if P<=51 then if P<=49 then local K;local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;elseif P>50 then J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];else local O;local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return end;end;elseif P<=52 then do return end;elseif P==53 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;else if(J[H[2]]~=J[H[4]])then L=L+1;else L=H[3];end;end;elseif P<=57 then if P<=55 then K[H[3]]=J[H[2]];elseif P>56 then local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];else local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,H[3]))end;L=L+1;H=I[L];P=H[2];do return O(J,P,T)end;L=L+1;H=I[L];do return end;end;elseif P<=58 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];elseif P==59 then local a,T;local K;local P;P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]a,T={J[P](O(J,P+1,H[3]))},0;for H=P,H[4]do T=T+1;J[H]=a[T];end L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]]+H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];else local P;J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=66 then if P<=63 then if P<=61 then J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;elseif P==62 then J[H[2]]=Q(U[H[3]],nil,R);else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];do return end;end;elseif P<=64 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];do return end;elseif P>65 then J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][J[H[4]]];else if(J[H[2]]<H[4])then L=L+1;else L=H[3];end;end;elseif P<=69 then if P<=67 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))elseif P==68 then local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};else if(J[H[2]]<J[H[4]])then L=L+1;else L=H[3];end;end;elseif P<=70 then local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return end;elseif P==71 then local I=H[2]local P,L={J[I](O(J,I+1,H[3]))},0;for H=I,H[4]do L=L+1;J[H]=P[L];end else J[H[2]]=R[H[3]];end;elseif P<=84 then if P<=78 then if P<=75 then if P<=73 then R[H[3]]=J[H[2]];elseif P==74 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local T;local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]*J[H[4]];L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];J[H[2]]=(H[3]~=0);L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];end;elseif P<=76 then J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]={};elseif P>77 then do return J[H[2]]end else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];end;elseif P<=81 then if P<=79 then local H=H[2]J[H](J[H+1])elseif P==80 then J[H[2]]=J[H[3]]*H[4];else J[H[2]][H[3]]=H[4];end;elseif P<=82 then J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][J[H[4]]];L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];L=H[3];elseif P>83 then J[H[2]]=#J[H[3]];else local a,T;local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]a,T={J[P](O(J,P+1,H[3]))},0;for H=P,H[4]do T=T+1;J[H]=a[T];end L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=90 then if P<=87 then if P<=85 then local H=H[2];do return J[H],J[H+1]end elseif P==86 then do return end;else local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;end;elseif P<=88 then local I=J[H[4]];if not I then L=L+1;else J[H[2]]=I;L=H[3];end;elseif P==89 then J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;else J[H[2]]=H[3]-J[H[4]];end;elseif P<=93 then if P<=91 then do return J[H[2]]();end;elseif P>92 then local P;J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];end;elseif P<=95 then if P>94 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))else local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];end;elseif P>96 then J[H[2]]=Q(U[H[3]],nil,R);else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];end;elseif P<=146 then if P<=121 then if P<=109 then if P<=103 then if P<=100 then if P<=98 then local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];do return end;elseif P==99 then local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];else local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=#J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];L=H[3];end;elseif P<=101 then local W,a;local M;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];M=J[H[3]];J[P+1]=M;J[P]=M[H[4]];L=L+1;H=I[L];P=H[2]W,a={J[P](J[P+1])},0;for H=P,H[4]do a=a+1;J[H]=W[a];end L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]/H[4];L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,H[3]))end;L=L+1;H=I[L];P=H[2];do return O(J,P,T)end;L=L+1;H=I[L];do return end;elseif P>102 then local I=H[3];local L=J[I]for H=I+1,H[4]do L=L..J[H];end;J[H[2]]=L;else local P;P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];end;elseif P<=106 then if P<=104 then local H=H[2];do return O(J,H,T)end;elseif P==105 then local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];else local R;local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=(H[3]~=0);L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];end;elseif P<=107 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};elseif P==108 then local T;local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][J[H[3]]]=J[H[4]];L=L+1;H=I[L];do return J[H[2]]end L=L+1;H=I[L];do return end;else local L=H[2];local I=J[H[3]];J[L+1]=I;J[L]=I[J[H[4]]];end;elseif P<=115 then if P<=112 then if P<=110 then local K;local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];T=P+N-1;for H=P,T do K=S[H-P];J[H]=K;end;L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,T))L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;elseif P>111 then if(H[2]<=J[H[4]])then L=H[3];else L=L+1;end;else local L=H[2];local I=J[H[3]];J[L+1]=I;J[L]=I[J[H[4]]];end;elseif P<=113 then J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+H[4];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;elseif P==114 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))else J[H[2]]=(H[3]~=0);end;elseif P<=118 then if P<=116 then J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][J[H[3]]]=H[4];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];elseif P==117 then K[H[3]]=J[H[2]];L=L+1;H=I[L];J[H[2]]=(H[3]~=0);L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];L=H[3];else local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];end;elseif P<=119 then J[H[2]]=K[H[3]];elseif P>120 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];L=H[3];else local K;local P;J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=133 then if P<=127 then if P<=124 then if P<=122 then local O;local P;J[H[2]]={};L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+H[4];L=L+1;H=I[L];P=H[2];O=J[P];for H=P+1,H[3]do W(O,J[H])end;elseif P==123 then J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local L=H[2];do return J[L](O(J,L+1,H[3]))end;end;elseif P<=125 then local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]][J[H[3]]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=(H[3]~=0);elseif P>126 then J[H[2]]();else J[H[2]][J[H[3]]]=J[H[4]];end;elseif P<=130 then if P<=128 then local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))elseif P==129 then if(J[H[2]]<=J[H[4]])then L=H[3];else L=L+1;end;else if(J[H[2]]~=H[4])then L=L+1;else L=H[3];end;end;elseif P<=131 then J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;elseif P>132 then J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];else J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=139 then if P<=136 then if P<=134 then local H=H[2];do return J[H](O(J,H+1,T))end;elseif P>135 then local P;P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};else local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];end;elseif P<=137 then if(J[H[2]]<H[4])then L=L+1;else L=H[3];end;elseif P>138 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=(not J[H[3]]);L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))else local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=142 then if P<=140 then local O;local P;P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];L=H[3];elseif P>141 then local T;local P;P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][J[H[4]]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=144 then if P==143 then local P;P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(H[2]<J[H[4]])then L=L+1;else L=H[3];end;else local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];do return end;end;elseif P>145 then local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};else local O;local P;J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];do return end;end;elseif P<=171 then if P<=158 then if P<=152 then if P<=149 then if P<=147 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]~=H[4])then L=L+1;else L=H[3];end;elseif P==148 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else local L=H[2];do return J[L](O(J,L+1,H[3]))end;end;elseif P<=150 then if(J[H[2]]<=H[4])then L=L+1;else L=H[3];end;elseif P==151 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];do return end;else local H=H[2]J[H]=J[H](J[H+1])end;elseif P<=155 then if P<=153 then J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];elseif P>154 then local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]/J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]/J[H[4]];L=L+1;H=I[L];J[H[2]]=H[3]-J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]==J[H[4]])then L=L+1;else L=H[3];end;end;elseif P<=156 then local L=H[2]local I,H=a(J[L](O(J,L+1,H[3])))T=H+L-1 local H=0;for L=L,T do H=H+1;J[L]=I[H];end;elseif P>157 then J[H[2]][J[H[3]]]=H[4];else J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=164 then if P<=161 then if P<=159 then local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))elseif P>160 then for H=H[2],H[3]do J[H]=nil;end;else local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=(H[3]~=0);L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];do return end;end;elseif P<=162 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];elseif P==163 then if(H[2]<J[H[4]])then L=H[3];else L=L+1;end;else local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];do return end;end;elseif P<=167 then if P<=165 then if not J[H[2]]then L=L+1;else L=H[3];end;elseif P==166 then J[H[2]]=J[H[3]][J[H[4]]];else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];end;elseif P<=169 then if P>168 then local K;local P;J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];T=P+N-1;for H=P,T do K=S[H-P];J[H]=K;end;L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,T))else J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][J[H[4]]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];do return end;end;elseif P==170 then local I=J[H[4]];if I then L=L+1;else J[H[2]]=I;L=H[3];end;else if(J[H[2]]~=H[4])then L=L+1;else L=H[3];end;end;elseif P<=183 then if P<=177 then if P<=174 then if P<=172 then local M,K;local a;local P;P=H[2];a=J[H[3]];J[P+1]=a;J[P]=a[H[4]];L=L+1;H=I[L];P=H[2]M,K={J[P](J[P+1])},0;for H=P,H[4]do K=K+1;J[H]=M[K];end L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]/H[4];L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,H[3]))end;L=L+1;H=I[L];P=H[2];do return O(J,P,T)end;L=L+1;H=I[L];do return end;elseif P==173 then if(J[H[2]]<=J[H[4]])then L=L+1;else L=H[3];end;else J[H[2]]=J[H[3]]/J[H[4]];end;elseif P<=175 then local L=H[2];local I=J[L];for H=L+1,H[3]do W(I,J[H])end;elseif P>176 then if(J[H[2]]==J[H[4]])then L=L+1;else L=H[3];end;else local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=180 then if P<=178 then local M;local N,S;local W;local P;P=H[2];W=J[H[3]];J[P+1]=W;J[P]=W[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]N,S=a(J[P](O(J,P+1,H[3])))T=S+P-1 M=0;for H=P,T do M=M+1;J[H]=N[M];end;L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,T))L=L+1;H=I[L];L=H[3];elseif P==179 then local H=H[2]J[H](O(J,H+1,T))else if(J[H[2]]<J[H[4]])then L=H[3];else L=L+1;end;end;elseif P<=181 then local K;local P;J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];T=P+N-1;for H=P,T do K=S[H-P];J[H]=K;end;L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,T))L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;elseif P>182 then if(H[2]<=J[H[4]])then L=L+1;else L=H[3];end;else local P;local P,S;local M,K;local W;local P;P=H[2];W=J[H[3]];J[P+1]=W;J[P]=W[H[4]];L=L+1;H=I[L];P=H[2]M,K={J[P](J[P+1])},0;for H=P,H[4]do K=K+1;J[H]=M[K];end L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]]-H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]]+H[4];L=L+1;H=I[L];P=H[2]M,S=a(J[P](O(J,P+1,H[3])))T=S+P-1 K=0;for H=P,T do K=K+1;J[H]=M[K];end;L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,T))end;L=L+1;H=I[L];P=H[2];do return O(J,P,T)end;L=L+1;H=I[L];do return end;end;elseif P<=189 then if P<=186 then if P<=184 then local O;local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=(not J[H[3]]);L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return end;elseif P>185 then local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]={};else local M;local T;local a;local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];a=H[3];T=J[a]for H=a+1,H[4]do T=T..J[H];end;J[H[2]]=T;L=L+1;H=I[L];P=H[2];M=J[P];for H=P+1,H[3]do W(M,J[H])end;end;elseif P<=187 then local P=H[2];local O=H[4];local I=P+2 local P={J[P](J[P+1],J[I])};for H=1,O do J[I+H]=P[H];end;local P=P[1]if P then J[I]=P L=H[3];else L=L+1;end;elseif P>188 then local T;local P;P=H[2]J[P](J[P+1])L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][J[H[3]]]=J[H[4]];L=L+1;H=I[L];do return J[H[2]]end L=L+1;H=I[L];do return end;else J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]/H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]*J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];L=H[3];end;elseif P<=192 then if P<=190 then local T;local a,P;local R;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];R=H[2]a,P={J[R](O(J,R+1,H[3]))},0;for H=R,H[4]do P=P+1;J[H]=a[P];end L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];T=J[H[4]];if not T then L=L+1;else J[H[2]]=T;L=H[3];end;elseif P>191 then local K;local P;P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,H[3]))end;L=L+1;H=I[L];P=H[2];do return O(J,P,T)end;L=L+1;H=I[L];L=H[3];else local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=(not J[H[3]]);L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];end;elseif P<=194 then if P==193 then J[H[2]]=J[H[3]]-J[H[4]];else local M;local S,W;local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]S,W=a(J[P](O(J,P+1,H[3])))T=W+P-1 M=0;for H=P,T do M=M+1;J[H]=S[M];end;L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,T))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][J[H[4]]];end;elseif P>195 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]~=H[4])then L=L+1;else L=H[3];end;else J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];end;elseif P<=295 then if P<=245 then if P<=220 then if P<=208 then if P<=202 then if P<=199 then if P<=197 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if(J[H[2]]==J[H[4]])then L=L+1;else L=H[3];end;elseif P>198 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];else local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];end;elseif P<=200 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];elseif P>201 then local H=H[2]local I,L=a(J[H](O(J,H+1,T)))T=L+H-1 local L=0;for H=H,T do L=L+1;J[H]=I[L];end;else local P;J[H[2]]={};L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))end;elseif P<=205 then if P<=203 then J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];elseif P>204 then J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];else J[H[2]]=H[3]-J[H[4]];end;elseif P<=206 then J[H[2]]=H[3];elseif P>207 then local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else if(H[2]<J[H[4]])then L=L+1;else L=H[3];end;end;elseif P<=214 then if P<=211 then if P<=209 then local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];elseif P==210 then if(H[2]<=J[H[4]])then L=H[3];else L=L+1;end;else local T;local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return end;end;elseif P<=212 then local P;J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];elseif P>213 then local T;local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][J[H[3]]]=J[H[4]];L=L+1;H=I[L];do return J[H[2]]end L=L+1;H=I[L];do return end;else if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=217 then if P<=215 then local O;local K;local P;local R;local T;local a;J[H[2]][J[H[3]]]=J[H[4]];L=L+1;H=I[L];a=H[2];T={};for H=1,#M do R=M[H];for H=0,#R do P=R[H];K=P[1];O=P[2];if K==J and O>=a then T[O]=K[O];P[1]=T;end;end;end;L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=H[3];elseif P>216 then J[H[2]]=J[H[3]]*J[H[4]];else if(J[H[2]]==J[H[4]])then L=L+1;else L=H[3];end;end;elseif P<=218 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;elseif P>219 then local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];else J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]*H[4];end;elseif P<=232 then if P<=226 then if P<=223 then if P<=221 then local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])elseif P>222 then local K;local P;P=H[2]J[P](J[P+1])L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;else J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][J[H[4]]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=224 then local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,H[3]))end;L=L+1;H=I[L];P=H[2];do return O(J,P,T)end;L=L+1;H=I[L];do return end;elseif P==225 then J[H[2]]=H[3];else J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];end;elseif P<=229 then if P<=227 then local a=U[H[3]];local T;local P={};T=_({},{__index=function(L,H)local H=P[H];return H[1][H[2]];end,__newindex=function(J,H,L)local H=P[H]H[1][H[2]]=L;end;});for O=1,H[4]do L=L+1;local H=I[L];if H[1]==389 then P[O-1]={J,H[3]};else P[O-1]={K,H[3]};end;M[#M+1]=P;end;J[H[2]]=Q(a,T,R);elseif P==228 then local H=H[2]J[H]=J[H]()else local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;end;elseif P<=230 then J[H[2]]=J[H[3]]-H[4];elseif P>231 then J[H[2]]=(H[3]~=0);L=L+1;else J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];end;elseif P<=238 then if P<=235 then if P<=233 then local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];elseif P>234 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else J[H[2]][H[3]]=J[H[4]];end;elseif P<=236 then local L=H[2]J[L](O(J,L+1,H[3]))elseif P==237 then for H=H[2],H[3]do J[H]=nil;end;else local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=241 then if P<=239 then J[H[2]]=J[H[3]]-H[4];elseif P>240 then local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;end;elseif P<=243 then if P==242 then local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]~=H[4])then L=L+1;else L=H[3];end;else if(J[H[2]]<J[H[4]])then L=L+1;else L=H[3];end;end;elseif P==244 then local T;local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];do return end;else J[H[2]]=-J[H[3]];end;elseif P<=270 then if P<=257 then if P<=251 then if P<=248 then if P<=246 then do return J[H[2]]end elseif P>247 then J[H[2]]=(not J[H[3]]);else local O=H[2];local I={};for H=1,#M do local H=M[H];for L=0,#H do local L=H[L];local P=L[1];local H=L[2];if P==J and H>=O then I[H]=P[H];L[1]=I;end;end;end;end;elseif P<=249 then if(J[H[2]]<=J[H[4]])then L=H[3];else L=L+1;end;elseif P==250 then L=H[3];else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=254 then if P<=252 then J[H[2]]=J[H[3]]/H[4];elseif P>253 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]]+H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local O;local P;P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]<=J[H[4]])then L=H[3];else L=L+1;end;end;elseif P<=255 then if(J[H[2]]<J[H[4]])then L=H[3];else L=L+1;end;elseif P>256 then local H=H[2]J[H]=J[H]()else if(J[H[2]]<=H[4])then L=L+1;else L=H[3];end;end;elseif P<=263 then if P<=260 then if P<=258 then local K;local W,M;local R;local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]W,M=a(J[P](J[P+1]))T=M+P-1 K=0;for H=P,T do K=K+1;J[H]=W[K];end;L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,T))end;L=L+1;H=I[L];P=H[2];do return O(J,P,T)end;L=L+1;H=I[L];do return end;elseif P>259 then local O;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];else J[H[2]]=J[H[3]]*H[4];end;elseif P<=261 then J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];elseif P>262 then J[H[2]]=(not J[H[3]]);else local P;J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=266 then if P<=264 then local P=H[2];local O=H[4];local I=P+2 local P={J[P](J[P+1],J[I])};for H=1,O do J[I+H]=P[H];end;local P=P[1]if P then J[I]=P L=H[3];else L=L+1;end;elseif P==265 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];L=H[3];else local T;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];end;elseif P<=268 then if P==267 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];do return end;else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]~=H[4])then L=L+1;else L=H[3];end;end;elseif P>269 then local H=H[2]J[H]=J[H](O(J,H+1,T))else J[H[2]]=J[H[3]]+H[4];end;elseif P<=282 then if P<=276 then if P<=273 then if P<=271 then local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))elseif P==272 then local K;local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return J[H[2]]end L=L+1;H=I[L];do return end;else local O;local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];end;elseif P<=274 then local R;local P;J[H[2]]=(H[3]~=0);L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];K[H[3]]=J[H[2]];L=L+1;H=I[L];do return end;elseif P==275 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;else local I=H[3];local L=J[I]for H=I+1,H[4]do L=L..J[H];end;J[H[2]]=L;end;elseif P<=279 then if P<=277 then local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;elseif P>278 then local K;local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];else J[H[2]]=H[3]+J[H[4]];end;elseif P<=280 then J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];elseif P==281 then J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else J[H[2]]=H[3]+J[H[4]];end;elseif P<=288 then if P<=285 then if P<=283 then J[H[2]]=(H[3]~=0);elseif P>284 then local I=H[2];local O=J[I+2];local P=J[I]+O;J[I]=P;if(O>0)then if(P<=J[I+1])then L=H[3];J[I+3]=P;end elseif(P>=J[I+1])then L=H[3];J[I+3]=P;end else local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,H[3]))end;L=L+1;H=I[L];P=H[2];do return O(J,P,T)end;L=L+1;H=I[L];do return end;end;elseif P<=286 then local H=H[2];do return J[H],J[H+1]end elseif P>287 then local P;J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];P=J[H[4]];if not P then L=L+1;else J[H[2]]=P;L=H[3];end;end;elseif P<=291 then if P<=289 then J[H[2]]=J[H[3]]/J[H[4]];elseif P>290 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];do return end;end;elseif P<=293 then if P==292 then local K;local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;else local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;end;elseif P==294 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]==J[H[4]])then L=L+1;else L=H[3];end;else local O;local P;P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];L=H[3];end;elseif P<=344 then if P<=319 then if P<=307 then if P<=301 then if P<=298 then if P<=296 then local H=H[2];local L=J[H];for H=H+1,T do W(L,J[H])end;elseif P==297 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]==J[H[4]])then L=L+1;else L=H[3];end;else local I=J[H[4]];if not I then L=L+1;else J[H[2]]=I;L=H[3];end;end;elseif P<=299 then local O;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=(not J[H[3]]);L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return end;elseif P==300 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]/J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];do return J[P](O(J,P+1,H[3]))end;else local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];end;elseif P<=304 then if P<=302 then J[H[2]]();elseif P>303 then J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];for H=H[2],H[3]do J[H]=nil;end;L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];end;elseif P<=305 then J[H[2]]=J[H[3]]*J[H[4]];elseif P>306 then if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else local P;J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];end;elseif P<=313 then if P<=310 then if P<=308 then J[H[2]]=R[H[3]];elseif P==309 then if(H[2]<J[H[4]])then L=H[3];else L=L+1;end;else if(H[2]<=J[H[4]])then L=L+1;else L=H[3];end;end;elseif P<=311 then J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];L=H[3];elseif P==312 then J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];end;elseif P<=316 then if P<=314 then local L=H[2]local P,I={J[L](J[L+1])},0;for H=L,H[4]do I=I+1;J[H]=P[I];end elseif P>315 then local P;P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else local I=J[H[4]];if I then L=L+1;else J[H[2]]=I;L=H[3];end;end;elseif P<=317 then J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];do return end;elseif P>318 then local K;local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];K=J[P];for H=P+1,H[3]do W(K,J[H])end;else local P;J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];L=H[3];end;elseif P<=331 then if P<=325 then if P<=322 then if P<=320 then L=H[3];elseif P==321 then local R;local P;P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];L=H[3];else local H=H[2];T=H+N-1;for L=H,T do local H=S[L-H];J[L]=H;end;end;elseif P<=323 then local L=H[2];local I=J[L];for H=L+1,H[3]do W(I,J[H])end;elseif P==324 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];do return end;else local I=H[2];local L=J[H[3]];J[I+1]=L;J[I]=L[H[4]];end;elseif P<=328 then if P<=326 then local H=H[2]local I,L=a(J[H](O(J,H+1,T)))T=L+H-1 local L=0;for H=H,T do L=L+1;J[H]=I[L];end;elseif P>327 then local H=H[2]J[H]=J[H](O(J,H+1,T))else J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if(J[H[2]]~=J[H[4]])then L=L+1;else L=H[3];end;end;elseif P<=329 then local T=U[H[3]];local O;local P={};O=_({},{__index=function(L,H)local H=P[H];return H[1][H[2]];end,__newindex=function(J,H,L)local H=P[H]H[1][H[2]]=L;end;});for O=1,H[4]do L=L+1;local H=I[L];if H[1]==389 then P[O-1]={J,H[3]};else P[O-1]={K,H[3]};end;M[#M+1]=P;end;J[H[2]]=Q(T,O,R);elseif P>330 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local T;local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];do return end;end;elseif P<=337 then if P<=334 then if P<=332 then J[H[2]]=(H[3]~=0);L=L+1;elseif P==333 then do return J[H[2]]();end;else local R;local O;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=#J[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];O=J[P]R=J[P+2];if(R>0)then if(O>J[P+1])then L=H[3];else J[P+3]=O;end elseif(O<J[P+1])then L=H[3];else J[P+3]=O;end end;elseif P<=335 then local R;local M,W;local K;local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[J[H[4]]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[J[H[4]]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]M,W=a(J[P](O(J,P+1,H[3])))T=W+P-1 R=0;for H=P,T do R=R+1;J[H]=M[R];end;L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,T))L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[J[H[4]]];elseif P>336 then local K;local P;P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=(H[3]~=0);L=L+1;H=I[L];J[H[2]][J[H[3]]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];end;elseif P<=340 then if P<=338 then local R;local M,W;local K;local P;J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]M,W=a(J[P](O(J,P+1,H[3])))T=W+P-1 R=0;for H=P,T do R=R+1;J[H]=M[R];end;L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,T))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];elseif P==339 then local K;local P;P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;else local O;local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return end;end;elseif P<=342 then if P>341 then local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local H=H[2]local I,L=a(J[H](J[H+1]))T=L+H-1 local L=0;for H=H,T do L=L+1;J[H]=I[L];end;end;elseif P==343 then J[H[2]]=#J[H[3]];else local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=369 then if P<=356 then if P<=350 then if P<=347 then if P<=345 then local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];elseif P>346 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))else J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=348 then J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];elseif P==349 then local L=H[2]J[L](O(J,L+1,H[3]))else local H=H[2]J[H]=J[H](J[H+1])end;elseif P<=353 then if P<=351 then local P;J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];elseif P==352 then local L=H[2];local I=J[H[3]];J[L+1]=I;J[L]=I[H[4]];else if(H[2]<J[H[4]])then L=L+1;else L=H[3];end;end;elseif P<=354 then local M;local W,S;local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]W,S=a(J[P](O(J,P+1,H[3])))T=S+P-1 M=0;for H=P,T do M=M+1;J[H]=W[M];end;elseif P==355 then local H=H[2];do return O(J,H,T)end;else J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]]-J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]]+J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=362 then if P<=359 then if P<=357 then local I=H[2]local P,L={J[I](J[I+1])},0;for H=I,H[4]do L=L+1;J[H]=P[L];end elseif P>358 then local P;P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];else local O=H[2];local I={};for H=1,#M do local H=M[H];for L=0,#H do local L=H[L];local P=L[1];local H=L[2];if P==J and H>=O then I[H]=P[H];L[1]=I;end;end;end;end;elseif P<=360 then J[H[2]]=J[H[3]][J[H[4]]];elseif P==361 then J[H[2]]=J[H[3]]+J[H[4]];else local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];end;elseif P<=365 then if P<=363 then local I=H[2];local O=J[I+2];local P=J[I]+O;J[I]=P;if(O>0)then if(P<=J[I+1])then L=H[3];J[I+3]=P;end elseif(P>=J[I+1])then L=H[3];J[I+3]=P;end elseif P==364 then local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else local T;local P;P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][J[H[3]]]=J[H[4]];L=L+1;H=I[L];do return J[H[2]]end L=L+1;H=I[L];do return end;end;elseif P<=367 then if P>366 then if(J[H[2]]==H[4])then L=L+1;else L=H[3];end;else J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];do return J[H[2]]end end;elseif P==368 then local R;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return end;else local P;P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];end;elseif P<=381 then if P<=375 then if P<=372 then if P<=370 then local K;local P;P=H[2];K=J[H[3]];J[P+1]=K;J[P]=K[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];elseif P==371 then local R;local P;P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];else local P;J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];end;elseif P<=373 then J[H[2]]=J[H[3]];elseif P==374 then local L=H[2]J[L]=J[L](O(J,L+1,H[3]))else local O;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];O=J[P];for H=P+1,H[3]do W(O,J[H])end;end;elseif P<=378 then if P<=376 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;elseif P==377 then local H=H[2];local L=J[H];for H=H+1,T do W(L,J[H])end;else local O;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]];end;elseif P<=379 then J[H[2]][H[3]]=J[H[4]];elseif P==380 then local T;local P;P=H[2]J[P](J[P+1])L=L+1;H=I[L];P=H[2];T=J[H[3]];J[P+1]=T;J[P]=T[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=R[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];else local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]={};L=L+1;H=I[L];J[H[2]][H[3]]=H[4];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=387 then if P<=384 then if P<=382 then J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][J[H[4]]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if not J[H[2]]then L=L+1;else L=H[3];end;elseif P==383 then local O;local P;P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;else local T,K;local R;local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]T,K={J[P](O(J,P+1,H[3]))},0;for H=P,H[4]do K=K+1;J[H]=T[K];end L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P<=385 then local R;local P;P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];P=H[2]J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];R=J[H[3]];J[P+1]=R;J[P]=R[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];elseif P==386 then J[H[2]]=J[H[3]][H[4]];else local P;J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))L=L+1;H=I[L];J[H[2]]=J[H[3]];L=L+1;H=I[L];L=H[3];end;elseif P<=390 then if P<=388 then local H=H[2]J[H](J[H+1])elseif P>389 then local P;J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];J[H[2]]=H[3];L=L+1;H=I[L];P=H[2]J[P]=J[P](O(J,P+1,H[3]))else J[H[2]]=J[H[3]];end;elseif P<=392 then if P==391 then local O;local P;J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];P=H[2];O=J[H[3]];J[P+1]=O;J[P]=O[H[4]];L=L+1;H=I[L];P=H[2]J[P](J[P+1])L=L+1;H=I[L];do return end;else J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]][H[3]]=J[H[4]];L=L+1;H=I[L];J[H[2]]=K[H[3]];L=L+1;H=I[L];J[H[2]]=J[H[3]][H[4]];L=L+1;H=I[L];if J[H[2]]then L=L+1;else L=H[3];end;end;elseif P==393 then local H=H[2];do return J[H](O(J,H+1,T))end;else local L=H[2]local I,H=a(J[L](O(J,L+1,H[3])))T=H+L-1 local H=0;for L=L,T do H=H+1;J[L]=I[H];end;end;L=L+1;end;end;end;return Q(Y(),{},V)(...);end)(...)
+local BaseURL = "https://raw.githubusercontent.com/deividcomsono/Obsidian/refs/heads/main/"
+local CustomImageManager = {}
+local CustomImageManagerAssets = {
+    TransparencyTexture = {
+        RobloxId = 139785960036434,
+        Path = "Obsidian/assets/TransparencyTexture.png",
+        URL = BaseURL .. "assets/TransparencyTexture.png",
+
+        Id = nil,
+    },
+
+    SaturationMap = {
+        RobloxId = 4155801252,
+        Path = "Obsidian/assets/SaturationMap.png",
+        URL = BaseURL .. "assets/SaturationMap.png",
+
+        Id = nil,
+    },
+}
+do
+    local function RecursiveCreatePath(Path: string, IsFile: boolean?)
+        if not isfolder or not makefolder then
+            return
+        end
+
+        local Segments = Path:split("/")
+        local TraversedPath = ""
+
+        if IsFile then
+            table.remove(Segments, #Segments)
+        end
+
+        for _, Segment in ipairs(Segments) do
+            if not isfolder(TraversedPath .. Segment) then
+                makefolder(TraversedPath .. Segment)
+            end
+
+            TraversedPath = TraversedPath .. Segment .. "/"
+        end
+
+        return TraversedPath
+    end
+
+    function CustomImageManager.AddAsset(
+        AssetName: string,
+        RobloxAssetId: number,
+        URL: string,
+        ForceRedownload: boolean?
+    )
+        if CustomImageManagerAssets[AssetName] ~= nil then
+            error(string.format("Asset %q already exists", AssetName))
+        end
+
+        assert(typeof(RobloxAssetId) == "number", "RobloxAssetId must be a number")
+
+        CustomImageManagerAssets[AssetName] = {
+            RobloxId = RobloxAssetId,
+            Path = string.format("Obsidian/custom_assets/%s", AssetName),
+            URL = URL,
+
+            Id = nil,
+        }
+
+        CustomImageManager.DownloadAsset(AssetName, ForceRedownload)
+    end
+
+    function CustomImageManager.GetAsset(AssetName: string)
+        if not CustomImageManagerAssets[AssetName] then
+            return nil
+        end
+
+        local AssetData = CustomImageManagerAssets[AssetName]
+        if AssetData.Id then
+            return AssetData.Id
+        end
+
+        local AssetID = string.format("rbxassetid://%s", AssetData.RobloxId)
+
+        if getcustomasset then
+            local Success, NewID = pcall(getcustomasset, AssetData.Path)
+
+            if Success and NewID then
+                AssetID = NewID
+            end
+        end
+
+        AssetData.Id = AssetID
+        return AssetID
+    end
+
+    function CustomImageManager.DownloadAsset(AssetName: string, ForceRedownload: boolean?)
+        if not getcustomasset or not writefile or not isfile then
+            return false, "missing functions"
+        end
+
+        local AssetData = CustomImageManagerAssets[AssetName]
+
+        RecursiveCreatePath(AssetData.Path, true)
+
+        if ForceRedownload ~= true and isfile(AssetData.Path) then
+            return true, nil
+        end
+
+        local success, errorMessage = pcall(function()
+            writefile(AssetData.Path, game:HttpGet(AssetData.URL))
+        end)
+
+        return success, errorMessage
+    end
+
+    for AssetName, _ in CustomImageManagerAssets do
+        CustomImageManager.DownloadAsset(AssetName)
+    end
+end
+
+local Library = {
+    LocalPlayer = LocalPlayer,
+    DevicePlatform = nil,
+    IsMobile = false,
+    IsRobloxFocused = true,
+
+    ScreenGui = nil,
+
+    SearchText = "",
+    Searching = false,
+    GlobalSearch = false,
+    LastSearchTab = nil,
+
+    ActiveTab = nil,
+    Tabs = {},
+    TabButtons = {},
+    DependencyBoxes = {},
+
+    KeybindFrame = nil,
+    KeybindContainer = nil,
+    KeybindToggles = {},
+
+    Notifications = {},
+
+    ToggleKeybind = Enum.KeyCode.RightControl,
+    TweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+    NotifyTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+
+    Toggled = false,
+    Unloaded = false,
+
+    Labels = Labels,
+    Buttons = Buttons,
+    Toggles = Toggles,
+    Options = Options,
+
+    NotifySide = "Right",
+    ShowCustomCursor = true,
+    ForceCheckbox = false,
+    ShowToggleFrameInKeybinds = true,
+    NotifyOnError = false,
+
+    CantDragForced = false,
+
+    Signals = {},
+    UnloadSignals = {},
+
+    OriginalMinSize = Vector2.new(480, 360),
+    MinSize = Vector2.new(480, 360),
+    DPIScale = 1,
+    GroupboxesCollapsible = true,
+    CornerRadius = 4,
+
+    IsLightTheme = false,
+    Scheme = {
+        BackgroundColor = Color3.fromRGB(15, 15, 15),
+        MainColor = Color3.fromRGB(25, 25, 25),
+        AccentColor = Color3.fromRGB(125, 85, 255),
+        OutlineColor = Color3.fromRGB(40, 40, 40),
+        FontColor = Color3.new(1, 1, 1),
+        Font = Font.fromEnum(Enum.Font.Code),
+
+        RedColor = Color3.fromRGB(255, 50, 50),
+        DarkColor = Color3.new(0, 0, 0),
+        WhiteColor = Color3.new(1, 1, 1),
+    },
+
+    Registry = {},
+    Scales = {},
+
+    ImageManager = CustomImageManager,
+}
+
+if RunService:IsStudio() then
+    if UserInputService.TouchEnabled and not UserInputService.MouseEnabled then
+        Library.IsMobile = true
+        Library.OriginalMinSize = Vector2.new(480, 240)
+    else
+        Library.IsMobile = false
+        Library.OriginalMinSize = Vector2.new(480, 360)
+    end
+else
+    pcall(function()
+        Library.DevicePlatform = UserInputService:GetPlatform()
+    end)
+    Library.IsMobile = (Library.DevicePlatform == Enum.Platform.Android or Library.DevicePlatform == Enum.Platform.IOS)
+    Library.OriginalMinSize = Library.IsMobile and Vector2.new(480, 240) or Vector2.new(480, 360)
+end
+
+local Templates = {
+    Frame = {
+        BorderSizePixel = 0,
+    },
+    ImageLabel = {
+        BackgroundTransparency = 1,
+        Image = "rbxassetid://4155801252", -- SaturationMap
+        BorderSizePixel = 0,
+    },
+    ImageButton = {
+        AutoButtonColor = false,
+        BorderSizePixel = 0,
+    },
+    ScrollingFrame = {
+        BorderSizePixel = 0,
+    },
+    TextLabel = {
+        BorderSizePixel = 0,
+        FontFace = "Font",
+        RichText = true,
+        TextColor3 = "FontColor",
+    },
+    TextButton = {
+        AutoButtonColor = false,
+        BorderSizePixel = 0,
+        FontFace = "Font",
+        RichText = true,
+        TextColor3 = "FontColor",
+    },
+    TextBox = {
+        BorderSizePixel = 0,
+        FontFace = "Font",
+        PlaceholderColor3 = function()
+            local H, S, V = Library.Scheme.FontColor:ToHSV()
+            return Color3.fromHSV(H, S, V / 2)
+        end,
+        Text = "",
+        TextColor3 = "FontColor",
+    },
+    UIListLayout = {
+        SortOrder = Enum.SortOrder.LayoutOrder,
+    },
+    UIStroke = {
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+    },
+    Window = {
+        Title = "No Title",
+        Footer = "No Footer",
+        Position = UDim2.fromOffset(6, 6),
+        Size = UDim2.fromOffset(720, 600),
+        IconSize = UDim2.fromOffset(30, 30),
+        AutoShow = true,
+        Center = true,
+        Resizable = true,
+        SearchbarSize = UDim2.fromScale(1, 1),
+        GlobalSearch = false,
+        CornerRadius = 4,
+        NotifySide = "Right",
+        ShowCustomCursor = true,
+        Font = Enum.Font.Code,
+        ToggleKeybind = Enum.KeyCode.RightControl,
+        MobileButtonsSide = "Left",
+        UnlockMouseWhileOpen = true,
+
+        EnableSidebarResize = false,
+        EnableCompacting = true,
+        DisableCompactingSnap = false,
+        SidebarCompacted = false,
+        MinContainerWidth = 256,
+
+        MinSidebarWidth = 128,
+        SidebarCompactWidth = 48,
+        SidebarCollapseThreshold = 0.5,
+
+        CompactWidthActivation = 128,
+    },
+    Toggle = {
+        Text = "Toggle",
+        Default = false,
+
+        Callback = function() end,
+        Changed = function() end,
+
+        Risky = false,
+        Disabled = false,
+        Visible = true,
+    },
+    Input = {
+        Text = "Input",
+        Default = "",
+        Finished = false,
+        Numeric = false,
+        ClearTextOnFocus = true,
+        Placeholder = "",
+        AllowEmpty = true,
+        EmptyReset = "---",
+
+        Callback = function() end,
+        Changed = function() end,
+
+        Disabled = false,
+        Visible = true,
+    },
+    Slider = {
+        Text = "Slider",
+        Default = 0,
+        Min = 0,
+        Max = 100,
+        Rounding = 0,
+
+        Prefix = "",
+        Suffix = "",
+
+        Callback = function() end,
+        Changed = function() end,
+
+        Disabled = false,
+        Visible = true,
+    },
+    Dropdown = {
+        Values = {},
+        DisabledValues = {},
+        Multi = false,
+        MaxVisibleDropdownItems = 8,
+
+        Callback = function() end,
+        Changed = function() end,
+
+        Disabled = false,
+        Visible = true,
+    },
+    Viewport = {
+        Object = nil,
+        Camera = nil,
+        Clone = true,
+        AutoFocus = true,
+        Interactive = false,
+        Height = 200,
+        Visible = true,
+    },
+    Image = {
+        Image = "",
+        Transparency = 0,
+        BackgroundTransparency = 0,
+        Color = Color3.new(1, 1, 1),
+        RectOffset = Vector2.zero,
+        RectSize = Vector2.zero,
+        ScaleType = Enum.ScaleType.Fit,
+        Height = 200,
+        Visible = true,
+    },
+    Video = {
+        Video = "",
+        Looped = false,
+        Playing = false,
+        Volume = 1,
+        Height = 200,
+        Visible = true,
+    },
+    UIPassthrough = {
+        Instance = nil,
+        Height = 24,
+        Visible = true,
+    },
+    KeyPicker = {
+        Text = "KeyPicker",
+        Default = "None",
+        DefaultModifiers = {},
+        Mode = "Toggle",
+        Modes = { "Always", "Toggle", "Hold" },
+        SyncToggleState = false,
+
+        Callback = function() end,
+        ChangedCallback = function() end,
+        Changed = function() end,
+        Clicked = function() end,
+    },
+    ColorPicker = {
+        Default = Color3.new(1, 1, 1),
+
+        Callback = function() end,
+        Changed = function() end,
+    },
+}
+
+local Places = {
+    Bottom = { 0, 1 },
+    Right = { 1, 0 },
+}
+local Sizes = {
+    Left = { 0.5, 1 },
+    Right = { 0.5, 1 },
+}
+
+local SchemeReplaceAlias = {
+    RedColor = "Red",
+    WhiteColor = "White",
+    DarkColor = "Dark"
+}
+
+local SchemeAlias = {
+    Red = "RedColor",
+    White = "WhiteColor",
+    Dark = "DarkColor"
+}
+
+local function GetSchemeValue(Index)
+    if not Index then
+        return nil
+    end
+
+    local ReplaceAliasIndex = SchemeReplaceAlias[Index]
+    if ReplaceAliasIndex and Library.Scheme[ReplaceAliasIndex] ~= nil then
+        Library.Scheme[Index] = Library.Scheme[ReplaceAliasIndex]
+        Library.Scheme[ReplaceAliasIndex] = nil
+
+        return Library.Scheme[Index]
+    end
+
+    local AliasIndex = SchemeAlias[Index]
+    if AliasIndex and Library.Scheme[AliasIndex] ~= nil then
+        warn(string.format("Scheme Value %q is deprecated, please use %q instead.", Index, AliasIndex))
+        return Library.Scheme[AliasIndex]
+    end
+
+    return Library.Scheme[Index]
+end
+
+local function WaitForEvent(Event, Timeout, Condition)
+    local Bindable = Instance.new("BindableEvent")
+    local Connection = Event:Once(function(...)
+        if not Condition or typeof(Condition) == "function" and Condition(...) then
+            Bindable:Fire(true)
+        else
+            Bindable:Fire(false)
+        end
+    end)
+    task.delay(Timeout, function()
+        Connection:Disconnect()
+        Bindable:Fire(false)
+    end)
+
+    local Result = Bindable.Event:Wait()
+    Bindable:Destroy()
+
+    return Result
+end
+
+local function IsMouseInput(Input: InputObject, IncludeM2: boolean?)
+    return Input.UserInputType == Enum.UserInputType.MouseButton1
+        or (IncludeM2 == true and Input.UserInputType == Enum.UserInputType.MouseButton2)
+        or Input.UserInputType == Enum.UserInputType.Touch
+end
+local function IsClickInput(Input: InputObject, IncludeM2: boolean?)
+    return IsMouseInput(Input, IncludeM2)
+        and Input.UserInputState == Enum.UserInputState.Begin
+        and Library.IsRobloxFocused
+end
+local function IsHoverInput(Input: InputObject)
+    return (Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch)
+        and Input.UserInputState == Enum.UserInputState.Change
+end
+local function IsDragInput(Input: InputObject, IncludeM2: boolean?)
+    return IsMouseInput(Input, IncludeM2)
+        and (Input.UserInputState == Enum.UserInputState.Begin or Input.UserInputState == Enum.UserInputState.Change)
+        and Library.IsRobloxFocused
+end
+
+local function GetTableSize(Table: { [any]: any })
+    local Size = 0
+
+    for _, _ in Table do
+        Size += 1
+    end
+
+    return Size
+end
+local function StopTween(Tween: TweenBase)
+    if not (Tween and Tween.PlaybackState == Enum.PlaybackState.Playing) then
+        return
+    end
+
+    Tween:Cancel()
+end
+local function Trim(Text: string)
+    return Text:match("^%s*(.-)%s*$")
+end
+local function Round(Value, Rounding)
+    assert(Rounding >= 0, "Invalid rounding number.")
+
+    if Rounding == 0 then
+        return math.floor(Value)
+    end
+
+    return tonumber(string.format("%." .. Rounding .. "f", Value))
+end
+
+local function GetPlayers(ExcludeLocalPlayer: boolean?)
+    local PlayerList = Players:GetPlayers()
+
+    if ExcludeLocalPlayer then
+        local Idx = table.find(PlayerList, LocalPlayer)
+        if Idx then
+            table.remove(PlayerList, Idx)
+        end
+    end
+
+    table.sort(PlayerList, function(Player1, Player2)
+        return Player1.Name:lower() < Player2.Name:lower()
+    end)
+
+    return PlayerList
+end
+local function GetTeams()
+    local TeamList = Teams:GetTeams()
+
+    table.sort(TeamList, function(Team1, Team2)
+        return Team1.Name:lower() < Team2.Name:lower()
+    end)
+
+    return TeamList
+end
+
+function Library:UpdateDependencyBoxes()
+    for _, Depbox in Library.DependencyBoxes do
+        Depbox:Update(true)
+    end
+
+    if Library.Searching then
+        Library:UpdateSearch(Library.SearchText)
+    end
+end
+
+local function CheckDepbox(Box, Search)
+    local VisibleElements = 0
+
+    for _, ElementInfo in Box.Elements do
+        if ElementInfo.Type == "Divider" then
+            ElementInfo.Holder.Visible = false
+            continue
+        elseif ElementInfo.SubButton then
+            local Visible = false
+
+            if ElementInfo.Text:lower():match(Search) and ElementInfo.Visible then
+                Visible = true
+            else
+                ElementInfo.Base.Visible = false
+            end
+            if ElementInfo.SubButton.Text:lower():match(Search) and ElementInfo.SubButton.Visible then
+                Visible = true
+            else
+                ElementInfo.SubButton.Base.Visible = false
+            end
+            ElementInfo.Holder.Visible = Visible
+            if Visible then
+                VisibleElements += 1
+            end
+
+            continue
+        end
+
+        if ElementInfo.Text and ElementInfo.Text:lower():match(Search) and ElementInfo.Visible then
+            ElementInfo.Holder.Visible = true
+            VisibleElements += 1
+        else
+            ElementInfo.Holder.Visible = false
+        end
+    end
+
+    for _, Depbox in Box.DependencyBoxes do
+        if not Depbox.Visible then
+            continue
+        end
+
+        VisibleElements += CheckDepbox(Depbox, Search)
+    end
+
+    Box.Holder.Visible = VisibleElements > 0
+    return VisibleElements
+end
+local function RestoreDepbox(Box)
+    for _, ElementInfo in Box.Elements do
+        ElementInfo.Holder.Visible = typeof(ElementInfo.Visible) == "boolean" and ElementInfo.Visible or true
+
+        if ElementInfo.SubButton then
+            ElementInfo.Base.Visible = ElementInfo.Visible
+            ElementInfo.SubButton.Base.Visible = ElementInfo.SubButton.Visible
+        end
+    end
+
+    Box:Resize()
+    Box.Holder.Visible = true
+
+    for _, Depbox in Box.DependencyBoxes do
+        if not Depbox.Visible then
+            continue
+        end
+
+        RestoreDepbox(Depbox)
+    end
+end
+
+local function ApplySearchToTab(Tab, Search)
+    if not Tab then
+        return
+    end
+
+    local HasVisible = false
+
+    for _, Groupbox in Tab.Groupboxes do
+        local VisibleElements = 0
+
+        for _, ElementInfo in Groupbox.Elements do
+            if ElementInfo.Type == "Divider" then
+                ElementInfo.Holder.Visible = false
+                continue
+            elseif ElementInfo.SubButton then
+                    local Visible = false
+
+                    if ElementInfo.Text:lower():match(Search) and ElementInfo.Visible then
+                    Visible = true
+                else
+                    ElementInfo.Base.Visible = false
+                end
+                if ElementInfo.SubButton.Text:lower():match(Search) and ElementInfo.SubButton.Visible then
+                    Visible = true
+                else
+                    ElementInfo.SubButton.Base.Visible = false
+                end
+                ElementInfo.Holder.Visible = Visible
+                if Visible then
+                    VisibleElements += 1
+                end
+
+                continue
+            end
+
+            if ElementInfo.Text and ElementInfo.Text:lower():match(Search) and ElementInfo.Visible then
+                ElementInfo.Holder.Visible = true
+                VisibleElements += 1
+            else
+                ElementInfo.Holder.Visible = false
+            end
+        end
+
+        for _, Depbox in Groupbox.DependencyBoxes do
+            if not Depbox.Visible then
+                continue
+            end
+
+            VisibleElements += CheckDepbox(Depbox, Search)
+        end
+
+        if VisibleElements > 0 then
+            Groupbox:Resize()
+            HasVisible = true
+        end
+        Groupbox.BoxHolder.Visible = VisibleElements > 0
+    end
+
+    for _, Tabbox in Tab.Tabboxes do
+        local VisibleTabs = 0
+        local VisibleElements = {}
+
+        for _, SubTab in Tabbox.Tabs do
+            VisibleElements[SubTab] = 0
+
+            for _, ElementInfo in SubTab.Elements do
+                if ElementInfo.Type == "Divider" then
+                    ElementInfo.Holder.Visible = false
+                    continue
+                elseif ElementInfo.SubButton then
+                            local Visible = false
+
+                            if ElementInfo.Text:lower():match(Search) and ElementInfo.Visible then
+                        Visible = true
+                    else
+                        ElementInfo.Base.Visible = false
+                    end
+                    if ElementInfo.SubButton.Text:lower():match(Search) and ElementInfo.SubButton.Visible then
+                        Visible = true
+                    else
+                        ElementInfo.SubButton.Base.Visible = false
+                    end
+                    ElementInfo.Holder.Visible = Visible
+                    if Visible then
+                        VisibleElements[SubTab] += 1
+                    end
+
+                    continue
+                end
+
+                    if ElementInfo.Text and ElementInfo.Text:lower():match(Search) and ElementInfo.Visible then
+                    ElementInfo.Holder.Visible = true
+                    VisibleElements[SubTab] += 1
+                else
+                    ElementInfo.Holder.Visible = false
+                end
+            end
+
+            for _, Depbox in SubTab.DependencyBoxes do
+                if not Depbox.Visible then
+                    continue
+                end
+
+                VisibleElements[SubTab] += CheckDepbox(Depbox, Search)
+            end
+        end
+
+        for SubTab, Visible in VisibleElements do
+            SubTab.ButtonHolder.Visible = Visible > 0
+            if Visible > 0 then
+                VisibleTabs += 1
+                HasVisible = true
+
+                if Tabbox.ActiveTab == SubTab then
+                    SubTab:Resize()
+                elseif Tabbox.ActiveTab and VisibleElements[Tabbox.ActiveTab] == 0 then
+                    SubTab:Show()
+                end
+            end
+        end
+
+        Tabbox.BoxHolder.Visible = VisibleTabs > 0
+    end
+
+    return HasVisible
+end
+local function ResetTab(Tab)
+    if not Tab then
+        return
+    end
+
+    for _, Groupbox in Tab.Groupboxes do
+        for _, ElementInfo in Groupbox.Elements do
+            ElementInfo.Holder.Visible = typeof(ElementInfo.Visible) == "boolean" and ElementInfo.Visible or true
+
+            if ElementInfo.SubButton then
+                ElementInfo.Base.Visible = ElementInfo.Visible
+                ElementInfo.SubButton.Base.Visible = ElementInfo.SubButton.Visible
+            end
+        end
+
+        for _, Depbox in Groupbox.DependencyBoxes do
+            if not Depbox.Visible then
+                continue
+            end
+
+            RestoreDepbox(Depbox)
+        end
+
+        Groupbox:Resize()
+        Groupbox.BoxHolder.Visible = true
+    end
+
+    for _, Tabbox in Tab.Tabboxes do
+        for _, SubTab in Tabbox.Tabs do
+            for _, ElementInfo in SubTab.Elements do
+                ElementInfo.Holder.Visible = typeof(ElementInfo.Visible) == "boolean" and ElementInfo.Visible or true
+
+                if ElementInfo.SubButton then
+                    ElementInfo.Base.Visible = ElementInfo.Visible
+                    ElementInfo.SubButton.Base.Visible = ElementInfo.SubButton.Visible
+                end
+            end
+
+            for _, Depbox in SubTab.DependencyBoxes do
+                if not Depbox.Visible then
+                    continue
+                end
+
+                RestoreDepbox(Depbox)
+            end
+
+            SubTab.ButtonHolder.Visible = true
+        end
+
+        if Tabbox.ActiveTab then
+            Tabbox.ActiveTab:Resize()
+        end
+        Tabbox.BoxHolder.Visible = true
+    end
+end
+
+function Library:UpdateSearch(SearchText)
+    Library.SearchText = SearchText
+
+    local TabsToReset = {}
+
+    if Library.GlobalSearch then
+        for _, Tab in Library.Tabs do
+            if typeof(Tab) == "table" and not Tab.IsKeyTab then
+                table.insert(TabsToReset, Tab)
+            end
+        end
+    elseif Library.LastSearchTab and typeof(Library.LastSearchTab) == "table" then
+        table.insert(TabsToReset, Library.LastSearchTab)
+    end
+
+    for _, Tab in ipairs(TabsToReset) do
+        ResetTab(Tab)
+    end
+
+    local Search = SearchText:lower()
+    if Trim(Search) == "" then
+        Library.Searching = false
+        Library.LastSearchTab = nil
+        return
+    end
+    if not Library.GlobalSearch and Library.ActiveTab and Library.ActiveTab.IsKeyTab then
+        Library.Searching = false
+        Library.LastSearchTab = nil
+        return
+    end
+
+    Library.Searching = true
+
+    local TabsToSearch = {}
+
+    if Library.GlobalSearch then
+        TabsToSearch = TabsToReset
+        if #TabsToSearch == 0 then
+            for _, Tab in Library.Tabs do
+                if typeof(Tab) == "table" and not Tab.IsKeyTab then
+                    table.insert(TabsToSearch, Tab)
+                end
+            end
+        end
+    elseif Library.ActiveTab then
+        table.insert(TabsToSearch, Library.ActiveTab)
+    end
+
+    local FirstVisibleTab = nil
+    local ActiveHasVisible = false
+
+    for _, Tab in ipairs(TabsToSearch) do
+        local HasVisible = ApplySearchToTab(Tab, Search)
+        if HasVisible then
+            if not FirstVisibleTab then
+                FirstVisibleTab = Tab
+            end
+            if Tab == Library.ActiveTab then
+                ActiveHasVisible = true
+            end
+        end
+    end
+
+    if Library.GlobalSearch then
+        if ActiveHasVisible and Library.ActiveTab then
+            Library.ActiveTab:RefreshSides()
+        elseif FirstVisibleTab then
+            local SearchMarker = SearchText
+            task.defer(function()
+                if Library.SearchText ~= SearchMarker then
+                    return
+                end
+
+                if Library.ActiveTab ~= FirstVisibleTab then
+                    FirstVisibleTab:Show()
+                end
+            end)
+        end
+        Library.LastSearchTab = nil
+    else
+        Library.LastSearchTab = Library.ActiveTab
+    end
+end
+
+function Library:AddToRegistry(Instance, Properties)
+    Library.Registry[Instance] = Properties
+end
+
+function Library:RemoveFromRegistry(Instance)
+    Library.Registry[Instance] = nil
+end
+
+function Library:UpdateColorsUsingRegistry()
+    for Instance, Properties in Library.Registry do
+        for Property, Index in Properties do
+            local SchemeValue = GetSchemeValue(Index)
+
+            if SchemeValue or typeof(Index) == "function" then
+                Instance[Property] = SchemeValue or Index()
+            end
+        end
+    end
+end
+
+function Library:SetDPIScale(DPIScale: number)
+    Library.DPIScale = DPIScale / 100
+    Library.MinSize = Library.OriginalMinSize * Library.DPIScale
+
+    for _, UIScale in Library.Scales do
+        UIScale.Scale = Library.DPIScale
+    end
+
+    for _, Option in Options do
+        if Option.Type == "Dropdown" then
+            Option:RecalculateListSize()
+        end
+    end
+
+    for _, Notification in Library.Notifications do
+        Notification:Resize()
+    end
+end
+
+function Library:GiveSignal(Connection: RBXScriptConnection | RBXScriptSignal)
+    local ConnectionType = typeof(Connection)
+    if Connection and (ConnectionType == "RBXScriptConnection" or ConnectionType == "RBXScriptSignal") then
+        table.insert(Library.Signals, Connection)
+    end
+
+    return Connection
+end
+
+function IsValidCustomIcon(Icon: string)
+    return typeof(Icon) == "string"
+        and (Icon:match("rbxasset") or Icon:match("roblox%.com/asset/%?id=") or Icon:match("rbxthumb://type="))
+end
+
+type Icon = {
+    Url: string,
+    Id: number,
+    IconName: string,
+    ImageRectOffset: Vector2,
+    ImageRectSize: Vector2,
+}
+
+type IconModule = {
+    Icons: { string },
+    GetAsset: (Name: string) -> Icon?,
+}
+
+local FetchIcons, Icons = pcall(function()
+    return (loadstring(
+        game:HttpGet("https://raw.githubusercontent.com/deividcomsono/lucide-roblox-direct/refs/heads/main/source.lua")
+    ) :: () -> IconModule)()
+end)
+
+function Library:GetIcon(IconName: string)
+    if not FetchIcons then
+        return
+    end
+
+    local Success, Icon = pcall(Icons.GetAsset, IconName)
+    if not Success then
+        return
+    end
+    return Icon
+end
+
+function Library:GetCustomIcon(IconName: string)
+    if not IsValidCustomIcon(IconName) then
+        return Library:GetIcon(IconName)
+    else
+        return {
+            Url = IconName,
+            ImageRectOffset = Vector2.zero,
+            ImageRectSize = Vector2.zero,
+            Custom = true,
+        }
+    end
+end
+
+function Library:Validate(Table: { [string]: any }, Template: { [string]: any }): { [string]: any }
+    if typeof(Table) ~= "table" then
+        return Template
+    end
+
+    for k, v in Template do
+        if typeof(k) == "number" then
+            continue
+        end
+
+        if typeof(v) == "table" then
+            Table[k] = Library:Validate(Table[k], v)
+        elseif Table[k] == nil then
+            Table[k] = v
+        end
+    end
+
+    return Table
+end
+
+local function FillInstance(Table: { [string]: any }, Instance: GuiObject)
+    local ThemeProperties = Library.Registry[Instance] or {}
+
+    for key, value in Table do
+        if ThemeProperties[key] then
+            ThemeProperties[key] = nil
+            continue
+        elseif key ~= "Text" then
+            local SchemeValue = GetSchemeValue(value)
+
+            if SchemeValue or typeof(value) == "function" then
+                ThemeProperties[key] = value
+                value = SchemeValue or value()
+            end
+        end
+
+        Instance[key] = value
+    end
+
+    if GetTableSize(ThemeProperties) > 0 then
+        Library.Registry[Instance] = ThemeProperties
+    end
+end
+
+local function New(ClassName: string, Properties: { [string]: any }): any
+    local Instance = Instance.new(ClassName)
+
+    if Templates[ClassName] then
+        FillInstance(Templates[ClassName], Instance)
+    end
+    FillInstance(Properties, Instance)
+
+    if Properties["Parent"] and not Properties["ZIndex"] then
+        pcall(function()
+            Instance.ZIndex = Properties.Parent.ZIndex
+        end)
+    end
+
+    return Instance
+end
+
+--// Main Instances \\-
+local function SafeParentUI(Instance: Instance, Parent: Instance | () -> Instance)
+    local success, _error = pcall(function()
+        if not Parent then
+            Parent = CoreGui
+        end
+
+        local DestinationParent
+        if typeof(Parent) == "function" then
+            DestinationParent = Parent()
+        else
+            DestinationParent = Parent
+        end
+
+        Instance.Parent = DestinationParent
+    end)
+
+    if not (success and Instance.Parent) then
+        Instance.Parent = Library.LocalPlayer:WaitForChild("PlayerGui", math.huge)
+    end
+end
+
+local function ParentUI(UI: Instance, SkipHiddenUI: boolean?)
+    if SkipHiddenUI then
+        SafeParentUI(UI, CoreGui)
+        return
+    end
+
+    pcall(protectgui, UI)
+    SafeParentUI(UI, gethui)
+end
+
+local ScreenGui = New("ScreenGui", {
+    Name = "Obsidian",
+    DisplayOrder = 999,
+    ResetOnSpawn = false,
+})
+ParentUI(ScreenGui)
+Library.ScreenGui = ScreenGui
+ScreenGui.DescendantRemoving:Connect(function(Instance)
+    Library:RemoveFromRegistry(Instance)
+end)
+
+local ModalElement = New("TextButton", {
+    BackgroundTransparency = 1,
+    Modal = false,
+    Size = UDim2.fromScale(0, 0),
+    AnchorPoint = Vector2.zero,
+    Text = "",
+    ZIndex = -999,
+    Parent = ScreenGui,
+})
+
+local Cursor, CursorCustomImage
+do
+    Cursor = New("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = "WhiteColor",
+        Size = UDim2.fromOffset(9, 1),
+        Visible = false,
+        ZIndex = 999,
+        Parent = ScreenGui,
+    })
+    New("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = "DarkColor",
+        Position = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.new(1, 2, 1, 2),
+        ZIndex = 998,
+        Parent = Cursor,
+    })
+
+    local CursorV = New("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = "WhiteColor",
+        Position = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.fromOffset(1, 9),
+        Parent = Cursor,
+    })
+    New("Frame", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundColor3 = "DarkColor",
+        Position = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.new(1, 2, 1, 2),
+        ZIndex = 998,
+        Parent = CursorV,
+    })
+
+    CursorCustomImage = New("ImageLabel", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundTransparency = 1,
+        Position = UDim2.fromScale(0.5, 0.5),
+        Size = UDim2.fromOffset(20, 20),
+        ZIndex = 1000,
+        Visible = false,
+        Parent = Cursor
+    })
+end
+
+local NotificationArea
+local NotificationList
+do
+    NotificationArea = New("Frame", {
+        AnchorPoint = Vector2.new(1, 0),
+        BackgroundTransparency = 1,
+        Position = UDim2.new(1, -6, 0, 6),
+        Size = UDim2.new(0, 300, 1, -6),
+        Parent = ScreenGui,
+    })
+    table.insert(
+        Library.Scales,
+        New("UIScale", {
+            Parent = NotificationArea,
+        })
+    )
+
+    NotificationList = New("UIListLayout", {
+        HorizontalAlignment = Enum.HorizontalAlignment.Right,
+        Padding = UDim.new(0, 8),
+        Parent = NotificationArea,
+    })
+end
+
+--// Lib Functions \\--
+function Library:ResetCursorIcon()
+    CursorCustomImage.Visible = false
+    CursorCustomImage.Size = UDim2.fromOffset(20, 20)
+end
+
+function Library:ChangeCursorIcon(ImageId: string)
+    if not ImageId or ImageId == "" then
+        Library:ResetCursorIcon()
+        return
+    end
+
+    local Icon = Library:GetCustomIcon(ImageId)
+    assert(Icon, "Image must be a valid Roblox asset or a valid URL or a valid lucide icon.")
+
+    CursorCustomImage.Visible = true
+    CursorCustomImage.Image = Icon.Url
+    CursorCustomImage.ImageRectOffset = Icon.ImageRectOffset
+    CursorCustomImage.ImageRectSize = Icon.ImageRectSize
+end
+
+function Library:ChangeCursorIconSize(Size: UDim2)
+    assert(typeof(Size) == "UDim2", "UDim2 expected.")
+    CursorCustomImage.Size = Size
+end
+
+function Library:GetBetterColor(Color: Color3, Add: number): Color3
+    Add = Add * (Library.IsLightTheme and -4 or 2)
+    return Color3.fromRGB(
+        math.clamp(Color.R * 255 + Add, 0, 255),
+        math.clamp(Color.G * 255 + Add, 0, 255),
+        math.clamp(Color.B * 255 + Add, 0, 255)
+    )
+end
+
+function Library:GetLighterColor(Color: Color3): Color3
+    local H, S, V = Color:ToHSV()
+    return Color3.fromHSV(H, math.max(0, S - 0.1), math.min(1, V + 0.1))
+end
+
+function Library:GetDarkerColor(Color: Color3): Color3
+    local H, S, V = Color:ToHSV()
+    return Color3.fromHSV(H, S, V / 2)
+end
+
+function Library:GetKeyString(KeyCode: Enum.KeyCode)
+    if KeyCode.EnumType == Enum.KeyCode and KeyCode.Value > 33 and KeyCode.Value < 127 then
+        return string.char(KeyCode.Value)
+    end
+
+    return KeyCode.Name
+end
+
+function Library:GetTextBounds(Text: string, Font: Font, Size: number, Width: number?): (number, number)
+    local Params = Instance.new("GetTextBoundsParams")
+    Params.Text = Text
+    Params.RichText = true
+    Params.Font = Font
+    Params.Size = Size
+    Params.Width = Width or workspace.CurrentCamera.ViewportSize.X - 32
+
+    local Bounds = TextService:GetTextBoundsAsync(Params)
+    return Bounds.X, Bounds.Y
+end
+
+function Library:MouseIsOverFrame(Frame: GuiObject, Mouse: Vector2): boolean
+    local AbsPos, AbsSize = Frame.AbsolutePosition, Frame.AbsoluteSize
+    return Mouse.X >= AbsPos.X
+        and Mouse.X <= AbsPos.X + AbsSize.X
+        and Mouse.Y >= AbsPos.Y
+        and Mouse.Y <= AbsPos.Y + AbsSize.Y
+end
+
+function Library:SafeCallback(Func: (...any) -> ...any, ...: any)
+    if not (Func and typeof(Func) == "function") then
+        return
+    end
+
+    local Result = table.pack(xpcall(Func, function(Error)
+        task.defer(error, debug.traceback(Error, 2))
+        if Library.NotifyOnError then
+            Library:Notify(Error)
+        end
+
+        return Error
+    end, ...))
+
+    if not Result[1] then
+        return nil
+    end
+
+    return table.unpack(Result, 2, Result.n)
+end
+
+function Library:MakeDraggable(UI: GuiObject, DragFrame: GuiObject, IgnoreToggled: boolean?, IsMainWindow: boolean?)
+    local StartPos
+    local FramePos
+    local Dragging = false
+    local Changed
+    DragFrame.InputBegan:Connect(function(Input: InputObject)
+        if not IsClickInput(Input) or IsMainWindow and Library.CantDragForced then
+            return
+        end
+
+        StartPos = Input.Position
+        FramePos = UI.Position
+        Dragging = true
+
+        Changed = Input.Changed:Connect(function()
+            if Input.UserInputState ~= Enum.UserInputState.End then
+                return
+            end
+
+            Dragging = false
+            if Changed and Changed.Connected then
+                Changed:Disconnect()
+                Changed = nil
+            end
+        end)
+    end)
+    Library:GiveSignal(UserInputService.InputChanged:Connect(function(Input: InputObject)
+        if
+            (not IgnoreToggled and not Library.Toggled)
+            or (IsMainWindow and Library.CantDragForced)
+            or not (ScreenGui and ScreenGui.Parent)
+        then
+            Dragging = false
+            if Changed and Changed.Connected then
+                Changed:Disconnect()
+                Changed = nil
+            end
+
+            return
+        end
+
+        if Dragging and IsHoverInput(Input) then
+            local Delta = Input.Position - StartPos
+            UI.Position =
+                UDim2.new(FramePos.X.Scale, FramePos.X.Offset + Delta.X, FramePos.Y.Scale, FramePos.Y.Offset + Delta.Y)
+        end
+    end))
+end
+
+function Library:MakeResizable(UI: GuiObject, DragFrame: GuiObject, Callback: () -> ()?)
+    local StartPos
+    local FrameSize
+    local Dragging = false
+    local Changed
+
+    DragFrame.InputBegan:Connect(function(Input: InputObject)
+        if not IsClickInput(Input) then
+            return
+        end
+
+        StartPos = Input.Position
+        FrameSize = UI.Size
+        Dragging = true
+
+        Changed = Input.Changed:Connect(function()
+            if Input.UserInputState ~= Enum.UserInputState.End then
+                return
+            end
+
+            Dragging = false
+            if Changed and Changed.Connected then
+                Changed:Disconnect()
+                Changed = nil
+            end
+        end)
+    end)
+
+    Library:GiveSignal(UserInputService.InputChanged:Connect(function(Input: InputObject)
+        if not UI.Visible or not (ScreenGui and ScreenGui.Parent) then
+            Dragging = false
+            if Changed and Changed.Connected then
+                Changed:Disconnect()
+                Changed = nil
+            end
+
+            return
+        end
+
+        if Dragging and IsHoverInput(Input) then
+            local Delta = Input.Position - StartPos
+            UI.Size = UDim2.new(
+                FrameSize.X.Scale,
+                math.clamp(FrameSize.X.Offset + Delta.X, Library.MinSize.X, math.huge),
+                FrameSize.Y.Scale,
+                math.clamp(FrameSize.Y.Offset + Delta.Y, Library.MinSize.Y, math.huge)
+            )
+            if Callback then
+                Library:SafeCallback(Callback)
+            end
+        end
+    end))
+end
+
+function Library:MakeCover(Holder: GuiObject, Place: string)
+    local Pos = Places[Place] or { 0, 0 }
+    local Size = Sizes[Place] or { 1, 0.5 }
+
+    local Cover = New("Frame", {
+        AnchorPoint = Vector2.new(Pos[1], Pos[2]),
+        BackgroundColor3 = Holder.BackgroundColor3,
+        Position = UDim2.fromScale(Pos[1], Pos[2]),
+        Size = UDim2.fromScale(Size[1], Size[2]),
+        Parent = Holder,
+    })
+
+    return Cover
+end
+
+function Library:MakeLine(Frame: GuiObject, Info)
+    local Line = New("Frame", {
+        AnchorPoint = Info.AnchorPoint or Vector2.zero,
+        BackgroundColor3 = "OutlineColor",
+        Position = Info.Position,
+        Size = Info.Size,
+        ZIndex = Info.ZIndex or Frame.ZIndex,
+        Parent = Frame,
+    })
+
+    return Line
+end
+
+function Library:AddOutline(Frame: GuiObject)
+    local OutlineStroke = New("UIStroke", {
+        Color = "OutlineColor",
+        Thickness = 1,
+        ZIndex = 2,
+        Parent = Frame,
+    })
+    local ShadowStroke = New("UIStroke", {
+        Color = "DarkColor",
+        Thickness = 1.5,
+        ZIndex = 1,
+        Parent = Frame,
+    })
+    return OutlineStroke, ShadowStroke
+end
+
+function Library:AddBlank(Frame: GuiObject, Size: UDim2)
+    return New("Frame", {
+        BackgroundTransparency = 1,
+        Size = Size or UDim2.fromScale(0, 0),
+        Parent = Frame,
+    })
+end
+
+--// Deprecated \\--
+function Library:MakeOutline(Frame: GuiObject, Corner: number?, ZIndex: number?)
+    warn("Obsidian:MakeOutline is deprecated, please use Obsidian:AddOutline instead.")
+    local Holder = New("Frame", {
+        BackgroundColor3 = "DarkColor",
+        Position = UDim2.fromOffset(-2, -2),
+        Size = UDim2.new(1, 4, 1, 4),
+        ZIndex = ZIndex,
+        Parent = Frame,
+    })
+
+    local Outline = New("Frame", {
+        BackgroundColor3 = "OutlineColor",
+        Position = UDim2.fromOffset(1, 1),
+        Size = UDim2.new(1, -2, 1, -2),
+        ZIndex = ZIndex,
+        Parent = Holder,
+    })
+
+    if Corner and Corner > 0 then
+        New("UICorner", {
+            CornerRadius = UDim.new(0, Corner + 1),
+            Parent = Holder,
+        })
+        New("UICorner", {
+            CornerRadius = UDim.new(0, Corner),
+            Parent = Outline,
+        })
+    end
+
+    return Holder, Outline
+end
+
+function Library:AddDraggableLabel(Text: string)
+    local Table = {}
+
+    local Label = New("TextLabel", {
+        AutomaticSize = Enum.AutomaticSize.XY,
+        BackgroundColor3 = "BackgroundColor",
+        Size = UDim2.fromOffset(0, 0),
+        Position = UDim2.fromOffset(6, 6),
+        Text = Text,
+        TextSize = 15,
+        ZIndex = 10,
+        Parent = ScreenGui,
+    })
+    New("UICorner", {
+        CornerRadius = UDim.new(0, Library.CornerRadius),
+        Parent = Label,
+    })
+    New("UIPadding", {
+        PaddingBottom = UDim.new(0, 6),
+        PaddingLeft = UDim.new(0, 12),
+        PaddingRight = UDim.new(0, 12),
+        PaddingTop = UDim.new(0, 6),
+        Parent = Label,
+    })
+    table.insert(
+        Library.Scales,
+        New("UIScale", {
+            Parent = Label,
+        })
+    )
+    Library:AddOutline(Label)
+
+    Library:MakeDraggable(Label, Label, true)
+
+    Table.Label = Label
+
+    function Table:SetText(Text: string)
+        Label.Text = Text
+    end
+
+    function Table:SetVisible(Visible: boolean)
+        Label.Visible = Visible
+    end
+
+    return Table
+end
+
+function Library:AddDraggableButton(Text: string, Func, ExcludeScaling: boolean?)
+    local Table = {}
+
+    local Button = New("TextButton", {
+        BackgroundColor3 = "BackgroundColor",
+        Position = UDim2.fromOffset(6, 6),
+        TextSize = 16,
+        ZIndex = 10,
+        Parent = ScreenGui,
+    })
+    New("UICorner", {
+        CornerRadius = UDim.new(0, Library.CornerRadius),
+        Parent = Button,
+    })
+    if not ExcludeScaling then
+        table.insert(
+            Library.Scales,
+            New("UIScale", {
+                Parent = Button,
+            })
+        )
+    end
+    Library:AddOutline(Button)
+
+    Button.MouseButton1Click:Connect(function()
+        Library:SafeCallback(Func, Table)
+    end)
+    Library:MakeDraggable(Button, Button, true)
+
+    Table.Button = Button
+
+    function Table:SetText(Text: string)
+        local X, Y = Library:GetTextBounds(Text, Library.Scheme.Font, 16)
+
+        Button.Text = Text
+        Button.Size = UDim2.fromOffset(X * 2, Y * 2)
+    end
+    Table:SetText(Text)
+
+    return Table
+end
+
+function Library:AddDraggableMenu(Name: string)
+    local Holder = New("Frame", {
+        AutomaticSize = Enum.AutomaticSize.XY,
+        BackgroundColor3 = "BackgroundColor",
+        Position = UDim2.fromOffset(6, 6),
+        Size = UDim2.fromOffset(0, 0),
+        ZIndex = 10,
+        Parent = ScreenGui,
+    })
+    New("UICorner", {
+        CornerRadius = UDim.new(0, Library.CornerRadius),
+        Parent = Holder,
+    })
+    table.insert(
+        Library.Scales,
+        New("UIScale", {
+            Parent = Holder,
+        })
+    )
+    Library:AddOutline(Holder)
+
+    Library:MakeLine(Holder, {
+        Position = UDim2.fromOffset(0, 34),
+        Size = UDim2.new(1, 0, 0, 1),
+    })
+
+    local Label = New("TextLabel", {
+        BackgroundTransparency = 1,
+        Size = UDim2.new(1, 0, 0, 34),
+        Text = Name,
+        TextSize = 15,
+        TextXAlignment = Enum.TextXAlignment.Left,
+        Parent = Holder,
+    })
+    New("UIPadding", {
+        PaddingLeft = UDim.new(0, 12),
+        PaddingRight = UDim.new(0, 12),
+        Parent = Label,
+    })
+
+    local Container = New("Frame", {
+        BackgroundTransparency = 1,
+        Position = UDim2.fromOffset(0, 35),
+        Size = UDim2.new(1, 0, 1, -35),
+        Parent = Holder,
+    })
+    New("UIListLayout", {
+        Padding = UDim.new(0, 7),
+        Parent = Container,
+    })
+    New("UIPadding", {
+        PaddingBottom = UDim.new(0, 7),
+        PaddingLeft = UDim.new(0, 7),
+        PaddingRight = UDim.new(0, 7),
+        PaddingTop = UDim.new(0, 7),
+        Parent = Container,
+    })
+
+    Library:MakeDraggable(Holder, Label, true)
+    return Holder, Container
+end
+
+--// Watermark - Deprecated \\--
+do
+    local WatermarkLabel = Library:AddDraggableLabel("")
+    WatermarkLabel:SetVisible(false)
+
+    function Library:SetWatermark(Text: string)
+        warn("Watermark is deprecated, please use Library:AddDraggableLabel instead.")
+        WatermarkLabel:SetText(Text)
+    end
+
+    function Library:SetWatermarkVisibility(Visible: boolean)
+        warn("Watermark is deprecated, please use Library:AddDraggableLabel instead.")
+        WatermarkLabel:SetVisible(Visible)
+    end
+end
+
+--// Context Menu \\--
+local CurrentMenu
+function Library:AddContextMenu(
+    Holder: GuiObject,
+    Size: UDim2 | () -> (),
+    Offset: { [number]: number } | () -> {},
+    List: number?,
+    ActiveCallback: (Active: boolean) -> ()?
+)
+    local Menu
+    if List then
+        Menu = New("ScrollingFrame", {
+            AutomaticCanvasSize = List == 2 and Enum.AutomaticSize.Y or Enum.AutomaticSize.None,
+            AutomaticSize = List == 1 and Enum.AutomaticSize.Y or Enum.AutomaticSize.None,
+            BackgroundColor3 = "BackgroundColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            BottomImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
+            CanvasSize = UDim2.fromOffset(0, 0),
+            ScrollBarImageColor3 = "OutlineColor",
+            ScrollBarThickness = List == 2 and 2 or 0,
+            Size = typeof(Size) == "function" and Size() or Size,
+            TopImage = "rbxasset://textures/ui/Scroll/scroll-middle.png",
+            Visible = false,
+            ZIndex = 10,
+            Parent = ScreenGui,
+        })
+    else
+        Menu = New("Frame", {
+            BackgroundColor3 = "BackgroundColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            Size = typeof(Size) == "function" and Size() or Size,
+            Visible = false,
+            ZIndex = 10,
+            Parent = ScreenGui,
+        })
+    end
+    table.insert(
+        Library.Scales,
+        New("UIScale", {
+            Parent = Menu,
+        })
+    )
+
+    local Table = {
+        Active = false,
+        Holder = Holder,
+        Menu = Menu,
+        List = nil,
+        Signal = nil,
+
+        Size = Size,
+    }
+
+    if List then
+        Table.List = New("UIListLayout", {
+            Parent = Menu,
+        })
+    end
+
+    function Table:Open()
+        if CurrentMenu == Table then
+            return
+        elseif CurrentMenu then
+            CurrentMenu:Close()
+        end
+
+        CurrentMenu = Table
+        Table.Active = true
+
+        if typeof(Offset) == "function" then
+            Menu.Position = UDim2.fromOffset(
+                math.floor(Holder.AbsolutePosition.X + Offset()[1]),
+                math.floor(Holder.AbsolutePosition.Y + Offset()[2])
+            )
+        else
+            Menu.Position = UDim2.fromOffset(
+                math.floor(Holder.AbsolutePosition.X + Offset[1]),
+                math.floor(Holder.AbsolutePosition.Y + Offset[2])
+            )
+        end
+        Menu.Size = typeof(Table.Size) == "function" and Table.Size() or Table.Size
+        if typeof(ActiveCallback) == "function" then
+            Library:SafeCallback(ActiveCallback, true)
+        end
+
+        Menu.Visible = true
+
+        Table.Signal = Holder:GetPropertyChangedSignal("AbsolutePosition"):Connect(function()
+            if typeof(Offset) == "function" then
+                Menu.Position = UDim2.fromOffset(
+                    math.floor(Holder.AbsolutePosition.X + Offset()[1]),
+                    math.floor(Holder.AbsolutePosition.Y + Offset()[2])
+                )
+            else
+                Menu.Position = UDim2.fromOffset(
+                    math.floor(Holder.AbsolutePosition.X + Offset[1]),
+                    math.floor(Holder.AbsolutePosition.Y + Offset[2])
+                )
+            end
+        end)
+    end
+
+    function Table:Close()
+        if CurrentMenu ~= Table then
+            return
+        end
+        Menu.Visible = false
+
+        if Table.Signal then
+            Table.Signal:Disconnect()
+            Table.Signal = nil
+        end
+        Table.Active = false
+        CurrentMenu = nil
+        if typeof(ActiveCallback) == "function" then
+            Library:SafeCallback(ActiveCallback, false)
+        end
+    end
+
+    function Table:Toggle()
+        if Table.Active then
+            Table:Close()
+        else
+            Table:Open()
+        end
+    end
+
+    function Table:SetSize(Size)
+        Table.Size = Size
+        Menu.Size = typeof(Size) == "function" and Size() or Size
+    end
+
+    return Table
+end
+
+Library:GiveSignal(UserInputService.InputBegan:Connect(function(Input: InputObject)
+    if Library.Unloaded then
+        return
+    end
+
+    if IsClickInput(Input, true) then
+        local Location = Input.Position
+
+        if
+            CurrentMenu
+            and not (
+                Library:MouseIsOverFrame(CurrentMenu.Menu, Location)
+                or Library:MouseIsOverFrame(CurrentMenu.Holder, Location)
+            )
+        then
+            CurrentMenu:Close()
+        end
+    end
+end))
+
+--// Tooltip \\--
+local TooltipLabel = New("TextLabel", {
+    AutomaticSize = Enum.AutomaticSize.Y,
+    BackgroundColor3 = "BackgroundColor",
+    BorderColor3 = "OutlineColor",
+    BorderSizePixel = 1,
+    TextSize = 14,
+    TextWrapped = true,
+    Visible = false,
+    ZIndex = 20,
+    Parent = ScreenGui,
+})
+New("UIPadding", {
+    PaddingBottom = UDim.new(0, 2),
+    PaddingLeft = UDim.new(0, 4),
+    PaddingRight = UDim.new(0, 4),
+    PaddingTop = UDim.new(0, 2),
+    Parent = TooltipLabel,
+})
+table.insert(
+    Library.Scales,
+    New("UIScale", {
+        Parent = TooltipLabel,
+    })
+)
+TooltipLabel:GetPropertyChangedSignal("AbsolutePosition"):Connect(function()
+    if Library.Unloaded then
+        return
+    end
+
+    local X, _ = Library:GetTextBounds(
+        TooltipLabel.Text,
+        TooltipLabel.FontFace,
+        TooltipLabel.TextSize,
+        (workspace.CurrentCamera.ViewportSize.X - TooltipLabel.AbsolutePosition.X - 8) / Library.DPIScale
+    )
+
+    TooltipLabel.Size = UDim2.fromOffset(X + 8)
+end)
+
+local CurrentHoverInstance
+function Library:AddTooltip(InfoStr: string, DisabledInfoStr: string, HoverInstance: GuiObject)
+    local TooltipTable = {
+        Disabled = false,
+        Hovering = false,
+        Signals = {},
+    }
+
+    local function DoHover()
+        if
+            CurrentHoverInstance == HoverInstance
+            or (CurrentMenu and Library:MouseIsOverFrame(CurrentMenu.Menu, Mouse))
+            or (TooltipTable.Disabled and typeof(DisabledInfoStr) ~= "string")
+            or (not TooltipTable.Disabled and typeof(InfoStr) ~= "string")
+        then
+            return
+        end
+        CurrentHoverInstance = HoverInstance
+
+        TooltipLabel.Text = TooltipTable.Disabled and DisabledInfoStr or InfoStr
+        TooltipLabel.Visible = true
+
+        while
+            Library.Toggled
+            and Library:MouseIsOverFrame(HoverInstance, Mouse)
+            and not (CurrentMenu and Library:MouseIsOverFrame(CurrentMenu.Menu, Mouse))
+        do
+            TooltipLabel.Position = UDim2.fromOffset(
+                Mouse.X + (Library.ShowCustomCursor and 8 or 14),
+                Mouse.Y + (Library.ShowCustomCursor and 8 or 12)
+            )
+
+            RunService.RenderStepped:Wait()
+        end
+
+        TooltipLabel.Visible = false
+        CurrentHoverInstance = nil
+    end
+
+    local function GiveSignal(Connection: RBXScriptConnection | RBXScriptSignal)
+        local ConnectionType = typeof(Connection)
+        if Connection and (ConnectionType == "RBXScriptConnection" or ConnectionType == "RBXScriptSignal") then
+            table.insert(TooltipTable.Signals, Connection)
+        end
+
+        return Connection
+    end
+
+    GiveSignal(HoverInstance.MouseEnter:Connect(DoHover))
+    GiveSignal(HoverInstance.MouseMoved:Connect(DoHover))
+    GiveSignal(HoverInstance.MouseLeave:Connect(function()
+        if CurrentHoverInstance ~= HoverInstance then
+            return
+        end
+
+        TooltipLabel.Visible = false
+        CurrentHoverInstance = nil
+    end))
+
+    function TooltipTable:Destroy()
+        for Index = #TooltipTable.Signals, 1, -1 do
+            local Connection = table.remove(TooltipTable.Signals, Index)
+            if Connection and Connection.Connected then
+                Connection:Disconnect()
+            end
+        end
+
+        if CurrentHoverInstance == HoverInstance then
+            if TooltipLabel then
+                TooltipLabel.Visible = false
+            end
+
+            CurrentHoverInstance = nil
+        end
+    end
+
+    table.insert(Tooltips, TooltipLabel)
+    return TooltipTable
+end
+
+function Library:OnUnload(Callback)
+    table.insert(Library.UnloadSignals, Callback)
+end
+
+function Library:Unload()
+    for Index = #Library.Signals, 1, -1 do
+        local Connection = table.remove(Library.Signals, Index)
+        if Connection and Connection.Connected then
+            Connection:Disconnect()
+        end
+    end
+
+    for _, Callback in Library.UnloadSignals do
+        Library:SafeCallback(Callback)
+    end
+
+    for _, Tooltip in Tooltips do
+        Library:SafeCallback(Tooltip.Destroy, Tooltip)
+    end
+
+    Library.Unloaded = true
+    ScreenGui:Destroy()
+
+    getgenv().Library = nil
+end
+
+local CheckIcon = Library:GetIcon("check")
+local ArrowIcon = Library:GetIcon("chevron-up")
+local ResizeIcon = Library:GetIcon("move-diagonal-2")
+local KeyIcon = Library:GetIcon("key")
+local MoveIcon = Library:GetIcon("move")
+
+function Library:SetIconModule(module: IconModule)
+    FetchIcons = true
+    Icons = module
+
+    CheckIcon = Library:GetIcon("check")
+    ArrowIcon = Library:GetIcon("chevron-up")
+    ResizeIcon = Library:GetIcon("move-diagonal-2")
+    KeyIcon = Library:GetIcon("key")
+    MoveIcon = Library:GetIcon("move")
+end
+
+local BaseAddons = {}
+do
+    local Funcs = {}
+
+    function Funcs:AddKeyPicker(Idx, Info)
+        Info = Library:Validate(Info, Templates.KeyPicker)
+
+        local ParentObj = self
+        local ToggleLabel = ParentObj.TextLabel
+
+        local KeyPicker = {
+            Text = Info.Text,
+            Value = Info.Default, -- Key
+            Modifiers = Info.DefaultModifiers, -- Modifiers
+            DisplayValue = Info.Default, -- Picker Text
+
+            Toggled = false,
+            Mode = Info.Mode,
+            SyncToggleState = Info.SyncToggleState,
+
+            Callback = Info.Callback,
+            ChangedCallback = Info.ChangedCallback,
+            Changed = Info.Changed,
+            Clicked = Info.Clicked,
+
+            Type = "KeyPicker",
+        }
+
+        if KeyPicker.Mode == "Press" then
+            assert(ParentObj.Type == "Label", "KeyPicker with the mode 'Press' can be only applied on Labels.")
+
+            KeyPicker.SyncToggleState = false
+            Info.Modes = { "Press" }
+            Info.Mode = "Press"
+        end
+
+        if KeyPicker.SyncToggleState then
+            Info.Modes = { "Toggle", "Hold" }
+
+            if not table.find(Info.Modes, Info.Mode) then
+                Info.Mode = "Toggle"
+            end
+        end
+
+        local Picking = false
+
+        local SpecialKeys = {
+            ["MB1"] = Enum.UserInputType.MouseButton1,
+            ["MB2"] = Enum.UserInputType.MouseButton2,
+            ["MB3"] = Enum.UserInputType.MouseButton3,
+        }
+
+        local SpecialKeysInput = {
+            [Enum.UserInputType.MouseButton1] = "MB1",
+            [Enum.UserInputType.MouseButton2] = "MB2",
+            [Enum.UserInputType.MouseButton3] = "MB3",
+        }
+
+        local Modifiers = {
+            ["LAlt"] = Enum.KeyCode.LeftAlt,
+            ["RAlt"] = Enum.KeyCode.RightAlt,
+
+            ["LCtrl"] = Enum.KeyCode.LeftControl,
+            ["RCtrl"] = Enum.KeyCode.RightControl,
+
+            ["LShift"] = Enum.KeyCode.LeftShift,
+            ["RShift"] = Enum.KeyCode.RightShift,
+
+            ["Tab"] = Enum.KeyCode.Tab,
+            ["CapsLock"] = Enum.KeyCode.CapsLock,
+        }
+
+        local ModifiersInput = {
+            [Enum.KeyCode.LeftAlt] = "LAlt",
+            [Enum.KeyCode.RightAlt] = "RAlt",
+
+            [Enum.KeyCode.LeftControl] = "LCtrl",
+            [Enum.KeyCode.RightControl] = "RCtrl",
+
+            [Enum.KeyCode.LeftShift] = "LShift",
+            [Enum.KeyCode.RightShift] = "RShift",
+
+            [Enum.KeyCode.Tab] = "Tab",
+            [Enum.KeyCode.CapsLock] = "CapsLock",
+        }
+
+        local IsModifierInput = function(Input)
+            return Input.UserInputType == Enum.UserInputType.Keyboard and ModifiersInput[Input.KeyCode] ~= nil
+        end
+
+        local GetActiveModifiers = function()
+            local ActiveModifiers = {}
+
+            for Name, Input in Modifiers do
+                if table.find(ActiveModifiers, Name) then
+                    continue
+                end
+                if not UserInputService:IsKeyDown(Input) then
+                    continue
+                end
+
+                table.insert(ActiveModifiers, Name)
+            end
+
+            return ActiveModifiers
+        end
+
+        local AreModifiersHeld = function(Required)
+            if not (typeof(Required) == "table" and GetTableSize(Required) > 0) then
+                return true
+            end
+
+            local ActiveModifiers = GetActiveModifiers()
+            local Holding = true
+
+            for _, Name in Required do
+                if table.find(ActiveModifiers, Name) then
+                    continue
+                end
+
+                Holding = false
+                break
+            end
+
+            return Holding
+        end
+
+        local IsInputDown = function(Input)
+            if not Input then
+                return false
+            end
+
+            if SpecialKeysInput[Input.UserInputType] ~= nil then
+                return UserInputService:IsMouseButtonPressed(Input.UserInputType)
+                    and not UserInputService:GetFocusedTextBox()
+            elseif Input.UserInputType == Enum.UserInputType.Keyboard then
+                return UserInputService:IsKeyDown(Input.KeyCode) and not UserInputService:GetFocusedTextBox()
+            else
+                return false
+            end
+        end
+
+        local ConvertToInputModifiers = function(CurrentModifiers)
+            local InputModifiers = {}
+
+            for _, name in CurrentModifiers do
+                table.insert(InputModifiers, Modifiers[name])
+            end
+
+            return InputModifiers
+        end
+
+        local VerifyModifiers = function(CurrentModifiers)
+            if typeof(CurrentModifiers) ~= "table" then
+                return {}
+            end
+
+            local ValidModifiers = {}
+
+            for _, name in CurrentModifiers do
+                if not Modifiers[name] then
+                    continue
+                end
+
+                table.insert(ValidModifiers, name)
+            end
+
+            return ValidModifiers
+        end
+
+        KeyPicker.Modifiers = VerifyModifiers(KeyPicker.Modifiers) -- Verify default modifiers
+
+        local Picker = New("TextButton", {
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            Size = UDim2.fromOffset(18, 18),
+            Text = KeyPicker.Value,
+            TextSize = 14,
+            Parent = ToggleLabel,
+        })
+
+        local KeybindsToggle = { Normal = KeyPicker.Mode ~= "Toggle" }
+        do
+            local Holder = New("TextButton", {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 16),
+                Text = "",
+                Visible = not Info.NoUI,
+                Parent = Library.KeybindContainer,
+            })
+
+            local Label = New("TextLabel", {
+                AutomaticSize = Enum.AutomaticSize.X,
+                BackgroundTransparency = 1,
+                Size = UDim2.fromScale(0, 1),
+                Text = "",
+                TextSize = 14,
+                TextTransparency = 0.5,
+                Parent = Holder,
+            })
+
+            local Checkbox = New("Frame", {
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundColor3 = "MainColor",
+                Position = UDim2.fromScale(0, 0.5),
+                Size = UDim2.fromOffset(14, 14),
+                SizeConstraint = Enum.SizeConstraint.RelativeYY,
+                Parent = Holder,
+            })
+            New("UICorner", {
+                CornerRadius = UDim.new(0, Library.CornerRadius / 2),
+                Parent = Checkbox,
+            })
+            New("UIStroke", {
+                Color = "OutlineColor",
+                Parent = Checkbox,
+            })
+
+            local CheckImage = New("ImageLabel", {
+                Image = CheckIcon and CheckIcon.Url or "",
+                ImageColor3 = "FontColor",
+                ImageRectOffset = CheckIcon and CheckIcon.ImageRectOffset or Vector2.zero,
+                ImageRectSize = CheckIcon and CheckIcon.ImageRectSize or Vector2.zero,
+                ImageTransparency = 1,
+                Position = UDim2.fromOffset(2, 2),
+                Size = UDim2.new(1, -4, 1, -4),
+                Parent = Checkbox,
+            })
+
+            function KeybindsToggle:Display(State)
+                Label.TextTransparency = State and 0 or 0.5
+                CheckImage.ImageTransparency = State and 0 or 1
+            end
+
+            function KeybindsToggle:SetText(Text)
+                Label.Text = Text
+            end
+
+            function KeybindsToggle:SetVisibility(Visibility)
+                Holder.Visible = Visibility
+            end
+
+            function KeybindsToggle:SetNormal(Normal)
+                KeybindsToggle.Normal = Normal
+
+                Holder.Active = not Normal
+                Label.Position = Normal and UDim2.fromOffset(0, 0) or UDim2.fromOffset(22, 0)
+                Checkbox.Visible = not Normal
+            end
+
+            KeyPicker.DoClick = function(...) end --// make luau lsp shut up
+            Holder.MouseButton1Click:Connect(function()
+                if KeybindsToggle.Normal then
+                    return
+                end
+
+                KeyPicker.Toggled = not KeyPicker.Toggled
+                KeyPicker:DoClick()
+            end)
+
+            KeybindsToggle.Holder = Holder
+            KeybindsToggle.Label = Label
+            KeybindsToggle.Checkbox = Checkbox
+            KeybindsToggle.Loaded = true
+            table.insert(Library.KeybindToggles, KeybindsToggle)
+        end
+
+        local MenuTable = Library:AddContextMenu(Picker, UDim2.fromOffset(62, 0), function()
+            return { Picker.AbsoluteSize.X + 1.5, 0.5 }
+        end, 1)
+        KeyPicker.Menu = MenuTable
+
+        local ModeButtons = {}
+        for _, Mode in Info.Modes do
+            local ModeButton = {}
+
+            local Button = New("TextButton", {
+                BackgroundColor3 = "MainColor",
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 21),
+                Text = Mode,
+                TextSize = 14,
+                TextTransparency = 0.5,
+                Parent = MenuTable.Menu,
+            })
+
+            function ModeButton:Select()
+                for _, Button in ModeButtons do
+                    Button:Deselect()
+                end
+
+                KeyPicker.Mode = Mode
+
+                Button.BackgroundTransparency = 0
+                Button.TextTransparency = 0
+
+                MenuTable:Close()
+            end
+
+            function ModeButton:Deselect()
+                KeyPicker.Mode = nil
+
+                Button.BackgroundTransparency = 1
+                Button.TextTransparency = 0.5
+            end
+
+            Button.MouseButton1Click:Connect(function()
+                ModeButton:Select()
+            end)
+
+            if KeyPicker.Mode == Mode then
+                ModeButton:Select()
+            end
+
+            ModeButtons[Mode] = ModeButton
+        end
+
+        function KeyPicker:Display(PickerText)
+            if Library.Unloaded then
+                return
+            end
+
+            local X, Y = Library:GetTextBounds(
+                PickerText or KeyPicker.DisplayValue,
+                Picker.FontFace,
+                Picker.TextSize,
+                ToggleLabel.AbsoluteSize.X
+            )
+            Picker.Text = PickerText or KeyPicker.DisplayValue
+            Picker.Size = UDim2.fromOffset((X + 9), (Y + 4))
+        end
+
+        function KeyPicker:Update()
+            KeyPicker:Display()
+
+            if Info.NoUI then
+                return
+            end
+
+            if KeyPicker.Mode == "Toggle" and ParentObj.Type == "Toggle" and ParentObj.Disabled then
+                KeybindsToggle:SetVisibility(false)
+                return
+            end
+
+            local State = KeyPicker:GetState()
+            local ShowToggle = Library.ShowToggleFrameInKeybinds and KeyPicker.Mode == "Toggle"
+
+            if KeyPicker.SyncToggleState and ParentObj.Value ~= State then
+                ParentObj:SetValue(State)
+            end
+
+            if KeybindsToggle.Loaded then
+                if ShowToggle then
+                    KeybindsToggle:SetNormal(false)
+                else
+                    KeybindsToggle:SetNormal(true)
+                end
+
+                KeybindsToggle:SetText(("[%s] %s (%s)"):format(KeyPicker.DisplayValue, KeyPicker.Text, KeyPicker.Mode))
+                KeybindsToggle:SetVisibility(true)
+                KeybindsToggle:Display(State)
+            end
+        end
+
+        function KeyPicker:GetState()
+            if KeyPicker.Mode == "Always" then
+                return true
+            elseif KeyPicker.Mode == "Hold" then
+                local Key = KeyPicker.Value
+                if Key == "None" then
+                    return false
+                end
+
+                if not AreModifiersHeld(KeyPicker.Modifiers) then
+                    return false
+                end
+
+                if SpecialKeys[Key] ~= nil then
+                    return UserInputService:IsMouseButtonPressed(SpecialKeys[Key])
+                        and not UserInputService:GetFocusedTextBox()
+                else
+                    return UserInputService:IsKeyDown(Enum.KeyCode[Key]) and not UserInputService:GetFocusedTextBox()
+                end
+            else
+                return KeyPicker.Toggled
+            end
+        end
+
+        function KeyPicker:OnChanged(Func)
+            KeyPicker.Changed = Func
+        end
+
+        function KeyPicker:OnClick(Func)
+            KeyPicker.Clicked = Func
+        end
+
+        function KeyPicker:DoClick()
+            if KeyPicker.Mode == "Press" then
+                if KeyPicker.Toggled and Info.WaitForCallback == true then
+                    return
+                end
+
+                KeyPicker.Toggled = true
+            end
+
+            Library:SafeCallback(KeyPicker.Callback, KeyPicker.Toggled)
+            Library:SafeCallback(KeyPicker.Clicked, KeyPicker.Toggled)
+
+            if KeyPicker.Mode == "Press" then
+                KeyPicker.Toggled = false
+            end
+        end
+
+        function KeyPicker:SetValue(Data)
+            local Key, Mode, Modifiers = Data[1], Data[2], Data[3]
+
+            local IsKeyValid, UserInputType = pcall(function()
+                if Key == "None" then
+                    Key = nil
+                    return nil
+                end
+
+                if SpecialKeys[Key] == nil then
+                    return Enum.KeyCode[Key]
+                end
+
+                return SpecialKeys[Key]
+            end)
+
+            if Key == nil then
+                KeyPicker.Value = "None"
+            elseif IsKeyValid then
+                KeyPicker.Value = Key
+            else
+                KeyPicker.Value = "Unknown"
+            end
+
+            KeyPicker.Modifiers =
+                VerifyModifiers(if typeof(Modifiers) == "table" then Modifiers else KeyPicker.Modifiers)
+            KeyPicker.DisplayValue = if GetTableSize(KeyPicker.Modifiers) > 0
+                then (table.concat(KeyPicker.Modifiers, " + ") .. " + " .. KeyPicker.Value)
+                else KeyPicker.Value
+
+            if ModeButtons[Mode] then
+                ModeButtons[Mode]:Select()
+            end
+
+            local NewModifiers = ConvertToInputModifiers(KeyPicker.Modifiers)
+            Library:SafeCallback(KeyPicker.ChangedCallback, UserInputType, NewModifiers)
+            Library:SafeCallback(KeyPicker.Changed, UserInputType, NewModifiers)
+
+            KeyPicker:Update()
+        end
+
+        function KeyPicker:SetText(Text)
+            KeybindsToggle:SetText(Text)
+            KeyPicker:Update()
+        end
+
+        Picker.MouseButton1Click:Connect(function()
+            if Picking then
+                return
+            end
+
+            Picking = true
+
+            Picker.Text = "..."
+            Picker.Size = UDim2.fromOffset(29, 18)
+
+            local Input
+            local ActiveModifiers = {}
+
+            local GetInput = function()
+                Input = UserInputService.InputBegan:Wait()
+                return UserInputService:GetFocusedTextBox() ~= nil
+            end
+
+            repeat
+                task.wait()
+
+                Picker.Text = "..."
+                Picker.Size = UDim2.fromOffset(29, 18)
+
+                if GetInput() then
+                    Picking = false
+                    KeyPicker:Update()
+                    return
+                end
+
+                if Input.KeyCode == Enum.KeyCode.Escape then
+                    break
+                end
+
+                if IsModifierInput(Input) then
+                    local StopLoop = false
+
+                    repeat
+                        task.wait()
+                        if UserInputService:IsKeyDown(Input.KeyCode) then
+                            task.wait(0.075)
+
+                            if UserInputService:IsKeyDown(Input.KeyCode) then
+                                if not table.find(ActiveModifiers, ModifiersInput[Input.KeyCode]) then
+                                    ActiveModifiers[#ActiveModifiers + 1] = ModifiersInput[Input.KeyCode]
+                                    KeyPicker:Display(table.concat(ActiveModifiers, " + ") .. " + ...")
+                                end
+
+                                if GetInput() then
+                                    StopLoop = true
+                                    break -- Invalid Input
+                                end
+
+                                if Input.KeyCode == Enum.KeyCode.Escape then
+                                    break
+                                end
+
+                                if not IsModifierInput(Input) then
+                                    break
+                                end
+                            else
+                                if not table.find(ActiveModifiers, ModifiersInput[Input.KeyCode]) then
+                                    break -- Modifier is meant to be used as a normal key --
+                                end
+                            end
+                        end
+                    until false
+
+                    if StopLoop then
+                        Picking = false
+                        KeyPicker:Update()
+                        return
+                    end
+                end
+
+                break -- Input found, end loop
+            until false
+
+            local Key = "Unknown"
+            if SpecialKeysInput[Input.UserInputType] ~= nil then
+                Key = SpecialKeysInput[Input.UserInputType]
+            elseif Input.UserInputType == Enum.UserInputType.Keyboard then
+                Key = Input.KeyCode == Enum.KeyCode.Escape and "None" or Input.KeyCode.Name
+            end
+
+            ActiveModifiers = if Input.KeyCode == Enum.KeyCode.Escape or Key == "Unknown" then {} else ActiveModifiers
+
+            KeyPicker.Toggled = false
+            KeyPicker:SetValue({ Key, KeyPicker.Mode, ActiveModifiers })
+
+            repeat
+                task.wait()
+            until not IsInputDown(Input) or UserInputService:GetFocusedTextBox()
+            Picking = false
+        end)
+        Picker.MouseButton2Click:Connect(MenuTable.Toggle)
+
+        Library:GiveSignal(UserInputService.InputBegan:Connect(function(Input: InputObject)
+            if Library.Unloaded then
+                return
+            end
+
+            if
+                KeyPicker.Mode == "Always"
+                or KeyPicker.Value == "Unknown"
+                or KeyPicker.Value == "None"
+                or Picking
+                or UserInputService:GetFocusedTextBox()
+            then
+                return
+            end
+
+            local Key = KeyPicker.Value
+            local HoldingModifiers = AreModifiersHeld(KeyPicker.Modifiers)
+            local HoldingKey = false
+
+            if
+                Key
+                and HoldingModifiers == true
+                and (
+                    SpecialKeysInput[Input.UserInputType] == Key
+                    or (Input.UserInputType == Enum.UserInputType.Keyboard and Input.KeyCode.Name == Key)
+                )
+            then
+                HoldingKey = true
+            end
+
+            if KeyPicker.Mode == "Toggle" then
+                if HoldingKey then
+                    KeyPicker.Toggled = not KeyPicker.Toggled
+                    KeyPicker:DoClick()
+                end
+            elseif KeyPicker.Mode == "Press" then
+                if HoldingKey then
+                    KeyPicker:DoClick()
+                end
+            end
+
+            KeyPicker:Update()
+        end))
+
+        Library:GiveSignal(UserInputService.InputEnded:Connect(function()
+            if Library.Unloaded then
+                return
+            end
+
+            if
+                KeyPicker.Value == "Unknown"
+                or KeyPicker.Value == "None"
+                or Picking
+                or UserInputService:GetFocusedTextBox()
+            then
+                return
+            end
+
+            KeyPicker:Update()
+        end))
+
+        KeyPicker:Update()
+
+        if ParentObj.Addons then
+            table.insert(ParentObj.Addons, KeyPicker)
+        end
+
+        KeyPicker.Default = KeyPicker.Value
+        KeyPicker.DefaultModifiers = table.clone(KeyPicker.Modifiers or {})
+
+        Options[Idx] = KeyPicker
+
+        return self
+    end
+
+    local HueSequenceTable = {}
+    for Hue = 0, 1, 0.1 do
+        table.insert(HueSequenceTable, ColorSequenceKeypoint.new(Hue, Color3.fromHSV(Hue, 1, 1)))
+    end
+    function Funcs:AddColorPicker(Idx, Info)
+        Info = Library:Validate(Info, Templates.ColorPicker)
+
+        local ParentObj = self
+        local ToggleLabel = ParentObj.TextLabel
+
+        local ColorPicker = {
+            Value = Info.Default,
+
+            Transparency = Info.Transparency or 0,
+            Title = Info.Title,
+
+            Callback = Info.Callback,
+            Changed = Info.Changed,
+
+            Type = "ColorPicker",
+        }
+        ColorPicker.Hue, ColorPicker.Sat, ColorPicker.Vib = ColorPicker.Value:ToHSV()
+
+        local Holder = New("TextButton", {
+            BackgroundColor3 = ColorPicker.Value,
+            BorderColor3 = Library:GetDarkerColor(ColorPicker.Value),
+            BorderSizePixel = 1,
+            Size = UDim2.fromOffset(18, 18),
+            Text = "",
+            Parent = ToggleLabel,
+        })
+
+        local HolderTransparency = New("ImageLabel", {
+            Image = CustomImageManager.GetAsset("TransparencyTexture"),
+            ImageTransparency = (1 - ColorPicker.Transparency),
+            ScaleType = Enum.ScaleType.Tile,
+            Size = UDim2.fromScale(1, 1),
+            TileSize = UDim2.fromOffset(9, 9),
+            Parent = Holder,
+        })
+
+        --// Color Menu \\--
+        local ColorMenu = Library:AddContextMenu(
+            Holder,
+            UDim2.fromOffset(Info.Transparency and 256 or 234, 0),
+            function()
+                return { 0.5, Holder.AbsoluteSize.Y + 1.5 }
+            end,
+            1
+        )
+        ColorMenu.List.Padding = UDim.new(0, 8)
+        ColorPicker.ColorMenu = ColorMenu
+
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 6),
+            PaddingLeft = UDim.new(0, 6),
+            PaddingRight = UDim.new(0, 6),
+            PaddingTop = UDim.new(0, 6),
+            Parent = ColorMenu.Menu,
+        })
+
+        if typeof(ColorPicker.Title) == "string" then
+            New("TextLabel", {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 8),
+                Text = ColorPicker.Title,
+                TextSize = 14,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Parent = ColorMenu.Menu,
+            })
+        end
+
+        local ColorHolder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 200),
+            Parent = ColorMenu.Menu,
+        })
+        New("UIListLayout", {
+            FillDirection = Enum.FillDirection.Horizontal,
+            Padding = UDim.new(0, 6),
+            Parent = ColorHolder,
+        })
+
+        local SatVipMap = New("ImageButton", {
+            BackgroundColor3 = ColorPicker.Value,
+            Image = CustomImageManager.GetAsset("SaturationMap"),
+            Size = UDim2.fromOffset(200, 200),
+            Parent = ColorHolder,
+        })
+
+        local SatVibCursor = New("Frame", {
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            BackgroundColor3 = "WhiteColor",
+            Size = UDim2.fromOffset(6, 6),
+            Parent = SatVipMap,
+        })
+        New("UICorner", {
+            CornerRadius = UDim.new(1, 0),
+            Parent = SatVibCursor,
+        })
+        New("UIStroke", {
+            Color = "DarkColor",
+            Parent = SatVibCursor,
+        })
+
+        local HueSelector = New("TextButton", {
+            Size = UDim2.fromOffset(16, 200),
+            Text = "",
+            Parent = ColorHolder,
+        })
+        New("UIGradient", {
+            Color = ColorSequence.new(HueSequenceTable),
+            Rotation = 90,
+            Parent = HueSelector,
+        })
+
+        local HueCursor = New("Frame", {
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            BackgroundColor3 = "WhiteColor",
+            BorderColor3 = "DarkColor",
+            BorderSizePixel = 1,
+            Position = UDim2.fromScale(0.5, ColorPicker.Hue),
+            Size = UDim2.new(1, 2, 0, 1),
+            Parent = HueSelector,
+        })
+
+        local TransparencySelector, TransparencyColor, TransparencyCursor
+        if Info.Transparency then
+            TransparencySelector = New("ImageButton", {
+                Image = CustomImageManager.GetAsset("TransparencyTexture"),
+                ScaleType = Enum.ScaleType.Tile,
+                Size = UDim2.fromOffset(16, 200),
+                TileSize = UDim2.fromOffset(8, 8),
+                Parent = ColorHolder,
+            })
+
+            TransparencyColor = New("Frame", {
+                BackgroundColor3 = ColorPicker.Value,
+                Size = UDim2.fromScale(1, 1),
+                Parent = TransparencySelector,
+            })
+            New("UIGradient", {
+                Rotation = 90,
+                Transparency = NumberSequence.new({
+                    NumberSequenceKeypoint.new(0, 0),
+                    NumberSequenceKeypoint.new(1, 1),
+                }),
+                Parent = TransparencyColor,
+            })
+
+            TransparencyCursor = New("Frame", {
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                BackgroundColor3 = "WhiteColor",
+                BorderColor3 = "DarkColor",
+                BorderSizePixel = 1,
+                Position = UDim2.fromScale(0.5, ColorPicker.Transparency),
+                Size = UDim2.new(1, 2, 0, 1),
+                Parent = TransparencySelector,
+            })
+        end
+
+        local InfoHolder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 20),
+            Parent = ColorMenu.Menu,
+        })
+        New("UIListLayout", {
+            FillDirection = Enum.FillDirection.Horizontal,
+            HorizontalFlex = Enum.UIFlexAlignment.Fill,
+            Padding = UDim.new(0, 8),
+            Parent = InfoHolder,
+        })
+
+        local HueBox = New("TextBox", {
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            ClearTextOnFocus = false,
+            Size = UDim2.fromScale(1, 1),
+            Text = "#??????",
+            TextSize = 14,
+            Parent = InfoHolder,
+        })
+
+        local RgbBox = New("TextBox", {
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            ClearTextOnFocus = false,
+            Size = UDim2.fromScale(1, 1),
+            Text = "?, ?, ?",
+            TextSize = 14,
+            Parent = InfoHolder,
+        })
+
+        --// Context Menu \\--
+        local ContextMenu = Library:AddContextMenu(Holder, UDim2.fromOffset(93, 0), function()
+            return { Holder.AbsoluteSize.X + 1.5, 0.5 }
+        end, 1)
+        ColorPicker.ContextMenu = ContextMenu
+        do
+            local function CreateButton(Text, Func)
+                local Button = New("TextButton", {
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(1, 0, 0, 21),
+                    Text = Text,
+                    TextSize = 14,
+                    Parent = ContextMenu.Menu,
+                })
+
+                Button.MouseButton1Click:Connect(function()
+                    Library:SafeCallback(Func)
+                    ContextMenu:Close()
+                end)
+            end
+
+            CreateButton("Copy color", function()
+                Library.CopiedColor = { ColorPicker.Value, ColorPicker.Transparency }
+            end)
+
+            ColorPicker.SetValueRGB = function(...) end --// make luau lsp shut up
+            CreateButton("Paste color", function()
+                ColorPicker:SetValueRGB(Library.CopiedColor[1], Library.CopiedColor[2])
+            end)
+
+            if setclipboard then
+                CreateButton("Copy Hex", function()
+                    setclipboard(tostring(ColorPicker.Value:ToHex()))
+                end)
+                CreateButton("Copy RGB", function()
+                    setclipboard(table.concat({
+                        math.floor(ColorPicker.Value.R * 255),
+                        math.floor(ColorPicker.Value.G * 255),
+                        math.floor(ColorPicker.Value.B * 255),
+                    }, ", "))
+                end)
+            end
+        end
+
+        --// End \\--
+
+        function ColorPicker:SetHSVFromRGB(Color)
+            ColorPicker.Hue, ColorPicker.Sat, ColorPicker.Vib = Color:ToHSV()
+        end
+
+        function ColorPicker:Display()
+            if Library.Unloaded then
+                return
+            end
+
+            ColorPicker.Value = Color3.fromHSV(ColorPicker.Hue, ColorPicker.Sat, ColorPicker.Vib)
+
+            Holder.BackgroundColor3 = ColorPicker.Value
+            Holder.BorderColor3 = Library:GetDarkerColor(ColorPicker.Value)
+            HolderTransparency.ImageTransparency = (1 - ColorPicker.Transparency)
+
+            SatVipMap.BackgroundColor3 = Color3.fromHSV(ColorPicker.Hue, 1, 1)
+            if TransparencyColor then
+                TransparencyColor.BackgroundColor3 = ColorPicker.Value
+            end
+
+            SatVibCursor.Position = UDim2.fromScale(ColorPicker.Sat, 1 - ColorPicker.Vib)
+            HueCursor.Position = UDim2.fromScale(0.5, ColorPicker.Hue)
+            if TransparencyCursor then
+                TransparencyCursor.Position = UDim2.fromScale(0.5, ColorPicker.Transparency)
+            end
+
+            HueBox.Text = "#" .. ColorPicker.Value:ToHex()
+            RgbBox.Text = table.concat({
+                math.floor(ColorPicker.Value.R * 255),
+                math.floor(ColorPicker.Value.G * 255),
+                math.floor(ColorPicker.Value.B * 255),
+            }, ", ")
+        end
+
+        function ColorPicker:Update()
+            ColorPicker:Display()
+
+            Library:SafeCallback(ColorPicker.Callback, ColorPicker.Value)
+            Library:SafeCallback(ColorPicker.Changed, ColorPicker.Value)
+        end
+
+        function ColorPicker:OnChanged(Func)
+            ColorPicker.Changed = Func
+        end
+
+        function ColorPicker:SetValue(HSV, Transparency)
+            if typeof(HSV) == "Color3" then
+                ColorPicker:SetValueRGB(HSV, Transparency)
+                return
+            end
+
+            local Color = Color3.fromHSV(HSV[1], HSV[2], HSV[3])
+            ColorPicker.Transparency = Info.Transparency and Transparency or 0
+            ColorPicker:SetHSVFromRGB(Color)
+            ColorPicker:Update()
+        end
+
+        function ColorPicker:SetValueRGB(Color, Transparency)
+            ColorPicker.Transparency = Info.Transparency and Transparency or 0
+            ColorPicker:SetHSVFromRGB(Color)
+            ColorPicker:Update()
+        end
+
+        Holder.MouseButton1Click:Connect(ColorMenu.Toggle)
+        Holder.MouseButton2Click:Connect(ContextMenu.Toggle)
+
+        SatVipMap.InputBegan:Connect(function(Input: InputObject)
+            while IsDragInput(Input) do
+                local MinX = SatVipMap.AbsolutePosition.X
+                local MaxX = MinX + SatVipMap.AbsoluteSize.X
+                local LocationX = math.clamp(Mouse.X, MinX, MaxX)
+
+                local MinY = SatVipMap.AbsolutePosition.Y
+                local MaxY = MinY + SatVipMap.AbsoluteSize.Y
+                local LocationY = math.clamp(Mouse.Y, MinY, MaxY)
+
+                local OldSat = ColorPicker.Sat
+                local OldVib = ColorPicker.Vib
+                ColorPicker.Sat = (LocationX - MinX) / (MaxX - MinX)
+                ColorPicker.Vib = 1 - ((LocationY - MinY) / (MaxY - MinY))
+
+                if ColorPicker.Sat ~= OldSat or ColorPicker.Vib ~= OldVib then
+                    ColorPicker:Update()
+                end
+
+                RunService.RenderStepped:Wait()
+            end
+        end)
+        HueSelector.InputBegan:Connect(function(Input: InputObject)
+            while IsDragInput(Input) do
+                local Min = HueSelector.AbsolutePosition.Y
+                local Max = Min + HueSelector.AbsoluteSize.Y
+                local Location = math.clamp(Mouse.Y, Min, Max)
+
+                local OldHue = ColorPicker.Hue
+                ColorPicker.Hue = (Location - Min) / (Max - Min)
+
+                if ColorPicker.Hue ~= OldHue then
+                    ColorPicker:Update()
+                end
+
+                RunService.RenderStepped:Wait()
+            end
+        end)
+        if TransparencySelector then
+            TransparencySelector.InputBegan:Connect(function(Input: InputObject)
+                while IsDragInput(Input) do
+                    local Min = TransparencySelector.AbsolutePosition.Y
+                    local Max = TransparencySelector.AbsolutePosition.Y + TransparencySelector.AbsoluteSize.Y
+                    local Location = math.clamp(Mouse.Y, Min, Max)
+
+                    local OldTransparency = ColorPicker.Transparency
+                    ColorPicker.Transparency = (Location - Min) / (Max - Min)
+
+                    if ColorPicker.Transparency ~= OldTransparency then
+                        ColorPicker:Update()
+                    end
+
+                    RunService.RenderStepped:Wait()
+                end
+            end)
+        end
+
+        HueBox.FocusLost:Connect(function(Enter)
+            if not Enter then
+                return
+            end
+
+            local Success, Color = pcall(Color3.fromHex, HueBox.Text)
+            if Success and typeof(Color) == "Color3" then
+                ColorPicker.Hue, ColorPicker.Sat, ColorPicker.Vib = Color:ToHSV()
+            end
+
+            ColorPicker:Update()
+        end)
+        RgbBox.FocusLost:Connect(function(Enter)
+            if not Enter then
+                return
+            end
+
+            local R, G, B = RgbBox.Text:match("(%d+),%s*(%d+),%s*(%d+)")
+            if R and G and B then
+                ColorPicker:SetHSVFromRGB(Color3.fromRGB(R, G, B))
+            end
+
+            ColorPicker:Update()
+        end)
+
+        ColorPicker:Display()
+
+        if ParentObj.Addons then
+            table.insert(ParentObj.Addons, ColorPicker)
+        end
+
+        ColorPicker.Default = ColorPicker.Value
+
+        Options[Idx] = ColorPicker
+
+        return self
+    end
+
+    BaseAddons.__index = Funcs
+    BaseAddons.__namecall = function(_, Key, ...)
+        return Funcs[Key](...)
+    end
+end
+
+local BaseGroupbox = {}
+do
+    local Funcs = {}
+
+    function Funcs:AddDivider(Text)
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 6),
+            Parent = Container,
+        })
+
+        if Text then
+            local TextLabel = New("TextLabel", {
+                AutomaticSize = Enum.AutomaticSize.X,
+                BackgroundTransparency = 1,
+                Size = UDim2.fromScale(1, 0),
+                Text = Text,
+                TextSize = 14,
+                TextTransparency = 0.5,
+                TextXAlignment = Enum.TextXAlignment.Center,
+                Parent = Holder,
+            })
+
+            local X, _ = Library:GetTextBounds(Text, TextLabel.FontFace, TextLabel.TextSize, TextLabel.AbsoluteSize.X)
+            local SizeX = X // 2 + 10
+
+            New("Frame", {
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundColor3 = "MainColor",
+                BorderColor3 = "OutlineColor",
+                BorderSizePixel = 1,
+                Position = UDim2.fromScale(0, 0.5),
+                Size = UDim2.new(0.5, -SizeX, 0, 2),
+                Parent = Holder,
+            })
+            New("Frame", {
+                AnchorPoint = Vector2.new(1, 0.5),
+                BackgroundColor3 = "MainColor",
+                BorderColor3 = "OutlineColor",
+                BorderSizePixel = 1,
+                Position = UDim2.fromScale(1, 0.5),
+                Size = UDim2.new(0.5, -SizeX, 0, 2),
+                Parent = Holder,
+            })
+        else
+            New("Frame", {
+                AnchorPoint = Vector2.new(0, 0.5),
+                BackgroundColor3 = "MainColor",
+                BorderColor3 = "OutlineColor",
+                BorderSizePixel = 1,
+                Position = UDim2.fromScale(0, 0.5),
+                Size = UDim2.new(1, 0, 0, 2),
+                Parent = Holder,
+            })
+        end
+
+        Groupbox:Resize()
+
+        table.insert(Groupbox.Elements, {
+            Holder = Holder,
+            Type = "Divider",
+        })
+    end
+
+    function Funcs:AddLabel(...)
+        local Data = {}
+        local Addons = {}
+
+        local First = select(1, ...)
+        local Second = select(2, ...)
+
+        if typeof(First) == "table" or typeof(Second) == "table" then
+            local Params = typeof(First) == "table" and First or Second
+
+            Data.Text = Params.Text or ""
+            Data.DoesWrap = Params.DoesWrap or false
+            Data.Size = Params.Size or 14
+            Data.Visible = Params.Visible or true
+            Data.Idx = typeof(Second) == "table" and First or nil
+        else
+            Data.Text = First or ""
+            Data.DoesWrap = Second or false
+            Data.Size = 14
+            Data.Visible = true
+            Data.Idx = select(3, ...) or nil
+        end
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Label = {
+            Text = Data.Text,
+            DoesWrap = Data.DoesWrap,
+
+            Addons = Addons,
+
+            Visible = Data.Visible,
+            Type = "Label",
+        }
+
+        local TextLabel = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 18),
+            Text = Label.Text,
+            TextSize = Data.Size,
+            TextWrapped = Label.DoesWrap,
+            TextXAlignment = Groupbox.IsKeyTab and Enum.TextXAlignment.Center or Enum.TextXAlignment.Left,
+            Parent = Container,
+        })
+
+        function Label:SetVisible(Visible: boolean)
+            Label.Visible = Visible
+
+            TextLabel.Visible = Label.Visible
+            Groupbox:Resize()
+        end
+
+        function Label:SetText(Text: string)
+            Label.Text = Text
+            TextLabel.Text = Text
+
+            if Label.DoesWrap then
+                local _, Y =
+                    Library:GetTextBounds(Label.Text, TextLabel.FontFace, TextLabel.TextSize, TextLabel.AbsoluteSize.X)
+                TextLabel.Size = UDim2.new(1, 0, 0, Y + 4)
+            end
+
+            Groupbox:Resize()
+        end
+
+        if Label.DoesWrap then
+            local _, Y =
+                Library:GetTextBounds(Label.Text, TextLabel.FontFace, TextLabel.TextSize, TextLabel.AbsoluteSize.X)
+            TextLabel.Size = UDim2.new(1, 0, 0, Y + 4)
+
+            local Last = TextLabel.AbsoluteSize
+            TextLabel:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+                if TextLabel.AbsoluteSize == Last then
+                    return
+                end
+
+                local _, Y =
+                    Library:GetTextBounds(Label.Text, TextLabel.FontFace, TextLabel.TextSize, TextLabel.AbsoluteSize.X)
+                TextLabel.Size = UDim2.new(1, 0, 0, Y + 4)
+
+                Last = TextLabel.AbsoluteSize
+                Groupbox:Resize()
+            end)
+        else
+            New("UIListLayout", {
+                FillDirection = Enum.FillDirection.Horizontal,
+                HorizontalAlignment = Enum.HorizontalAlignment.Right,
+                Padding = UDim.new(0, 6),
+                Parent = TextLabel,
+            })
+        end
+
+        Groupbox:Resize()
+
+        Label.TextLabel = TextLabel
+        Label.Container = Container
+        if not Data.DoesWrap then
+            setmetatable(Label, BaseAddons)
+        end
+
+        Label.Holder = TextLabel
+        table.insert(Groupbox.Elements, Label)
+
+        if Data.Idx then
+            Labels[Data.Idx] = Label
+        else
+            table.insert(Labels, Label)
+        end
+
+        return Label
+    end
+
+    function Funcs:AddButton(...)
+        local function GetInfo(...)
+            local Info = {}
+
+            local First = select(1, ...)
+            local Second = select(2, ...)
+
+            if typeof(First) == "table" or typeof(Second) == "table" then
+                local Params = typeof(First) == "table" and First or Second
+
+                Info.Text = Params.Text or ""
+                Info.Func = Params.Func or Params.Callback or function() end
+                Info.DoubleClick = Params.DoubleClick
+
+                Info.Tooltip = Params.Tooltip
+                Info.DisabledTooltip = Params.DisabledTooltip
+
+                Info.Risky = Params.Risky or false
+                Info.Disabled = Params.Disabled or false
+                Info.Visible = Params.Visible or true
+                Info.Idx = typeof(Second) == "table" and First or nil
+            else
+                Info.Text = First or ""
+                Info.Func = Second or function() end
+                Info.DoubleClick = false
+
+                Info.Tooltip = nil
+                Info.DisabledTooltip = nil
+
+                Info.Risky = false
+                Info.Disabled = false
+                Info.Visible = true
+                Info.Idx = select(3, ...) or nil
+            end
+
+            return Info
+        end
+        local Info = GetInfo(...)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Button = {
+            Text = Info.Text,
+            Func = Info.Func,
+            DoubleClick = Info.DoubleClick,
+
+            Tooltip = Info.Tooltip,
+            DisabledTooltip = Info.DisabledTooltip,
+            TooltipTable = nil,
+
+            Risky = Info.Risky,
+            Disabled = Info.Disabled,
+            Visible = Info.Visible,
+
+            Tween = nil,
+            Type = "Button",
+        }
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 21),
+            Parent = Container,
+        })
+
+        New("UIListLayout", {
+            FillDirection = Enum.FillDirection.Horizontal,
+            HorizontalFlex = Enum.UIFlexAlignment.Fill,
+            Padding = UDim.new(0, 9),
+            Parent = Holder,
+        })
+
+        local function CreateButton(Button)
+            local Base = New("TextButton", {
+                Active = not Button.Disabled,
+                BackgroundColor3 = Button.Disabled and "BackgroundColor" or "MainColor",
+                Size = UDim2.fromScale(1, 1),
+                Text = Button.Text,
+                TextSize = 14,
+                TextTransparency = 0.4,
+                Visible = Button.Visible,
+                Parent = Holder,
+            })
+
+            local Stroke = New("UIStroke", {
+                Color = "OutlineColor",
+                Transparency = Button.Disabled and 0.5 or 0,
+                Parent = Base,
+            })
+
+            return Base, Stroke
+        end
+
+        local function InitEvents(Button)
+            Button.Base.MouseEnter:Connect(function()
+                if Button.Disabled then
+                    return
+                end
+
+                Button.Tween = TweenService:Create(Button.Base, Library.TweenInfo, {
+                    TextTransparency = 0,
+                })
+                Button.Tween:Play()
+            end)
+            Button.Base.MouseLeave:Connect(function()
+                if Button.Disabled then
+                    return
+                end
+
+                Button.Tween = TweenService:Create(Button.Base, Library.TweenInfo, {
+                    TextTransparency = 0.4,
+                })
+                Button.Tween:Play()
+            end)
+
+            Button.Base.MouseButton1Click:Connect(function()
+                if Button.Disabled or Button.Locked then
+                    return
+                end
+
+                if Button.DoubleClick then
+                    Button.Locked = true
+
+                    Button.Base.Text = "Are you sure?"
+                    Button.Base.TextColor3 = Library.Scheme.AccentColor
+                    Library.Registry[Button.Base].TextColor3 = "AccentColor"
+
+                    local Clicked = WaitForEvent(Button.Base.MouseButton1Click, 0.5)
+
+                    Button.Base.Text = Button.Text
+                    Button.Base.TextColor3 = Button.Risky and Library.Scheme.RedColor or Library.Scheme.FontColor
+                    Library.Registry[Button.Base].TextColor3 = Button.Risky and "RedColor" or "FontColor"
+
+                    if Clicked then
+                        Library:SafeCallback(Button.Func)
+                    end
+
+                    RunService.RenderStepped:Wait() --// Mouse Button fires without waiting (i hate roblox)
+                    Button.Locked = false
+                    return
+                end
+
+                Library:SafeCallback(Button.Func)
+            end)
+        end
+
+        Button.Base, Button.Stroke = CreateButton(Button)
+        InitEvents(Button)
+
+        function Button:AddButton(...)
+            local Info = GetInfo(...)
+
+            local SubButton = {
+                Text = Info.Text,
+                Func = Info.Func,
+                DoubleClick = Info.DoubleClick,
+
+                Tooltip = Info.Tooltip,
+                DisabledTooltip = Info.DisabledTooltip,
+                TooltipTable = nil,
+
+                Risky = Info.Risky,
+                Disabled = Info.Disabled,
+                Visible = Info.Visible,
+
+                Tween = nil,
+                Type = "SubButton",
+            }
+
+            Button.SubButton = SubButton
+            SubButton.Base, SubButton.Stroke = CreateButton(SubButton)
+            InitEvents(SubButton)
+
+            function SubButton:UpdateColors()
+                if Library.Unloaded then
+                    return
+                end
+
+                StopTween(SubButton.Tween)
+
+                SubButton.Base.BackgroundColor3 = SubButton.Disabled and Library.Scheme.BackgroundColor
+                    or Library.Scheme.MainColor
+                SubButton.Base.TextTransparency = SubButton.Disabled and 0.8 or 0.4
+                SubButton.Stroke.Transparency = SubButton.Disabled and 0.5 or 0
+
+                Library.Registry[SubButton.Base].BackgroundColor3 = SubButton.Disabled and "BackgroundColor"
+                    or "MainColor"
+            end
+
+            function SubButton:SetDisabled(Disabled: boolean)
+                SubButton.Disabled = Disabled
+
+                if SubButton.TooltipTable then
+                    SubButton.TooltipTable.Disabled = SubButton.Disabled
+                end
+
+                SubButton.Base.Active = not SubButton.Disabled
+                SubButton:UpdateColors()
+            end
+
+            function SubButton:SetVisible(Visible: boolean)
+                SubButton.Visible = Visible
+
+                SubButton.Base.Visible = SubButton.Visible
+                Groupbox:Resize()
+            end
+
+            function SubButton:SetText(Text: string)
+                SubButton.Text = Text
+                SubButton.Base.Text = Text
+            end
+
+            if typeof(SubButton.Tooltip) == "string" or typeof(SubButton.DisabledTooltip) == "string" then
+                SubButton.TooltipTable =
+                    Library:AddTooltip(SubButton.Tooltip, SubButton.DisabledTooltip, SubButton.Base)
+                SubButton.TooltipTable.Disabled = SubButton.Disabled
+            end
+
+            if SubButton.Risky then
+                SubButton.Base.TextColor3 = Library.Scheme.RedColor
+                Library.Registry[SubButton.Base].TextColor3 = "RedColor"
+            end
+
+            SubButton:UpdateColors()
+
+            if Info.Idx then
+                Buttons[Info.Idx] = SubButton
+            else
+                table.insert(Buttons, SubButton)
+            end
+
+            return SubButton
+        end
+
+        function Button:UpdateColors()
+            if Library.Unloaded then
+                return
+            end
+
+            StopTween(Button.Tween)
+
+            Button.Base.BackgroundColor3 = Button.Disabled and Library.Scheme.BackgroundColor
+                or Library.Scheme.MainColor
+            Button.Base.TextTransparency = Button.Disabled and 0.8 or 0.4
+            Button.Stroke.Transparency = Button.Disabled and 0.5 or 0
+
+            Library.Registry[Button.Base].BackgroundColor3 = Button.Disabled and "BackgroundColor" or "MainColor"
+        end
+
+        function Button:SetDisabled(Disabled: boolean)
+            Button.Disabled = Disabled
+
+            if Button.TooltipTable then
+                Button.TooltipTable.Disabled = Button.Disabled
+            end
+
+            Button.Base.Active = not Button.Disabled
+            Button:UpdateColors()
+        end
+
+        function Button:SetVisible(Visible: boolean)
+            Button.Visible = Visible
+
+            Holder.Visible = Button.Visible
+            Groupbox:Resize()
+        end
+
+        function Button:SetText(Text: string)
+            Button.Text = Text
+            Button.Base.Text = Text
+        end
+
+        if typeof(Button.Tooltip) == "string" or typeof(Button.DisabledTooltip) == "string" then
+            Button.TooltipTable = Library:AddTooltip(Button.Tooltip, Button.DisabledTooltip, Button.Base)
+            Button.TooltipTable.Disabled = Button.Disabled
+        end
+
+        if Button.Risky then
+            Button.Base.TextColor3 = Library.Scheme.RedColor
+            Library.Registry[Button.Base].TextColor3 = "RedColor"
+        end
+
+        Button:UpdateColors()
+        Groupbox:Resize()
+
+        Button.Holder = Holder
+        table.insert(Groupbox.Elements, Button)
+
+        if Info.Idx then
+            Buttons[Info.Idx] = Button
+        else
+            table.insert(Buttons, Button)
+        end
+
+        return Button
+    end
+
+    function Funcs:AddCheckbox(Idx, Info)
+        Info = Library:Validate(Info, Templates.Toggle)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Toggle = {
+            Text = Info.Text,
+            Value = Info.Default,
+
+            Tooltip = Info.Tooltip,
+            DisabledTooltip = Info.DisabledTooltip,
+            TooltipTable = nil,
+
+            Callback = Info.Callback,
+            Changed = Info.Changed,
+
+            Risky = Info.Risky,
+            Disabled = Info.Disabled,
+            Visible = Info.Visible,
+            Addons = {},
+
+            Type = "Toggle",
+        }
+
+        local Button = New("TextButton", {
+            Active = not Toggle.Disabled,
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 18),
+            Text = "",
+            Visible = Toggle.Visible,
+            Parent = Container,
+        })
+
+        local Label = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Position = UDim2.fromOffset(26, 0),
+            Size = UDim2.new(1, -26, 1, 0),
+            Text = Toggle.Text,
+            TextSize = 14,
+            TextTransparency = 0.4,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Parent = Button,
+        })
+
+        New("UIListLayout", {
+            FillDirection = Enum.FillDirection.Horizontal,
+            HorizontalAlignment = Enum.HorizontalAlignment.Right,
+            Padding = UDim.new(0, 6),
+            Parent = Label,
+        })
+
+        local Checkbox = New("Frame", {
+            BackgroundColor3 = "MainColor",
+            Size = UDim2.fromScale(1, 1),
+            SizeConstraint = Enum.SizeConstraint.RelativeYY,
+            Parent = Button,
+        })
+        New("UICorner", {
+            CornerRadius = UDim.new(0, Library.CornerRadius / 2),
+            Parent = Checkbox,
+        })
+
+        local CheckboxStroke = New("UIStroke", {
+            Color = "OutlineColor",
+            Parent = Checkbox,
+        })
+
+        local CheckImage = New("ImageLabel", {
+            Image = CheckIcon and CheckIcon.Url or "",
+            ImageColor3 = "FontColor",
+            ImageRectOffset = CheckIcon and CheckIcon.ImageRectOffset or Vector2.zero,
+            ImageRectSize = CheckIcon and CheckIcon.ImageRectSize or Vector2.zero,
+            ImageTransparency = 1,
+            Position = UDim2.fromOffset(2, 2),
+            Size = UDim2.new(1, -4, 1, -4),
+            Parent = Checkbox,
+        })
+
+        function Toggle:UpdateColors()
+            Toggle:Display()
+        end
+
+        function Toggle:Display()
+            if Library.Unloaded then
+                return
+            end
+
+            CheckboxStroke.Transparency = Toggle.Disabled and 0.5 or 0
+
+            if Toggle.Disabled then
+                Label.TextTransparency = 0.8
+                CheckImage.ImageTransparency = Toggle.Value and 0.8 or 1
+
+                Checkbox.BackgroundColor3 = Library.Scheme.BackgroundColor
+                Library.Registry[Checkbox].BackgroundColor3 = "BackgroundColor"
+
+                return
+            end
+
+            TweenService:Create(Label, Library.TweenInfo, {
+                TextTransparency = Toggle.Value and 0 or 0.4,
+            }):Play()
+            TweenService:Create(CheckImage, Library.TweenInfo, {
+                ImageTransparency = Toggle.Value and 0 or 1,
+            }):Play()
+
+            Checkbox.BackgroundColor3 = Library.Scheme.MainColor
+            Library.Registry[Checkbox].BackgroundColor3 = "MainColor"
+        end
+
+        function Toggle:OnChanged(Func)
+            Toggle.Changed = Func
+        end
+
+        function Toggle:SetValue(Value)
+            if Toggle.Disabled then
+                return
+            end
+
+            Toggle.Value = Value
+            Toggle:Display()
+
+            for _, Addon in Toggle.Addons do
+                if Addon.Type == "KeyPicker" and Addon.SyncToggleState then
+                    Addon.Toggled = Toggle.Value
+                    Addon:Update()
+                end
+            end
+
+            Library:UpdateDependencyBoxes()
+            Library:SafeCallback(Toggle.Callback, Toggle.Value)
+            Library:SafeCallback(Toggle.Changed, Toggle.Value)
+        end
+
+        function Toggle:SetDisabled(Disabled: boolean)
+            Toggle.Disabled = Disabled
+
+            if Toggle.TooltipTable then
+                Toggle.TooltipTable.Disabled = Toggle.Disabled
+            end
+
+            for _, Addon in Toggle.Addons do
+                if Addon.Type == "KeyPicker" and Addon.SyncToggleState then
+                    Addon:Update()
+                end
+            end
+
+            Button.Active = not Toggle.Disabled
+            Toggle:Display()
+        end
+
+        function Toggle:SetVisible(Visible: boolean)
+            Toggle.Visible = Visible
+
+            Button.Visible = Toggle.Visible
+            Groupbox:Resize()
+        end
+
+        function Toggle:SetText(Text: string)
+            Toggle.Text = Text
+            Label.Text = Text
+        end
+
+        Button.MouseButton1Click:Connect(function()
+            if Toggle.Disabled then
+                return
+            end
+
+            Toggle:SetValue(not Toggle.Value)
+        end)
+
+        if typeof(Toggle.Tooltip) == "string" or typeof(Toggle.DisabledTooltip) == "string" then
+            Toggle.TooltipTable = Library:AddTooltip(Toggle.Tooltip, Toggle.DisabledTooltip, Button)
+            Toggle.TooltipTable.Disabled = Toggle.Disabled
+        end
+
+        if Toggle.Risky then
+            Label.TextColor3 = Library.Scheme.RedColor
+            Library.Registry[Label].TextColor3 = "RedColor"
+        end
+
+        Toggle:Display()
+        Groupbox:Resize()
+
+        Toggle.TextLabel = Label
+        Toggle.Container = Container
+        setmetatable(Toggle, BaseAddons)
+
+        Toggle.Holder = Button
+        table.insert(Groupbox.Elements, Toggle)
+
+        Toggle.Default = Toggle.Value
+
+        Toggles[Idx] = Toggle
+
+        return Toggle
+    end
+
+    function Funcs:AddToggle(Idx, Info)
+        if Library.ForceCheckbox then
+            return Funcs.AddCheckbox(self, Idx, Info)
+        end
+
+        Info = Library:Validate(Info, Templates.Toggle)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Toggle = {
+            Text = Info.Text,
+            Value = Info.Default,
+
+            Tooltip = Info.Tooltip,
+            DisabledTooltip = Info.DisabledTooltip,
+            TooltipTable = nil,
+
+            Callback = Info.Callback,
+            Changed = Info.Changed,
+
+            Risky = Info.Risky,
+            Disabled = Info.Disabled,
+            Visible = Info.Visible,
+            Addons = {},
+
+            Type = "Toggle",
+        }
+
+        local Button = New("TextButton", {
+            Active = not Toggle.Disabled,
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 18),
+            Text = "",
+            Visible = Toggle.Visible,
+            Parent = Container,
+        })
+
+        local Label = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, -40, 1, 0),
+            Text = Toggle.Text,
+            TextSize = 14,
+            TextTransparency = 0.4,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Parent = Button,
+        })
+
+        New("UIListLayout", {
+            FillDirection = Enum.FillDirection.Horizontal,
+            HorizontalAlignment = Enum.HorizontalAlignment.Right,
+            Padding = UDim.new(0, 6),
+            Parent = Label,
+        })
+
+        local Switch = New("Frame", {
+            AnchorPoint = Vector2.new(1, 0),
+            BackgroundColor3 = "MainColor",
+            Position = UDim2.fromScale(1, 0),
+            Size = UDim2.fromOffset(32, 18),
+            Parent = Button,
+        })
+        New("UICorner", {
+            CornerRadius = UDim.new(1, 0),
+            Parent = Switch,
+        })
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 2),
+            PaddingLeft = UDim.new(0, 2),
+            PaddingRight = UDim.new(0, 2),
+            PaddingTop = UDim.new(0, 2),
+            Parent = Switch,
+        })
+        local SwitchStroke = New("UIStroke", {
+            Color = "OutlineColor",
+            Parent = Switch,
+        })
+
+        local Ball = New("Frame", {
+            BackgroundColor3 = "FontColor",
+            Size = UDim2.fromScale(1, 1),
+            SizeConstraint = Enum.SizeConstraint.RelativeYY,
+            Parent = Switch,
+        })
+        New("UICorner", {
+            CornerRadius = UDim.new(1, 0),
+            Parent = Ball,
+        })
+
+        function Toggle:UpdateColors()
+            Toggle:Display()
+        end
+
+        function Toggle:Display()
+            if Library.Unloaded then
+                return
+            end
+
+            local Offset = Toggle.Value and 1 or 0
+
+            Switch.BackgroundTransparency = Toggle.Disabled and 0.75 or 0
+            SwitchStroke.Transparency = Toggle.Disabled and 0.75 or 0
+
+            Switch.BackgroundColor3 = Toggle.Value and Library.Scheme.AccentColor or Library.Scheme.MainColor
+            SwitchStroke.Color = Toggle.Value and Library.Scheme.AccentColor or Library.Scheme.OutlineColor
+
+            Library.Registry[Switch].BackgroundColor3 = Toggle.Value and "AccentColor" or "MainColor"
+            Library.Registry[SwitchStroke].Color = Toggle.Value and "AccentColor" or "OutlineColor"
+
+            if Toggle.Disabled then
+                Label.TextTransparency = 0.8
+                Ball.AnchorPoint = Vector2.new(Offset, 0)
+                Ball.Position = UDim2.fromScale(Offset, 0)
+
+                Ball.BackgroundColor3 = Library:GetDarkerColor(Library.Scheme.FontColor)
+                Library.Registry[Ball].BackgroundColor3 = function()
+                    return Library:GetDarkerColor(Library.Scheme.FontColor)
+                end
+
+                return
+            end
+
+            TweenService:Create(Label, Library.TweenInfo, {
+                TextTransparency = Toggle.Value and 0 or 0.4,
+            }):Play()
+            TweenService:Create(Ball, Library.TweenInfo, {
+                AnchorPoint = Vector2.new(Offset, 0),
+                Position = UDim2.fromScale(Offset, 0),
+            }):Play()
+
+            Ball.BackgroundColor3 = Library.Scheme.FontColor
+            Library.Registry[Ball].BackgroundColor3 = "FontColor"
+        end
+
+        function Toggle:OnChanged(Func)
+            Toggle.Changed = Func
+        end
+
+        function Toggle:SetValue(Value)
+            if Toggle.Disabled then
+                return
+            end
+
+            Toggle.Value = Value
+            Toggle:Display()
+
+            for _, Addon in Toggle.Addons do
+                if Addon.Type == "KeyPicker" and Addon.SyncToggleState then
+                    Addon.Toggled = Toggle.Value
+                    Addon:Update()
+                end
+            end
+
+            Library:UpdateDependencyBoxes()
+            Library:SafeCallback(Toggle.Callback, Toggle.Value)
+            Library:SafeCallback(Toggle.Changed, Toggle.Value)
+        end
+
+        function Toggle:SetDisabled(Disabled: boolean)
+            Toggle.Disabled = Disabled
+
+            if Toggle.TooltipTable then
+                Toggle.TooltipTable.Disabled = Toggle.Disabled
+            end
+
+            for _, Addon in Toggle.Addons do
+                if Addon.Type == "KeyPicker" and Addon.SyncToggleState then
+                    Addon:Update()
+                end
+            end
+
+            Button.Active = not Toggle.Disabled
+            Toggle:Display()
+        end
+
+        function Toggle:SetVisible(Visible: boolean)
+            Toggle.Visible = Visible
+
+            Button.Visible = Toggle.Visible
+            Groupbox:Resize()
+        end
+
+        function Toggle:SetText(Text: string)
+            Toggle.Text = Text
+            Label.Text = Text
+        end
+
+        Button.MouseButton1Click:Connect(function()
+            if Toggle.Disabled then
+                return
+            end
+
+            Toggle:SetValue(not Toggle.Value)
+        end)
+
+        if typeof(Toggle.Tooltip) == "string" or typeof(Toggle.DisabledTooltip) == "string" then
+            Toggle.TooltipTable = Library:AddTooltip(Toggle.Tooltip, Toggle.DisabledTooltip, Button)
+            Toggle.TooltipTable.Disabled = Toggle.Disabled
+        end
+
+        if Toggle.Risky then
+            Label.TextColor3 = Library.Scheme.RedColor
+            Library.Registry[Label].TextColor3 = "RedColor"
+        end
+
+        Toggle:Display()
+        Groupbox:Resize()
+
+        Toggle.TextLabel = Label
+        Toggle.Container = Container
+        setmetatable(Toggle, BaseAddons)
+
+        Toggle.Holder = Button
+        table.insert(Groupbox.Elements, Toggle)
+
+        Toggle.Default = Toggle.Value
+
+        Toggles[Idx] = Toggle
+
+        return Toggle
+    end
+
+    function Funcs:AddInput(Idx, Info)
+        Info = Library:Validate(Info, Templates.Input)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Input = {
+            Text = Info.Text,
+            Value = Info.Default,
+
+            Finished = Info.Finished,
+            Numeric = Info.Numeric,
+            ClearTextOnFocus = Info.ClearTextOnFocus,
+            Placeholder = Info.Placeholder,
+            AllowEmpty = Info.AllowEmpty,
+            EmptyReset = Info.EmptyReset,
+
+            Tooltip = Info.Tooltip,
+            DisabledTooltip = Info.DisabledTooltip,
+            TooltipTable = nil,
+
+            Callback = Info.Callback,
+            Changed = Info.Changed,
+
+            Disabled = Info.Disabled,
+            Visible = Info.Visible,
+
+            Type = "Input",
+        }
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 39),
+            Visible = Input.Visible,
+            Parent = Container,
+        })
+
+        local Label = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 14),
+            Text = Input.Text,
+            TextSize = 14,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Parent = Holder,
+        })
+
+        local Box = New("TextBox", {
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            ClearTextOnFocus = not Input.Disabled and Input.ClearTextOnFocus,
+            PlaceholderText = Input.Placeholder,
+            Position = UDim2.fromScale(0, 1),
+            Size = UDim2.new(1, 0, 0, 21),
+            Text = Input.Value,
+            TextEditable = not Input.Disabled,
+            TextScaled = true,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Parent = Holder,
+        })
+
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 3),
+            PaddingLeft = UDim.new(0, 8),
+            PaddingRight = UDim.new(0, 8),
+            PaddingTop = UDim.new(0, 4),
+            Parent = Box,
+        })
+
+        function Input:UpdateColors()
+            if Library.Unloaded then
+                return
+            end
+
+            Label.TextTransparency = Input.Disabled and 0.8 or 0
+            Box.TextTransparency = Input.Disabled and 0.8 or 0
+        end
+
+        function Input:OnChanged(Func)
+            Input.Changed = Func
+        end
+
+        function Input:SetValue(Text)
+            if not Input.AllowEmpty and Trim(Text) == "" then
+                Text = Input.EmptyReset
+            end
+
+            if Info.MaxLength and #Text > Info.MaxLength then
+                Text = Text:sub(1, Info.MaxLength)
+            end
+
+            if Input.Numeric then
+                if #tostring(Text) > 0 and not tonumber(Text) then
+                    Text = Input.Value
+                end
+            end
+
+            Input.Value = Text
+            Box.Text = Text
+
+            if not Input.Disabled then
+                Library:SafeCallback(Input.Callback, Input.Value)
+                Library:SafeCallback(Input.Changed, Input.Value)
+            end
+        end
+
+        function Input:SetDisabled(Disabled: boolean)
+            Input.Disabled = Disabled
+
+            if Input.TooltipTable then
+                Input.TooltipTable.Disabled = Input.Disabled
+            end
+
+            Box.ClearTextOnFocus = not Input.Disabled and Input.ClearTextOnFocus
+            Box.TextEditable = not Input.Disabled
+            Input:UpdateColors()
+        end
+
+        function Input:SetVisible(Visible: boolean)
+            Input.Visible = Visible
+
+            Holder.Visible = Input.Visible
+            Groupbox:Resize()
+        end
+
+        function Input:SetText(Text: string)
+            Input.Text = Text
+            Label.Text = Text
+        end
+
+        if Input.Finished then
+            Box.FocusLost:Connect(function(Enter)
+                if not Enter then
+                    return
+                end
+
+                Input:SetValue(Box.Text)
+            end)
+        else
+            Box:GetPropertyChangedSignal("Text"):Connect(function()
+                Input:SetValue(Box.Text)
+            end)
+        end
+
+        if typeof(Input.Tooltip) == "string" or typeof(Input.DisabledTooltip) == "string" then
+            Input.TooltipTable = Library:AddTooltip(Input.Tooltip, Input.DisabledTooltip, Box)
+            Input.TooltipTable.Disabled = Input.Disabled
+        end
+
+        Groupbox:Resize()
+
+        Input.Holder = Holder
+        table.insert(Groupbox.Elements, Input)
+
+        Input.Default = Input.Value
+
+        Options[Idx] = Input
+
+        return Input
+    end
+
+    function Funcs:AddSlider(Idx, Info)
+        Info = Library:Validate(Info, Templates.Slider)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Slider = {
+            Text = Info.Text,
+            Value = Info.Default,
+
+            Min = Info.Min,
+            Max = Info.Max,
+
+            Prefix = Info.Prefix,
+            Suffix = Info.Suffix,
+            Compact = Info.Compact,
+            Rounding = Info.Rounding,
+
+            Tooltip = Info.Tooltip,
+            DisabledTooltip = Info.DisabledTooltip,
+            TooltipTable = nil,
+
+            Callback = Info.Callback,
+            Changed = Info.Changed,
+
+            Disabled = Info.Disabled,
+            Visible = Info.Visible,
+
+            Type = "Slider",
+        }
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, Info.Compact and 13 or 31),
+            Visible = Slider.Visible,
+            Parent = Container,
+        })
+
+        local SliderLabel
+        if not Info.Compact then
+            SliderLabel = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 14),
+                Text = Slider.Text,
+                TextSize = 14,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Parent = Holder,
+            })
+        end
+
+        local Bar = New("TextButton", {
+            Active = not Slider.Disabled,
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            Position = UDim2.fromScale(0, 1),
+            Size = UDim2.new(1, 0, 0, 13),
+            Text = "",
+            Parent = Holder,
+        })
+
+        local DisplayLabel = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 1),
+            Text = "",
+            TextSize = 14,
+            ZIndex = 2,
+            Parent = Bar,
+        })
+        New("UIStroke", {
+            ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+            Color = "DarkColor",
+            LineJoinMode = Enum.LineJoinMode.Miter,
+            Parent = DisplayLabel,
+        })
+
+        local Fill = New("Frame", {
+            BackgroundColor3 = "AccentColor",
+            Size = UDim2.fromScale(0.5, 1),
+            Parent = Bar,
+        })
+
+        function Slider:UpdateColors()
+            if Library.Unloaded then
+                return
+            end
+
+            if SliderLabel then
+                SliderLabel.TextTransparency = Slider.Disabled and 0.8 or 0
+            end
+            DisplayLabel.TextTransparency = Slider.Disabled and 0.8 or 0
+
+            Fill.BackgroundColor3 = Slider.Disabled and Library.Scheme.OutlineColor or Library.Scheme.AccentColor
+            Library.Registry[Fill].BackgroundColor3 = Slider.Disabled and "OutlineColor" or "AccentColor"
+        end
+
+        function Slider:Display()
+            if Library.Unloaded then
+                return
+            end
+
+            local CustomDisplayText = nil
+            if Info.FormatDisplayValue then
+                CustomDisplayText = Info.FormatDisplayValue(Slider, Slider.Value)
+            end
+
+            if CustomDisplayText then
+                DisplayLabel.Text = tostring(CustomDisplayText)
+            else
+                if Info.Compact then
+                    DisplayLabel.Text =
+                        string.format("%s: %s%s%s", Slider.Text, Slider.Prefix, Slider.Value, Slider.Suffix)
+                elseif Info.HideMax then
+                    DisplayLabel.Text = string.format("%s%s%s", Slider.Prefix, Slider.Value, Slider.Suffix)
+                else
+                    DisplayLabel.Text = string.format(
+                        "%s%s%s/%s%s%s",
+                        Slider.Prefix,
+                        Slider.Value,
+                        Slider.Suffix,
+                        Slider.Prefix,
+                        Slider.Max,
+                        Slider.Suffix
+                    )
+                end
+            end
+
+            local X = (Slider.Value - Slider.Min) / (Slider.Max - Slider.Min)
+            Fill.Size = UDim2.fromScale(X, 1)
+        end
+
+        function Slider:OnChanged(Func)
+            Slider.Changed = Func
+        end
+
+        function Slider:SetMax(Value)
+            assert(Value > Slider.Min, "Max value cannot be less than the current min value.")
+
+            Slider:SetValue(math.clamp(Slider.Value, Slider.Min, Value)) --this will make  so it updates. and im calling this so i dont need to add an if :P
+            Slider.Max = Value
+            Slider:Display()
+        end
+
+        function Slider:SetMin(Value)
+            assert(Value < Slider.Max, "Min value cannot be greater than the current max value.")
+
+            Slider:SetValue(math.clamp(Slider.Value, Value, Slider.Max)) --same here. adding these comments for the funny
+            Slider.Min = Value
+            Slider:Display()
+        end
+
+        function Slider:SetValue(Str)
+            if Slider.Disabled then
+                return
+            end
+
+            local Num = tonumber(Str)
+            if not Num or Num == Slider.Value then
+                return
+            end
+
+            Num = math.clamp(Num, Slider.Min, Slider.Max)
+
+            Slider.Value = Num
+            Slider:Display()
+
+            Library:SafeCallback(Slider.Callback, Slider.Value)
+            Library:SafeCallback(Slider.Changed, Slider.Value)
+        end
+
+        function Slider:SetDisabled(Disabled: boolean)
+            Slider.Disabled = Disabled
+
+            if Slider.TooltipTable then
+                Slider.TooltipTable.Disabled = Slider.Disabled
+            end
+
+            Bar.Active = not Slider.Disabled
+            Slider:UpdateColors()
+        end
+
+        function Slider:SetVisible(Visible: boolean)
+            Slider.Visible = Visible
+
+            Holder.Visible = Slider.Visible
+            Groupbox:Resize()
+        end
+
+        function Slider:SetText(Text: string)
+            Slider.Text = Text
+            if SliderLabel then
+                SliderLabel.Text = Text
+                return
+            end
+            Slider:Display()
+        end
+
+        function Slider:SetPrefix(Prefix: string)
+            Slider.Prefix = Prefix
+            Slider:Display()
+        end
+
+        function Slider:SetSuffix(Suffix: string)
+            Slider.Suffix = Suffix
+            Slider:Display()
+        end
+
+        Bar.InputBegan:Connect(function(Input: InputObject)
+            if not IsClickInput(Input) or Slider.Disabled then
+                return
+            end
+
+            for _, Side in Library.ActiveTab.Sides do
+                Side.ScrollingEnabled = false
+            end
+
+            while IsDragInput(Input) do
+                local Location = Mouse.X
+                local Scale = math.clamp((Location - Bar.AbsolutePosition.X) / Bar.AbsoluteSize.X, 0, 1)
+
+                local OldValue = Slider.Value
+                Slider.Value = Round(Slider.Min + ((Slider.Max - Slider.Min) * Scale), Slider.Rounding)
+
+                Slider:Display()
+                if Slider.Value ~= OldValue then
+                    Library:SafeCallback(Slider.Callback, Slider.Value)
+                    Library:SafeCallback(Slider.Changed, Slider.Value)
+                end
+
+                RunService.RenderStepped:Wait()
+            end
+
+            for _, Side in Library.ActiveTab.Sides do
+                Side.ScrollingEnabled = true
+            end
+        end)
+
+        if typeof(Slider.Tooltip) == "string" or typeof(Slider.DisabledTooltip) == "string" then
+            Slider.TooltipTable = Library:AddTooltip(Slider.Tooltip, Slider.DisabledTooltip, Bar)
+            Slider.TooltipTable.Disabled = Slider.Disabled
+        end
+
+        Slider:UpdateColors()
+        Slider:Display()
+        Groupbox:Resize()
+
+        Slider.Holder = Holder
+        table.insert(Groupbox.Elements, Slider)
+
+        Slider.Default = Slider.Value
+
+        Options[Idx] = Slider
+
+        return Slider
+    end
+
+    function Funcs:AddDropdown(Idx, Info)
+        Info = Library:Validate(Info, Templates.Dropdown)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        if Info.SpecialType == "Player" then
+            Info.Values = GetPlayers(Info.ExcludeLocalPlayer)
+            Info.AllowNull = true
+        elseif Info.SpecialType == "Team" then
+            Info.Values = GetTeams()
+            Info.AllowNull = true
+        end
+
+        local Dropdown = {
+            Text = typeof(Info.Text) == "string" and Info.Text or nil,
+            Value = Info.Multi and {} or nil,
+            Values = Info.Values,
+            DisabledValues = Info.DisabledValues,
+            Multi = Info.Multi,
+
+            SpecialType = Info.SpecialType,
+            ExcludeLocalPlayer = Info.ExcludeLocalPlayer,
+
+            Tooltip = Info.Tooltip,
+            DisabledTooltip = Info.DisabledTooltip,
+            TooltipTable = nil,
+
+            Callback = Info.Callback,
+            Changed = Info.Changed,
+
+            Disabled = Info.Disabled,
+            Visible = Info.Visible,
+
+            Type = "Dropdown",
+        }
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, Dropdown.Text and 39 or 21),
+            Visible = Dropdown.Visible,
+            Parent = Container,
+        })
+
+        local Label = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 14),
+            Text = Dropdown.Text,
+            TextSize = 14,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Visible = not not Info.Text,
+            Parent = Holder,
+        })
+
+        local Display = New("TextButton", {
+            Active = not Dropdown.Disabled,
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            Position = UDim2.fromScale(0, 1),
+            Size = UDim2.new(1, 0, 0, 21),
+            Text = "---",
+            TextSize = 14,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Parent = Holder,
+        })
+
+        New("UIPadding", {
+            PaddingLeft = UDim.new(0, 8),
+            PaddingRight = UDim.new(0, 4),
+            Parent = Display,
+        })
+
+        local ArrowImage = New("ImageLabel", {
+            AnchorPoint = Vector2.new(1, 0.5),
+            Image = ArrowIcon and ArrowIcon.Url or "",
+            ImageColor3 = "FontColor",
+            ImageRectOffset = ArrowIcon and ArrowIcon.ImageRectOffset or Vector2.zero,
+            ImageRectSize = ArrowIcon and ArrowIcon.ImageRectSize or Vector2.zero,
+            ImageTransparency = 0.5,
+            Position = UDim2.fromScale(1, 0.5),
+            Size = UDim2.fromOffset(16, 16),
+            Parent = Display,
+        })
+
+        local SearchBox
+        if Info.Searchable then
+            SearchBox = New("TextBox", {
+                BackgroundTransparency = 1,
+                PlaceholderText = "Search...",
+                Position = UDim2.fromOffset(-8, 0),
+                Size = UDim2.new(1, -12, 1, 0),
+                TextSize = 14,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Visible = false,
+                Parent = Display,
+            })
+            New("UIPadding", {
+                PaddingLeft = UDim.new(0, 8),
+                Parent = SearchBox,
+            })
+        end
+
+        local MenuTable = Library:AddContextMenu(
+            Display,
+            function()
+                return UDim2.fromOffset(Display.AbsoluteSize.X / Library.DPIScale, 0)
+            end,
+            function()
+                return { 0.5, Display.AbsoluteSize.Y + 1.5 }
+            end,
+            2,
+            function(Active: boolean)
+                Display.TextTransparency = (Active and SearchBox) and 1 or 0
+                ArrowImage.ImageTransparency = Active and 0 or 0.5
+                ArrowImage.Rotation = Active and 180 or 0
+                if SearchBox then
+                    SearchBox.Text = ""
+                    SearchBox.Visible = Active
+                end
+            end
+        )
+        Dropdown.Menu = MenuTable
+
+        function Dropdown:RecalculateListSize(Count)
+            local Y = math.clamp((Count or GetTableSize(Dropdown.Values)) * 21, 0, Info.MaxVisibleDropdownItems * 21)
+
+            MenuTable:SetSize(function()
+                return UDim2.fromOffset(Display.AbsoluteSize.X / Library.DPIScale, Y)
+            end)
+        end
+
+        function Dropdown:UpdateColors()
+            if Library.Unloaded then
+                return
+            end
+
+            Label.TextTransparency = Dropdown.Disabled and 0.8 or 0
+            Display.TextTransparency = Dropdown.Disabled and 0.8 or 0
+            ArrowImage.ImageTransparency = Dropdown.Disabled and 0.8 or MenuTable.Active and 0 or 0.5
+        end
+
+        function Dropdown:Display()
+            if Library.Unloaded then
+                return
+            end
+
+            local Str = ""
+
+            if Info.Multi then
+                for _, Value in Dropdown.Values do
+                    if Dropdown.Value[Value] then
+                        Str = Str
+                            .. (Info.FormatDisplayValue and tostring(Info.FormatDisplayValue(Value)) or tostring(Value))
+                            .. ", "
+                    end
+                end
+
+                Str = Str:sub(1, #Str - 2)
+            else
+                Str = Dropdown.Value and tostring(Dropdown.Value) or ""
+                if Str ~= "" and Info.FormatDisplayValue then
+                    Str = tostring(Info.FormatDisplayValue(Str))
+                end
+            end
+
+            if #Str > 25 then
+                Str = Str:sub(1, 22) .. "..."
+            end
+
+            Display.Text = (Str == "" and "---" or Str)
+        end
+
+        function Dropdown:OnChanged(Func)
+            Dropdown.Changed = Func
+        end
+
+        function Dropdown:GetActiveValues()
+            if Info.Multi then
+                local Table = {}
+
+                for Value, _ in Dropdown.Value do
+                    table.insert(Table, Value)
+                end
+
+                return Table
+            end
+
+            return Dropdown.Value and 1 or 0
+        end
+
+        local Buttons = {}
+        function Dropdown:BuildDropdownList()
+            local Values = Dropdown.Values
+            local DisabledValues = Dropdown.DisabledValues
+
+            for Button, _ in Buttons do
+                Button:Destroy()
+            end
+            table.clear(Buttons)
+
+            local Count = 0
+            for _, Value in Values do
+                if SearchBox and not tostring(Value):lower():match(SearchBox.Text:lower()) then
+                    continue
+                end
+
+                Count += 1
+                local IsDisabled = table.find(DisabledValues, Value)
+                local Table = {}
+
+                local Button = New("TextButton", {
+                    BackgroundColor3 = "MainColor",
+                    BackgroundTransparency = 1,
+                    LayoutOrder = IsDisabled and 1 or 0,
+                    Size = UDim2.new(1, 0, 0, 21),
+                    Text = tostring(Value),
+                    TextSize = 14,
+                    TextTransparency = 0.5,
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    Parent = MenuTable.Menu,
+                })
+                New("UIPadding", {
+                    PaddingLeft = UDim.new(0, 7),
+                    PaddingRight = UDim.new(0, 7),
+                    Parent = Button,
+                })
+
+                local Selected
+                if Info.Multi then
+                    Selected = Dropdown.Value[Value]
+                else
+                    Selected = Dropdown.Value == Value
+                end
+
+                function Table:UpdateButton()
+                    if Info.Multi then
+                        Selected = Dropdown.Value[Value]
+                    else
+                        Selected = Dropdown.Value == Value
+                    end
+
+                    Button.BackgroundTransparency = Selected and 0 or 1
+                    Button.TextTransparency = IsDisabled and 0.8 or Selected and 0 or 0.5
+                end
+
+                if not IsDisabled then
+                    Button.MouseButton1Click:Connect(function()
+                        local Try = not Selected
+
+                        if not (Dropdown:GetActiveValues() == 1 and not Try and not Info.AllowNull) then
+                            Selected = Try
+                            if Info.Multi then
+                                Dropdown.Value[Value] = Selected and true or nil
+                            else
+                                Dropdown.Value = Selected and Value or nil
+                            end
+
+                            for _, OtherButton in Buttons do
+                                OtherButton:UpdateButton()
+                            end
+                        end
+
+                        Table:UpdateButton()
+                        Dropdown:Display()
+
+                        Library:UpdateDependencyBoxes()
+                        Library:SafeCallback(Dropdown.Callback, Dropdown.Value)
+                        Library:SafeCallback(Dropdown.Changed, Dropdown.Value)
+                    end)
+                end
+
+                Table:UpdateButton()
+                Dropdown:Display()
+
+                Buttons[Button] = Table
+            end
+
+            Dropdown:RecalculateListSize(Count)
+        end
+
+        function Dropdown:SetValue(Value)
+            if Info.Multi then
+                local Table = {}
+
+                for Val, Active in Value or {} do
+                    if typeof(Active) ~= "boolean" then
+                        Table[Active] = true
+                    elseif Active and table.find(Dropdown.Values, Val) then
+                        Table[Val] = true
+                    end
+                end
+
+                Dropdown.Value = Table
+            else
+                if table.find(Dropdown.Values, Value) then
+                    Dropdown.Value = Value
+                elseif not Value then
+                    Dropdown.Value = nil
+                end
+            end
+
+            Dropdown:Display()
+            for _, Button in Buttons do
+                Button:UpdateButton()
+            end
+
+            if not Dropdown.Disabled then
+                Library:UpdateDependencyBoxes()
+                Library:SafeCallback(Dropdown.Callback, Dropdown.Value)
+                Library:SafeCallback(Dropdown.Changed, Dropdown.Value)
+            end
+        end
+
+        function Dropdown:SetValues(Values)
+            Dropdown.Values = Values
+            Dropdown:BuildDropdownList()
+        end
+
+        function Dropdown:AddValues(Values)
+            if typeof(Values) == "table" then
+                for _, val in Values do
+                    table.insert(Dropdown.Values, val)
+                end
+            elseif typeof(Values) == "string" then
+                table.insert(Dropdown.Values, Values)
+            else
+                return
+            end
+
+            Dropdown:BuildDropdownList()
+        end
+
+        function Dropdown:SetDisabledValues(DisabledValues)
+            Dropdown.DisabledValues = DisabledValues
+            Dropdown:BuildDropdownList()
+        end
+
+        function Dropdown:AddDisabledValues(DisabledValues)
+            if typeof(DisabledValues) == "table" then
+                for _, val in DisabledValues do
+                    table.insert(Dropdown.DisabledValues, val)
+                end
+            elseif typeof(DisabledValues) == "string" then
+                table.insert(Dropdown.DisabledValues, DisabledValues)
+            else
+                return
+            end
+
+            Dropdown:BuildDropdownList()
+        end
+
+        function Dropdown:SetDisabled(Disabled: boolean)
+            Dropdown.Disabled = Disabled
+
+            if Dropdown.TooltipTable then
+                Dropdown.TooltipTable.Disabled = Dropdown.Disabled
+            end
+
+            MenuTable:Close()
+            Display.Active = not Dropdown.Disabled
+            Dropdown:UpdateColors()
+        end
+
+        function Dropdown:SetVisible(Visible: boolean)
+            Dropdown.Visible = Visible
+
+            Holder.Visible = Dropdown.Visible
+            Groupbox:Resize()
+        end
+
+        function Dropdown:SetText(Text: string)
+            Dropdown.Text = Text
+            Holder.Size = UDim2.new(1, 0, 0, Text and 39 or 21)
+
+            Label.Text = Text and Text or ""
+            Label.Visible = not not Text
+        end
+
+        Display.MouseButton1Click:Connect(function()
+            if Dropdown.Disabled then
+                return
+            end
+
+            MenuTable:Toggle()
+        end)
+
+        if SearchBox then
+            SearchBox:GetPropertyChangedSignal("Text"):Connect(Dropdown.BuildDropdownList)
+        end
+
+        local Defaults = {}
+        if typeof(Info.Default) == "string" then
+            local Index = table.find(Dropdown.Values, Info.Default)
+            if Index then
+                table.insert(Defaults, Index)
+            end
+        elseif typeof(Info.Default) == "table" then
+            for _, Value in next, Info.Default do
+                local Index = table.find(Dropdown.Values, Value)
+                if Index then
+                    table.insert(Defaults, Index)
+                end
+            end
+        elseif Dropdown.Values[Info.Default] ~= nil then
+            table.insert(Defaults, Info.Default)
+        end
+
+        if next(Defaults) then
+            for i = 1, #Defaults do
+                local Index = Defaults[i]
+                if Info.Multi then
+                    Dropdown.Value[Dropdown.Values[Index]] = true
+                else
+                    Dropdown.Value = Dropdown.Values[Index]
+                end
+
+                if not Info.Multi then
+                    break
+                end
+            end
+        end
+
+        if typeof(Dropdown.Tooltip) == "string" or typeof(Dropdown.DisabledTooltip) == "string" then
+            Dropdown.TooltipTable = Library:AddTooltip(Dropdown.Tooltip, Dropdown.DisabledTooltip, Display)
+            Dropdown.TooltipTable.Disabled = Dropdown.Disabled
+        end
+
+        Dropdown:UpdateColors()
+        Dropdown:Display()
+        Dropdown:BuildDropdownList()
+        Groupbox:Resize()
+
+        Dropdown.Holder = Holder
+        table.insert(Groupbox.Elements, Dropdown)
+
+        Dropdown.Default = Defaults
+        Dropdown.DefaultValues = Dropdown.Values
+
+        Options[Idx] = Dropdown
+
+        return Dropdown
+    end
+
+    function Funcs:AddViewport(Idx, Info)
+        Info = Library:Validate(Info, Templates.Viewport)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Dragging, Pinching = false, false
+        local LastMousePos, LastPinchDist = nil, 0
+
+        local ViewportObject = Info.Object
+        if Info.Clone and typeof(Info.Object) == "Instance" then
+            if Info.Object.Archivable then
+                ViewportObject = ViewportObject:Clone()
+            else
+                Info.Object.Archivable = true
+                ViewportObject = ViewportObject:Clone()
+                Info.Object.Archivable = false
+            end
+        end
+
+        local Viewport = {
+            Object = ViewportObject,
+            Camera = if not Info.Camera then Instance.new("Camera") else Info.Camera,
+            Interactive = Info.Interactive,
+            AutoFocus = Info.AutoFocus,
+            Visible = Info.Visible,
+            Type = "Viewport",
+        }
+
+        assert(
+            typeof(Viewport.Object) == "Instance" and (Viewport.Object:IsA("BasePart") or Viewport.Object:IsA("Model")),
+            "Instance must be a BasePart or Model."
+        )
+
+        assert(
+            typeof(Viewport.Camera) == "Instance" and Viewport.Camera:IsA("Camera"),
+            "Camera must be a valid Camera instance."
+        )
+
+        local function GetModelSize(model)
+            if model:IsA("BasePart") then
+                return model.Size
+            end
+
+            return select(2, model:GetBoundingBox())
+        end
+
+        local function FocusCamera()
+            local ModelSize = GetModelSize(Viewport.Object)
+            local MaxExtent = math.max(ModelSize.X, ModelSize.Y, ModelSize.Z)
+            local CameraDistance = MaxExtent * 2
+            local ModelPosition = Viewport.Object:GetPivot().Position
+
+            Viewport.Camera.CFrame =
+                CFrame.new(ModelPosition + Vector3.new(0, MaxExtent / 2, CameraDistance), ModelPosition)
+        end
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, Info.Height),
+            Visible = Viewport.Visible,
+            Parent = Container,
+        })
+
+        local Box = New("Frame", {
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            Position = UDim2.fromScale(0, 1),
+            Size = UDim2.fromScale(1, 1),
+            Parent = Holder,
+        })
+
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 3),
+            PaddingLeft = UDim.new(0, 8),
+            PaddingRight = UDim.new(0, 8),
+            PaddingTop = UDim.new(0, 4),
+            Parent = Box,
+        })
+
+        local ViewportFrame = New("ViewportFrame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 1),
+            Parent = Box,
+            CurrentCamera = Viewport.Camera,
+            Active = Viewport.Interactive,
+        })
+
+        ViewportFrame.MouseEnter:Connect(function()
+            if not Viewport.Interactive then
+                return
+            end
+
+            for _, Side in Groupbox.Tab.Sides do
+                Side.ScrollingEnabled = false
+            end
+        end)
+
+        ViewportFrame.MouseLeave:Connect(function()
+            if not Viewport.Interactive then
+                return
+            end
+
+            for _, Side in Groupbox.Tab.Sides do
+                Side.ScrollingEnabled = true
+            end
+        end)
+
+        ViewportFrame.InputBegan:Connect(function(input)
+            if not Viewport.Interactive then
+                return
+            end
+
+            if input.UserInputType == Enum.UserInputType.MouseButton2 then
+                Dragging = true
+                LastMousePos = input.Position
+            elseif input.UserInputType == Enum.UserInputType.Touch and not Pinching then
+                Dragging = true
+                LastMousePos = input.Position
+            end
+        end)
+
+        Library:GiveSignal(UserInputService.InputEnded:Connect(function(input)
+            if Library.Unloaded then
+                return
+            end
+
+            if not Viewport.Interactive then
+                return
+            end
+
+            if input.UserInputType == Enum.UserInputType.MouseButton2 then
+                Dragging = false
+            elseif input.UserInputType == Enum.UserInputType.Touch then
+                Dragging = false
+            end
+        end))
+
+        Library:GiveSignal(UserInputService.InputChanged:Connect(function(input)
+            if Library.Unloaded then
+                return
+            end
+
+            if not Viewport.Interactive or not Dragging or Pinching then
+                return
+            end
+
+            if
+                input.UserInputType == Enum.UserInputType.MouseMovement
+                or input.UserInputType == Enum.UserInputType.Touch
+            then
+                local MouseDelta = input.Position - LastMousePos
+                LastMousePos = input.Position
+
+                local Position = Viewport.Object:GetPivot().Position
+                local Camera = Viewport.Camera
+
+                local RotationY = CFrame.fromAxisAngle(Vector3.new(0, 1, 0), -MouseDelta.X * 0.01)
+                Camera.CFrame = CFrame.new(Position) * RotationY * CFrame.new(-Position) * Camera.CFrame
+
+                local RotationX = CFrame.fromAxisAngle(Camera.CFrame.RightVector, -MouseDelta.Y * 0.01)
+                local PitchedCFrame = CFrame.new(Position) * RotationX * CFrame.new(-Position) * Camera.CFrame
+
+                if PitchedCFrame.UpVector.Y > 0.1 then
+                    Camera.CFrame = PitchedCFrame
+                end
+            end
+        end))
+
+        ViewportFrame.InputChanged:Connect(function(input)
+            if not Viewport.Interactive then
+                return
+            end
+
+            if input.UserInputType == Enum.UserInputType.MouseWheel then
+                local ZoomAmount = input.Position.Z * 2
+                Viewport.Camera.CFrame += Viewport.Camera.CFrame.LookVector * ZoomAmount
+            end
+        end)
+
+        Library:GiveSignal(UserInputService.TouchPinch:Connect(function(touchPositions, scale, velocity, state)
+            if Library.Unloaded then
+                return
+            end
+
+            if not Viewport.Interactive or not Library:MouseIsOverFrame(ViewportFrame, touchPositions[1]) then
+                return
+            end
+
+            if state == Enum.UserInputState.Begin then
+                Pinching = true
+                Dragging = false
+                LastPinchDist = (touchPositions[1] - touchPositions[2]).Magnitude
+            elseif state == Enum.UserInputState.Change then
+                local currentDist = (touchPositions[1] - touchPositions[2]).Magnitude
+                local delta = (currentDist - LastPinchDist) * 0.1
+                LastPinchDist = currentDist
+                Viewport.Camera.CFrame += Viewport.Camera.CFrame.LookVector * delta
+            elseif state == Enum.UserInputState.End or state == Enum.UserInputState.Cancel then
+                Pinching = false
+            end
+        end))
+
+        Viewport.Object.Parent = ViewportFrame
+        if Viewport.AutoFocus then
+            FocusCamera()
+        end
+
+        function Viewport:SetObject(Object: Instance, Clone: boolean?)
+            assert(Object, "Object cannot be nil.")
+
+            if Clone then
+                Object = Object:Clone()
+            end
+
+            if Viewport.Object then
+                Viewport.Object:Destroy()
+            end
+
+            Viewport.Object = Object
+            Viewport.Object.Parent = ViewportFrame
+
+            Groupbox:Resize()
+        end
+
+        function Viewport:SetHeight(Height: number)
+            assert(Height > 0, "Height must be greater than 0.")
+
+            Holder.Size = UDim2.new(1, 0, 0, Height)
+            Groupbox:Resize()
+        end
+
+        function Viewport:Focus()
+            if not Viewport.Object then
+                return
+            end
+
+            FocusCamera()
+        end
+
+        function Viewport:SetCamera(Camera: Instance)
+            assert(
+                Camera and typeof(Camera) == "Instance" and Camera:IsA("Camera"),
+                "Camera must be a valid Camera instance."
+            )
+
+            Viewport.Camera = Camera
+            ViewportFrame.CurrentCamera = Camera
+        end
+
+        function Viewport:SetInteractive(Interactive: boolean)
+            Viewport.Interactive = Interactive
+            ViewportFrame.Active = Interactive
+        end
+
+        function Viewport:SetVisible(Visible: boolean)
+            Viewport.Visible = Visible
+
+            Holder.Visible = Viewport.Visible
+            Groupbox:Resize()
+        end
+
+        Groupbox:Resize()
+
+        Viewport.Holder = Holder
+        table.insert(Groupbox.Elements, Viewport)
+
+        Options[Idx] = Viewport
+
+        return Viewport
+    end
+
+    function Funcs:AddImage(Idx, Info)
+        Info = Library:Validate(Info, Templates.Image)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Image = {
+            Image = Info.Image,
+            Color = Info.Color,
+            RectOffset = Info.RectOffset,
+            RectSize = Info.RectSize,
+            Height = Info.Height,
+            ScaleType = Info.ScaleType,
+            Transparency = Info.Transparency,
+            BackgroundTransparency = Info.BackgroundTransparency,
+
+            Visible = Info.Visible,
+            Type = "Image",
+        }
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, Info.Height),
+            Visible = Image.Visible,
+            Parent = Container,
+        })
+
+        local Box = New("Frame", {
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            BackgroundTransparency = Image.BackgroundTransparency,
+            Position = UDim2.fromScale(0, 1),
+            Size = UDim2.fromScale(1, 1),
+            Parent = Holder,
+        })
+
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 3),
+            PaddingLeft = UDim.new(0, 8),
+            PaddingRight = UDim.new(0, 8),
+            PaddingTop = UDim.new(0, 4),
+            Parent = Box,
+        })
+
+        local ImageProperties = {
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 1),
+            Image = Image.Image,
+            ImageTransparency = Image.Transparency,
+            ImageColor3 = Image.Color,
+            ImageRectOffset = Image.RectOffset,
+            ImageRectSize = Image.RectSize,
+            ScaleType = Image.ScaleType,
+            Parent = Box,
+        }
+
+        local Icon = Library:GetCustomIcon(ImageProperties.Image)
+        assert(Icon, "Image must be a valid Roblox asset or a valid URL or a valid lucide icon.")
+
+        ImageProperties.Image = Icon.Url
+        ImageProperties.ImageRectOffset = Icon.ImageRectOffset
+        ImageProperties.ImageRectSize = Icon.ImageRectSize
+
+        local ImageLabel = New("ImageLabel", ImageProperties)
+
+        function Image:SetHeight(Height: number)
+            assert(Height > 0, "Height must be greater than 0.")
+
+            Image.Height = Height
+            Holder.Size = UDim2.new(1, 0, 0, Height)
+            Groupbox:Resize()
+        end
+
+        function Image:SetImage(NewImage: string)
+            assert(typeof(NewImage) == "string", "Image must be a string.")
+
+            local Icon = Library:GetCustomIcon(NewImage)
+            assert(Icon, "Image must be a valid Roblox asset or a valid URL or a valid lucide icon.")
+
+            NewImage = Icon.Url
+            Image.RectOffset = Icon.ImageRectOffset
+            Image.RectSize = Icon.ImageRectSize
+
+            ImageLabel.Image = NewImage
+            Image.Image = NewImage
+        end
+
+        function Image:SetColor(Color: Color3)
+            assert(typeof(Color) == "Color3", "Color must be a Color3 value.")
+
+            ImageLabel.ImageColor3 = Color
+            Image.Color = Color
+        end
+
+        function Image:SetRectOffset(RectOffset: Vector2)
+            assert(typeof(RectOffset) == "Vector2", "RectOffset must be a Vector2 value.")
+
+            ImageLabel.ImageRectOffset = RectOffset
+            Image.RectOffset = RectOffset
+        end
+
+        function Image:SetRectSize(RectSize: Vector2)
+            assert(typeof(RectSize) == "Vector2", "RectSize must be a Vector2 value.")
+
+            ImageLabel.ImageRectSize = RectSize
+            Image.RectSize = RectSize
+        end
+
+        function Image:SetScaleType(ScaleType: Enum.ScaleType)
+            assert(
+                typeof(ScaleType) == "EnumItem" and ScaleType:IsA("ScaleType"),
+                "ScaleType must be a valid Enum.ScaleType."
+            )
+
+            ImageLabel.ScaleType = ScaleType
+            Image.ScaleType = ScaleType
+        end
+
+        function Image:SetTransparency(Transparency: number)
+            assert(typeof(Transparency) == "number", "Transparency must be a number between 0 and 1.")
+            assert(Transparency >= 0 and Transparency <= 1, "Transparency must be between 0 and 1.")
+
+            ImageLabel.ImageTransparency = Transparency
+            Image.Transparency = Transparency
+        end
+
+        function Image:SetVisible(Visible: boolean)
+            Image.Visible = Visible
+
+            Holder.Visible = Image.Visible
+            Groupbox:Resize()
+        end
+
+        Groupbox:Resize()
+
+        Image.Holder = Holder
+        table.insert(Groupbox.Elements, Image)
+
+        Options[Idx] = Image
+
+        return Image
+    end
+
+    function Funcs:AddVideo(Idx, Info)
+        Info = Library:Validate(Info, Templates.Video)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local Video = {
+            Video = Info.Video,
+            Looped = Info.Looped,
+            Playing = Info.Playing,
+            Volume = Info.Volume,
+            Height = Info.Height,
+            Visible = Info.Visible,
+
+            Type = "Video",
+        }
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, Info.Height),
+            Visible = Video.Visible,
+            Parent = Container,
+        })
+
+        local Box = New("Frame", {
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundColor3 = "MainColor",
+            BorderColor3 = "OutlineColor",
+            BorderSizePixel = 1,
+            Position = UDim2.fromScale(0, 1),
+            Size = UDim2.fromScale(1, 1),
+            Parent = Holder,
+        })
+
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 3),
+            PaddingLeft = UDim.new(0, 8),
+            PaddingRight = UDim.new(0, 8),
+            PaddingTop = UDim.new(0, 4),
+            Parent = Box,
+        })
+
+        local VideoFrameInstance = New("VideoFrame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 1),
+            Video = Video.Video,
+            Looped = Video.Looped,
+            Volume = Video.Volume,
+            Parent = Box,
+        })
+
+        VideoFrameInstance.Playing = Video.Playing
+
+        function Video:SetHeight(Height: number)
+            assert(Height > 0, "Height must be greater than 0.")
+
+            Video.Height = Height
+            Holder.Size = UDim2.new(1, 0, 0, Height)
+            Groupbox:Resize()
+        end
+
+        function Video:SetVideo(NewVideo: string)
+            assert(typeof(NewVideo) == "string", "Video must be a string.")
+
+            VideoFrameInstance.Video = NewVideo
+            Video.Video = NewVideo
+        end
+
+        function Video:SetLooped(Looped: boolean)
+            assert(typeof(Looped) == "boolean", "Looped must be a boolean.")
+
+            VideoFrameInstance.Looped = Looped
+            Video.Looped = Looped
+        end
+
+        function Video:SetVolume(Volume: number)
+            assert(typeof(Volume) == "number", "Volume must be a number between 0 and 10.")
+
+            VideoFrameInstance.Volume = Volume
+            Video.Volume = Volume
+        end
+
+        function Video:SetPlaying(Playing: boolean)
+            assert(typeof(Playing) == "boolean", "Playing must be a boolean.")
+
+            VideoFrameInstance.Playing = Playing
+            Video.Playing = Playing
+        end
+
+        function Video:Play()
+            VideoFrameInstance.Playing = true
+            Video.Playing = true
+        end
+
+        function Video:Pause()
+            VideoFrameInstance.Playing = false
+            Video.Playing = false
+        end
+
+        function Video:SetVisible(Visible: boolean)
+            Video.Visible = Visible
+
+            Holder.Visible = Video.Visible
+            Groupbox:Resize()
+        end
+
+        Groupbox:Resize()
+
+        Video.Holder = Holder
+        Video.VideoFrame = VideoFrameInstance
+        table.insert(Groupbox.Elements, Video)
+
+        Options[Idx] = Video
+
+        return Video
+    end
+
+    function Funcs:AddUIPassthrough(Idx, Info)
+        Info = Library:Validate(Info, Templates.UIPassthrough)
+
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        assert(Info.Instance, "Instance must be provided.")
+        assert(
+            typeof(Info.Instance) == "Instance" and Info.Instance:IsA("GuiBase2d"),
+            "Instance must inherit from GuiBase2d."
+        )
+        assert(typeof(Info.Height) == "number" and Info.Height > 0, "Height must be a number greater than 0.")
+
+        local Passthrough = {
+            Instance = Info.Instance,
+            Height = Info.Height,
+            Visible = Info.Visible,
+
+            Type = "UIPassthrough",
+        }
+
+        local Holder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, Info.Height),
+            Visible = Passthrough.Visible,
+            Parent = Container,
+        })
+
+        Passthrough.Instance.Parent = Holder
+
+        Groupbox:Resize()
+
+        function Passthrough:SetHeight(Height: number)
+            assert(typeof(Height) == "number" and Height > 0, "Height must be a number greater than 0.")
+
+            Passthrough.Height = Height
+            Holder.Size = UDim2.new(1, 0, 0, Height)
+            Groupbox:Resize()
+        end
+
+        function Passthrough:SetInstance(Instance: Instance)
+            assert(Instance, "Instance must be provided.")
+            assert(
+                typeof(Instance) == "Instance" and Instance:IsA("GuiBase2d"),
+                "Instance must inherit from GuiBase2d."
+            )
+
+            if Passthrough.Instance then
+                Passthrough.Instance.Parent = nil
+            end
+
+            Passthrough.Instance = Instance
+            Passthrough.Instance.Parent = Holder
+        end
+
+        function Passthrough:SetVisible(Visible: boolean)
+            Passthrough.Visible = Visible
+
+            Holder.Visible = Passthrough.Visible
+            Groupbox:Resize()
+        end
+
+        Passthrough.Holder = Holder
+        table.insert(Groupbox.Elements, Passthrough)
+
+        Options[Idx] = Passthrough
+
+        return Passthrough
+    end
+
+    function Funcs:AddDependencyBox()
+        local Groupbox = self
+        local Container = Groupbox.Container
+
+        local DepboxContainer
+        local DepboxList
+
+        do
+            DepboxContainer = New("Frame", {
+                BackgroundTransparency = 1,
+                Size = UDim2.fromScale(1, 1),
+                Visible = false,
+                Parent = Container,
+            })
+
+            DepboxList = New("UIListLayout", {
+                Padding = UDim.new(0, 8),
+                Parent = DepboxContainer,
+            })
+        end
+
+        local Depbox = {
+            Visible = false,
+            Dependencies = {},
+
+            Holder = DepboxContainer,
+            Container = DepboxContainer,
+
+            Elements = {},
+            DependencyBoxes = {},
+        }
+
+        function Depbox:Resize()
+            DepboxContainer.Size = UDim2.new(1, 0, 0, DepboxList.AbsoluteContentSize.Y / Library.DPIScale)
+            Groupbox:Resize()
+        end
+
+        function Depbox:Update(CancelSearch)
+            for _, Dependency in Depbox.Dependencies do
+                local Element = Dependency[1]
+                local Value = Dependency[2]
+
+                if Element.Type == "Toggle" and Element.Value ~= Value then
+                    DepboxContainer.Visible = false
+                    Depbox.Visible = false
+                    return
+                elseif Element.Type == "Dropdown" then
+                    if typeof(Element.Value) == "table" then
+                        if not Element.Value[Value] then
+                            DepboxContainer.Visible = false
+                            Depbox.Visible = false
+                            return
+                        end
+                    else
+                        if Element.Value ~= Value then
+                            DepboxContainer.Visible = false
+                            Depbox.Visible = false
+                            return
+                        end
+                    end
+                end
+            end
+
+            Depbox.Visible = true
+            DepboxContainer.Visible = true
+            if not Library.Searching then
+                task.defer(function()
+                    Depbox:Resize()
+                end)
+            elseif not CancelSearch then
+                Library:UpdateSearch(Library.SearchText)
+            end
+        end
+
+        DepboxList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+            if not Depbox.Visible then
+                return
+            end
+
+            Depbox:Resize()
+        end)
+
+        function Depbox:SetupDependencies(Dependencies)
+            for _, Dependency in Dependencies do
+                assert(typeof(Dependency) == "table", "Dependency should be a table.")
+                assert(Dependency[1] ~= nil, "Dependency is missing element.")
+                assert(Dependency[2] ~= nil, "Dependency is missing expected value.")
+            end
+
+            Depbox.Dependencies = Dependencies
+            Depbox:Update()
+        end
+
+        DepboxContainer:GetPropertyChangedSignal("Visible"):Connect(function()
+            Depbox:Resize()
+        end)
+
+        setmetatable(Depbox, BaseGroupbox)
+
+        table.insert(Groupbox.DependencyBoxes, Depbox)
+        table.insert(Library.DependencyBoxes, Depbox)
+
+        return Depbox
+    end
+
+    function Funcs:AddDependencyGroupbox()
+        local Groupbox = self
+        local Tab = Groupbox.Tab
+        local BoxHolder = Groupbox.BoxHolder
+
+        local DepGroupboxContainer
+        local DepGroupboxList
+
+        do
+            DepGroupboxContainer = New("Frame", {
+                BackgroundColor3 = "BackgroundColor",
+                Size = UDim2.fromScale(1, 0),
+                Visible = false,
+                Parent = BoxHolder,
+            })
+            New("UICorner", {
+                CornerRadius = UDim.new(0, Library.CornerRadius),
+                Parent = DepGroupboxContainer,
+            })
+            Library:AddOutline(DepGroupboxContainer)
+
+            DepGroupboxList = New("UIListLayout", {
+                Padding = UDim.new(0, 8),
+                Parent = DepGroupboxContainer,
+            })
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 7),
+                PaddingLeft = UDim.new(0, 7),
+                PaddingRight = UDim.new(0, 7),
+                PaddingTop = UDim.new(0, 7),
+                Parent = DepGroupboxContainer,
+            })
+        end
+
+        local DepGroupbox = {
+            Visible = false,
+            Dependencies = {},
+
+            BoxHolder = BoxHolder,
+            Holder = DepGroupboxContainer,
+            Container = DepGroupboxContainer,
+
+            Tab = Tab,
+            Elements = {},
+            DependencyBoxes = {},
+        }
+
+        function DepGroupbox:Resize()
+            DepGroupboxContainer.Size = UDim2.new(1, 0, 0, (DepGroupboxList.AbsoluteContentSize.Y / Library.DPIScale) + 18)
+        end
+
+        function DepGroupbox:Update(CancelSearch)
+            for _, Dependency in DepGroupbox.Dependencies do
+                local Element = Dependency[1]
+                local Value = Dependency[2]
+
+                if Element.Type == "Toggle" and Element.Value ~= Value then
+                    DepGroupboxContainer.Visible = false
+                    DepGroupbox.Visible = false
+                    return
+                elseif Element.Type == "Dropdown" then
+                    if typeof(Element.Value) == "table" then
+                        if not Element.Value[Value] then
+                            DepGroupboxContainer.Visible = false
+                            DepGroupbox.Visible = false
+                            return
+                        end
+                    else
+                        if Element.Value ~= Value then
+                            DepGroupboxContainer.Visible = false
+                            DepGroupbox.Visible = false
+                            return
+                        end
+                    end
+                end
+            end
+
+            DepGroupbox.Visible = true
+            if not Library.Searching then
+                DepGroupboxContainer.Visible = true
+                DepGroupbox:Resize()
+            elseif not CancelSearch then
+                Library:UpdateSearch(Library.SearchText)
+            end
+        end
+
+        function DepGroupbox:SetupDependencies(Dependencies)
+            for _, Dependency in Dependencies do
+                assert(typeof(Dependency) == "table", "Dependency should be a table.")
+                assert(Dependency[1] ~= nil, "Dependency is missing element.")
+                assert(Dependency[2] ~= nil, "Dependency is missing expected value.")
+            end
+
+            DepGroupbox.Dependencies = Dependencies
+            DepGroupbox:Update()
+        end
+
+        setmetatable(DepGroupbox, BaseGroupbox)
+
+        table.insert(Tab.DependencyGroupboxes, DepGroupbox)
+        table.insert(Library.DependencyBoxes, DepGroupbox)
+
+        return DepGroupbox
+    end
+
+    BaseGroupbox.__index = Funcs
+    BaseGroupbox.__namecall = function(_, Key, ...)
+        return Funcs[Key](...)
+    end
+end
+
+function Library:SetFont(FontFace)
+    if typeof(FontFace) == "EnumItem" then
+        FontFace = Font.fromEnum(FontFace)
+    end
+
+    Library.Scheme.Font = FontFace
+    Library:UpdateColorsUsingRegistry()
+end
+
+function Library:SetNotifySide(Side: string)
+    Library.NotifySide = Side
+
+    if Side:lower() == "left" then
+        NotificationArea.AnchorPoint = Vector2.new(0, 0)
+        NotificationArea.Position = UDim2.fromOffset(6, 6)
+        NotificationList.HorizontalAlignment = Enum.HorizontalAlignment.Left
+    else
+        NotificationArea.AnchorPoint = Vector2.new(1, 0)
+        NotificationArea.Position = UDim2.new(1, -6, 0, 6)
+        NotificationList.HorizontalAlignment = Enum.HorizontalAlignment.Right
+    end
+end
+
+function Library:Notify(...)
+    local Data = {}
+    local Info = select(1, ...)
+
+    if typeof(Info) == "table" then
+        Data.Title = tostring(Info.Title)
+        Data.Description = tostring(Info.Description)
+        Data.Time = Info.Time or 5
+        Data.SoundId = Info.SoundId
+        Data.Steps = Info.Steps
+        Data.Persist = Info.Persist
+    else
+        Data.Description = tostring(Info)
+        Data.Time = select(2, ...) or 5
+        Data.SoundId = select(3, ...)
+    end
+    Data.Destroyed = false
+
+    local DeletedInstance = false
+    local DeleteConnection = nil
+    if typeof(Data.Time) == "Instance" then
+        DeleteConnection = Data.Time.Destroying:Connect(function()
+            DeletedInstance = true
+
+            DeleteConnection:Disconnect()
+            DeleteConnection = nil
+        end)
+    end
+
+    local FakeBackground = New("Frame", {
+        AutomaticSize = Enum.AutomaticSize.Y,
+        BackgroundTransparency = 1,
+        Size = UDim2.fromScale(1, 0),
+        Visible = false,
+        Parent = NotificationArea,
+    })
+
+    local Holder = New("Frame", {
+        AutomaticSize = Enum.AutomaticSize.Y,
+        BackgroundColor3 = "MainColor",
+        Position = Library.NotifySide:lower() == "left" and UDim2.new(-1, -8, 0, -2) or UDim2.new(1, 8, 0, -2),
+        Size = UDim2.fromScale(1, 1),
+        ZIndex = 5,
+        Parent = FakeBackground,
+    })
+    New("UICorner", {
+        CornerRadius = UDim.new(0, Library.CornerRadius),
+        Parent = Holder,
+    })
+    New("UIListLayout", {
+        Padding = UDim.new(0, 4),
+        Parent = Holder,
+    })
+    New("UIPadding", {
+        PaddingBottom = UDim.new(0, 8),
+        PaddingLeft = UDim.new(0, 8),
+        PaddingRight = UDim.new(0, 8),
+        PaddingTop = UDim.new(0, 8),
+        Parent = Holder,
+    })
+    Library:AddOutline(Holder)
+
+    local Title
+    local Desc
+    local TitleX = 0
+    local DescX = 0
+
+    local TimerFill
+
+    if Data.Title then
+        Title = New("TextLabel", {
+            AutomaticSize = Enum.AutomaticSize.X,
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(0, 0),
+            Text = Data.Title,
+            TextSize = 15,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Parent = Holder,
+        })
+    end
+
+    if Data.Description then
+        Desc = New("TextLabel", {
+            AutomaticSize = Enum.AutomaticSize.X,
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(0, 0),
+            Text = Data.Description,
+            TextSize = 14,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Parent = Holder,
+        })
+    end
+
+    function Data:Resize()
+        if Title then
+            local X, Y =
+                Library:GetTextBounds(Title.Text, Title.FontFace, Title.TextSize, (NotificationArea.AbsoluteSize.X / Library.DPIScale) - 24)
+            Title.Size = UDim2.fromOffset(0, Y)
+            TitleX = X
+        end
+
+        if Desc then
+            local X, Y =
+                Library:GetTextBounds(Desc.Text, Desc.FontFace, Desc.TextSize, (NotificationArea.AbsoluteSize.X / Library.DPIScale) - 24)
+            Desc.Size = UDim2.fromOffset(0, Y)
+            DescX = X
+        end
+
+        FakeBackground.Size = UDim2.fromOffset(math.max(TitleX, DescX) + 24, 0)
+    end
+
+    function Data:ChangeTitle(Text)
+        if Title then
+            Data.Title = tostring(Text)
+            Title.Text = Data.Title
+            Data:Resize()
+        end
+    end
+
+    function Data:ChangeDescription(Text)
+        if Desc then
+            Data.Description = tostring(Text)
+            Desc.Text = Data.Description
+            Data:Resize()
+        end
+    end
+
+    function Data:ChangeStep(NewStep)
+        if TimerFill and Data.Steps then
+            NewStep = math.clamp(NewStep or 0, 0, Data.Steps)
+            TimerFill.Size = UDim2.fromScale(NewStep / Data.Steps, 1)
+        end
+    end
+
+    function Data:Destroy()
+        Data.Destroyed = true
+
+        if typeof(Data.Time) == "Instance" then
+            pcall(Data.Time.Destroy, Data.Time)
+        end
+
+        if DeleteConnection then
+            DeleteConnection:Disconnect()
+        end
+
+        TweenService
+            :Create(Holder, Library.NotifyTweenInfo, {
+                Position = Library.NotifySide:lower() == "left" and UDim2.new(-1, -8, 0, -2) or UDim2.new(1, 8, 0, -2),
+            })
+            :Play()
+
+        task.delay(Library.NotifyTweenInfo.Time, function()
+            Library.Notifications[FakeBackground] = nil
+            FakeBackground:Destroy()
+        end)
+    end
+
+    Data:Resize()
+
+    local TimerHolder = New("Frame", {
+        BackgroundTransparency = 1,
+        Size = UDim2.new(1, 0, 0, 7),
+        Visible = (Data.Persist ~= true and typeof(Data.Time) ~= "Instance") or typeof(Data.Steps) == "number",
+        Parent = Holder,
+    })
+    local TimerBar = New("Frame", {
+        BackgroundColor3 = "BackgroundColor",
+        BorderColor3 = "OutlineColor",
+        BorderSizePixel = 1,
+        Position = UDim2.fromOffset(0, 3),
+        Size = UDim2.new(1, 0, 0, 2),
+        Parent = TimerHolder,
+    })
+    TimerFill = New("Frame", {
+        BackgroundColor3 = "AccentColor",
+        Size = UDim2.fromScale(1, 1),
+        Parent = TimerBar,
+    })
+
+    if typeof(Data.Time) == "Instance" then
+        TimerFill.Size = UDim2.fromScale(0, 1)
+    end
+    if Data.SoundId then
+        local SoundId = Data.SoundId
+        if typeof(SoundId) == "number" then
+            SoundId = string.format("rbxassetid://%d", SoundId)
+        end
+
+        New("Sound", {
+            SoundId = SoundId,
+            Volume = 3,
+            PlayOnRemove = true,
+            Parent = SoundService,
+        }):Destroy()
+    end
+
+    Library.Notifications[FakeBackground] = Data
+
+    FakeBackground.Visible = true
+    TweenService:Create(Holder, Library.NotifyTweenInfo, {
+        Position = UDim2.fromOffset(0, 0),
+    }):Play()
+
+    task.delay(Library.NotifyTweenInfo.Time, function()
+        if Data.Persist then
+            return
+        elseif typeof(Data.Time) == "Instance" then
+            repeat
+                task.wait()
+            until DeletedInstance or Data.Destroyed
+        else
+            TweenService
+                :Create(TimerFill, TweenInfo.new(Data.Time, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {
+                    Size = UDim2.fromScale(0, 1),
+                })
+                :Play()
+            task.wait(Data.Time)
+        end
+
+        if not Data.Destroyed then
+            Data:Destroy()
+        end
+    end)
+
+    return Data
+end
+
+function Library:CreateWindow(WindowInfo)
+    WindowInfo = Library:Validate(WindowInfo, Templates.Window)
+    local ViewportSize: Vector2 = workspace.CurrentCamera.ViewportSize
+    if RunService:IsStudio() and ViewportSize.X <= 5 and ViewportSize.Y <= 5 then
+        repeat
+            ViewportSize = workspace.CurrentCamera.ViewportSize
+            task.wait()
+        until ViewportSize.X > 5 and ViewportSize.Y > 5
+    end
+
+    local MaxX = ViewportSize.X - 64
+    local MaxY = ViewportSize.Y - 64
+
+    Library.OriginalMinSize =
+        Vector2.new(math.min(Library.OriginalMinSize.X, MaxX), math.min(Library.OriginalMinSize.Y, MaxY))
+    Library.MinSize = Library.OriginalMinSize
+
+    WindowInfo.Size = UDim2.fromOffset(
+        math.clamp(WindowInfo.Size.X.Offset, Library.MinSize.X, MaxX),
+        math.clamp(WindowInfo.Size.Y.Offset, Library.MinSize.Y, MaxY)
+    )
+    if typeof(WindowInfo.Font) == "EnumItem" then
+        WindowInfo.Font = Font.fromEnum(WindowInfo.Font)
+    end
+    WindowInfo.CornerRadius = math.min(WindowInfo.CornerRadius, 20)
+
+    --// Old Naming \\--
+    if WindowInfo.Compact ~= nil then
+        WindowInfo.SidebarCompacted = WindowInfo.Compact
+    end
+    if WindowInfo.SidebarMinWidth ~= nil then
+        WindowInfo.MinSidebarWidth = WindowInfo.SidebarMinWidth
+    end
+    WindowInfo.MinSidebarWidth = math.max(64, WindowInfo.MinSidebarWidth)
+    WindowInfo.SidebarCompactWidth = math.max(48, WindowInfo.SidebarCompactWidth)
+    WindowInfo.SidebarCollapseThreshold = math.clamp(WindowInfo.SidebarCollapseThreshold, 0.1, 0.9)
+    WindowInfo.CompactWidthActivation = math.max(48, WindowInfo.CompactWidthActivation)
+
+    Library.CornerRadius = WindowInfo.CornerRadius
+    Library:SetNotifySide(WindowInfo.NotifySide)
+    Library.ShowCustomCursor = WindowInfo.ShowCustomCursor
+    Library.Scheme.Font = WindowInfo.Font
+    Library.ToggleKeybind = WindowInfo.ToggleKeybind
+    Library.GlobalSearch = WindowInfo.GlobalSearch
+
+    local IsDefaultSearchbarSize = WindowInfo.SearchbarSize == UDim2.fromScale(1, 1)
+    local MainFrame
+    local DividerLine
+    local TitleHolder
+    local WindowTitle
+    local WindowIcon
+    local RightWrapper
+    local SearchBox
+    local CurrentTabInfo
+    local CurrentTabLabel
+    local CurrentTabDescription
+    local ResizeButton
+    local Tabs
+    local Container
+
+    local InitialLeftWidth = math.ceil(WindowInfo.Size.X.Offset * 0.3)
+    local IsCompact = WindowInfo.SidebarCompacted
+    local LastExpandedWidth = InitialLeftWidth
+
+    do
+        Library.KeybindFrame, Library.KeybindContainer = Library:AddDraggableMenu("Keybinds")
+        Library.KeybindFrame.AnchorPoint = Vector2.new(0, 0.5)
+        Library.KeybindFrame.Position = UDim2.new(0, 6, 0.5, 0)
+        Library.KeybindFrame.Visible = false
+
+        MainFrame = New("TextButton", {
+            BackgroundColor3 = function()
+                return Library:GetBetterColor(Library.Scheme.BackgroundColor, -1)
+            end,
+            Name = "Main",
+            Text = "",
+            Position = WindowInfo.Position,
+            Size = WindowInfo.Size,
+            Visible = false,
+            Parent = ScreenGui,
+        })
+        New("UICorner", {
+            CornerRadius = UDim.new(0, WindowInfo.CornerRadius),
+            Parent = MainFrame,
+        })
+        table.insert(
+            Library.Scales,
+            New("UIScale", {
+                Parent = MainFrame,
+            })
+        )
+        Library:AddOutline(MainFrame)
+        Library:MakeLine(MainFrame, {
+            Position = UDim2.fromOffset(0, 48),
+            Size = UDim2.new(1, 0, 0, 1),
+        })
+
+        DividerLine = New("Frame", {
+            BackgroundColor3 = "OutlineColor",
+            Position = UDim2.fromOffset(InitialLeftWidth, 0),
+            Size = UDim2.new(0, 1, 1, -21),
+            Parent = MainFrame,
+        })
+
+        if WindowInfo.BackgroundImage then
+            New("ImageLabel", {
+                Image = WindowInfo.BackgroundImage,
+                Position = UDim2.fromScale(0, 0),
+                Size = UDim2.fromScale(1, 1),
+                ScaleType = Enum.ScaleType.Stretch,
+                ZIndex = 999,
+                BackgroundTransparency = 1,
+                ImageTransparency = 0.75,
+                Parent = MainFrame,
+            })
+        end
+
+        if WindowInfo.Center then
+            MainFrame.Position = UDim2.new(0.5, -MainFrame.Size.X.Offset / 2, 0.5, -MainFrame.Size.Y.Offset / 2)
+        end
+
+        --// Top Bar \\-
+        local TopBar = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(1, 0, 0, 48),
+            Parent = MainFrame,
+        })
+        Library:MakeDraggable(MainFrame, TopBar, false, true)
+
+        --// Title
+        TitleHolder = New("Frame", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(0, InitialLeftWidth, 1, 0),
+            Parent = TopBar,
+        })
+        New("UIListLayout", {
+            FillDirection = Enum.FillDirection.Horizontal,
+            HorizontalAlignment = Enum.HorizontalAlignment.Center,
+            VerticalAlignment = Enum.VerticalAlignment.Center,
+            Padding = UDim.new(0, 6),
+            Parent = TitleHolder,
+        })
+
+        if WindowInfo.Icon then
+            WindowIcon = New("ImageLabel", {
+                Image = if tonumber(WindowInfo.Icon)
+                    then string.format("rbxassetid://%d", WindowInfo.Icon)
+                    else WindowInfo.Icon,
+                Size = WindowInfo.IconSize,
+                Parent = TitleHolder,
+            })
+        else
+            WindowIcon = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Size = WindowInfo.IconSize,
+                Text = WindowInfo.Title:sub(1, 1),
+                TextScaled = true,
+                Visible = false,
+                Parent = TitleHolder,
+            })
+        end
+
+        local X = Library:GetTextBounds(
+            WindowInfo.Title,
+            Library.Scheme.Font,
+            20,
+            TitleHolder.AbsoluteSize.X - (WindowInfo.Icon and WindowInfo.IconSize.X.Offset + 6 or 0) - 12
+        )
+        WindowTitle = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.new(0, X, 1, 0),
+            Text = WindowInfo.Title,
+            TextSize = 20,
+            Parent = TitleHolder,
+        })
+
+        --// Top Right Bar
+        RightWrapper = New("Frame", {
+            AnchorPoint = Vector2.new(1, 0.5),
+            BackgroundTransparency = 1,
+            Position = UDim2.new(1, -49, 0.5, 0),
+            Size = UDim2.new(1, -InitialLeftWidth - 57 - 1, 1, -16),
+            Parent = TopBar,
+        })
+
+        New("UIListLayout", {
+            FillDirection = Enum.FillDirection.Horizontal,
+            HorizontalAlignment = Enum.HorizontalAlignment.Left,
+            VerticalAlignment = Enum.VerticalAlignment.Center,
+            Padding = UDim.new(0, 8),
+            Parent = RightWrapper,
+        })
+
+        CurrentTabInfo = New("Frame", {
+            Size = UDim2.fromScale(WindowInfo.DisableSearch and 1 or 0.5, 1),
+            Visible = false,
+            BackgroundTransparency = 1,
+            Parent = RightWrapper,
+        })
+
+        New("UIFlexItem", {
+            FlexMode = Enum.UIFlexMode.Grow,
+            Parent = CurrentTabInfo,
+        })
+
+        New("UIListLayout", {
+            FillDirection = Enum.FillDirection.Vertical,
+            HorizontalAlignment = Enum.HorizontalAlignment.Left,
+            VerticalAlignment = Enum.VerticalAlignment.Center,
+            Parent = CurrentTabInfo,
+        })
+
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 8),
+            PaddingLeft = UDim.new(0, 8),
+            PaddingRight = UDim.new(0, 8),
+            PaddingTop = UDim.new(0, 8),
+            Parent = CurrentTabInfo,
+        })
+
+        CurrentTabLabel = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 0),
+            AutomaticSize = Enum.AutomaticSize.Y,
+            Text = "",
+            TextSize = 14,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Parent = CurrentTabInfo,
+        })
+
+        CurrentTabDescription = New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 0),
+            AutomaticSize = Enum.AutomaticSize.Y,
+            Text = "",
+            TextWrapped = true,
+            TextSize = 14,
+            TextXAlignment = Enum.TextXAlignment.Left,
+            TextTransparency = 0.5,
+            Parent = CurrentTabInfo,
+        })
+
+        SearchBox = New("TextBox", {
+            BackgroundColor3 = "MainColor",
+            PlaceholderText = "Search",
+            Size = WindowInfo.SearchbarSize,
+            TextScaled = true,
+            Visible = not (WindowInfo.DisableSearch or false),
+            Parent = RightWrapper,
+        })
+        New("UIFlexItem", {
+            FlexMode = Enum.UIFlexMode.Shrink,
+            Parent = SearchBox,
+        })
+        New("UICorner", {
+            CornerRadius = UDim.new(0, WindowInfo.CornerRadius),
+            Parent = SearchBox,
+        })
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 8),
+            PaddingLeft = UDim.new(0, 8),
+            PaddingRight = UDim.new(0, 8),
+            PaddingTop = UDim.new(0, 8),
+            Parent = SearchBox,
+        })
+        New("UIStroke", {
+            Color = "OutlineColor",
+            Parent = SearchBox,
+        })
+
+        local SearchIcon = Library:GetIcon("search")
+        if SearchIcon then
+            New("ImageLabel", {
+                Image = SearchIcon.Url,
+                ImageColor3 = "FontColor",
+                ImageRectOffset = SearchIcon.ImageRectOffset,
+                ImageRectSize = SearchIcon.ImageRectSize,
+                ImageTransparency = 0.5,
+                Size = UDim2.fromScale(1, 1),
+                SizeConstraint = Enum.SizeConstraint.RelativeYY,
+                Parent = SearchBox,
+            })
+        end
+
+        if MoveIcon then
+            New("ImageLabel", {
+                AnchorPoint = Vector2.new(1, 0.5),
+                Image = MoveIcon.Url,
+                ImageColor3 = "OutlineColor",
+                ImageRectOffset = MoveIcon.ImageRectOffset,
+                ImageRectSize = MoveIcon.ImageRectSize,
+                Position = UDim2.new(1, -10, 0.5, 0),
+                Size = UDim2.fromOffset(28, 28),
+                SizeConstraint = Enum.SizeConstraint.RelativeYY,
+                Parent = TopBar,
+            })
+        end
+
+        --// Bottom Bar \\--
+        local BottomBackground = New("Frame", {
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundColor3 = function()
+                return Library:GetBetterColor(Library.Scheme.BackgroundColor, 4)
+            end,
+            Position = UDim2.fromScale(0, 1),
+            Size = UDim2.new(1, 0, 0, WindowInfo.CornerRadius * 2),
+            Parent = MainFrame,
+        })
+        Library:MakeLine(MainFrame, {
+            AnchorPoint = Vector2.new(0, 1),
+            Position = UDim2.new(0, 0, 1, -20),
+            Size = UDim2.new(1, 0, 0, 1),
+        })
+
+        local BottomBar = New("Frame", {
+            AnchorPoint = Vector2.new(0, 1),
+            BackgroundTransparency = 1,
+            Position = UDim2.fromScale(0, 1),
+            Size = UDim2.new(1, 0, 0, 20),
+            Parent = MainFrame,
+        })
+        New("UICorner", {
+            CornerRadius = UDim.new(0, WindowInfo.CornerRadius),
+            Parent = BottomBackground,
+        })
+
+        --// Footer
+        New("TextLabel", {
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(1, 1),
+            Text = WindowInfo.Footer,
+            TextSize = 14,
+            TextTransparency = 0.5,
+            Parent = BottomBar,
+        })
+
+        --// Resize Button
+        if WindowInfo.Resizable then
+            ResizeButton = New("TextButton", {
+                AnchorPoint = Vector2.new(1, 0),
+                BackgroundTransparency = 1,
+                Position = UDim2.new(1, -WindowInfo.CornerRadius / 4, 0, 0),
+                Size = UDim2.fromScale(1, 1),
+                SizeConstraint = Enum.SizeConstraint.RelativeYY,
+                Text = "",
+                Parent = BottomBar,
+            })
+
+            Library:MakeResizable(MainFrame, ResizeButton, function()
+                for _, Tab in Library.Tabs do
+                    Tab:Resize(true)
+                end
+            end)
+        end
+
+        New("ImageLabel", {
+            Image = ResizeIcon and ResizeIcon.Url or "",
+            ImageColor3 = "FontColor",
+            ImageRectOffset = ResizeIcon and ResizeIcon.ImageRectOffset or Vector2.zero,
+            ImageRectSize = ResizeIcon and ResizeIcon.ImageRectSize or Vector2.zero,
+            ImageTransparency = 0.5,
+            Position = UDim2.fromOffset(2, 2),
+            Size = UDim2.new(1, -4, 1, -4),
+            Parent = ResizeButton,
+        })
+
+        --// Tabs \\--
+        Tabs = New("ScrollingFrame", {
+            AutomaticCanvasSize = Enum.AutomaticSize.Y,
+            BackgroundColor3 = "BackgroundColor",
+            CanvasSize = UDim2.fromScale(0, 0),
+            Position = UDim2.fromOffset(0, 49),
+            ScrollBarThickness = 0,
+            Size = UDim2.new(0, InitialLeftWidth, 1, -70),
+            Parent = MainFrame,
+        })
+        New("UIListLayout", {
+            Parent = Tabs,
+        })
+
+        --// Container \\--
+        Container = New("Frame", {
+            AnchorPoint = Vector2.new(1, 0),
+            BackgroundColor3 = function()
+                return Library:GetBetterColor(Library.Scheme.BackgroundColor, 1)
+            end,
+            Name = "Container",
+            Position = UDim2.new(1, 0, 0, 49),
+            Size = UDim2.new(1, -InitialLeftWidth - 1, 1, -70),
+            Parent = MainFrame,
+        })
+        New("UIPadding", {
+            PaddingBottom = UDim.new(0, 0),
+            PaddingLeft = UDim.new(0, 6),
+            PaddingRight = UDim.new(0, 6),
+            PaddingTop = UDim.new(0, 0),
+            Parent = Container,
+        })
+    end
+
+    --// Window Table \\--
+    local Window = {}
+
+    function Window:ChangeTitle(title)
+        assert(typeof(title) == "string", "Expected string for title got: " .. typeof(title))
+
+        WindowTitle.Text = title
+        WindowInfo.Title = title
+    end
+
+    local function ApplyCompact()
+        IsCompact = Window:GetSidebarWidth() == WindowInfo.SidebarCompactWidth
+        if WindowInfo.DisableCompactingSnap then
+            IsCompact = Window:GetSidebarWidth() <= WindowInfo.CompactWidthActivation
+        end
+
+        WindowTitle.Visible = not IsCompact
+        if not WindowInfo.Icon then
+            WindowIcon.Visible = IsCompact
+        end
+
+        for _, Button in Library.TabButtons do
+            if not Button.Icon then
+                continue
+            end
+
+            Button.Label.Visible = not IsCompact
+            Button.Padding.PaddingBottom = UDim.new(0, IsCompact and 6 or 11)
+            Button.Padding.PaddingLeft = UDim.new(0, IsCompact and 6 or 12)
+            Button.Padding.PaddingRight = UDim.new(0, IsCompact and 6 or 12)
+            Button.Padding.PaddingTop = UDim.new(0, IsCompact and 6 or 11)
+            Button.Icon.SizeConstraint = IsCompact and Enum.SizeConstraint.RelativeXY or Enum.SizeConstraint.RelativeYY
+        end
+    end
+
+    function Window:IsSidebarCompacted()
+        return IsCompact
+    end
+
+    function Window:SetCompact(State)
+        Window:SetSidebarWidth(State and WindowInfo.SidebarCompactWidth or LastExpandedWidth)
+    end
+
+    function Window:GetSidebarWidth()
+        return Tabs.Size.X.Offset
+    end
+
+    function Window:SetSidebarWidth(Width)
+        Width = math.clamp(Width, 48, MainFrame.Size.X.Offset - WindowInfo.MinContainerWidth - 1)
+
+        DividerLine.Position = UDim2.fromOffset(Width, 0)
+
+        TitleHolder.Size = UDim2.new(0, Width, 1, 0)
+        RightWrapper.Size = UDim2.new(1, -Width - 57 - 1, 1, -16)
+        Tabs.Size = UDim2.new(0, Width, 1, -70)
+        Container.Size = UDim2.new(1, -Width - 1, 1, -70)
+
+        if WindowInfo.EnableCompacting then
+            ApplyCompact()
+        end
+        if not IsCompact then
+            LastExpandedWidth = Width
+        end
+    end
+
+    function Window:ShowTabInfo(Name, Description)
+        CurrentTabLabel.Text = Name
+        CurrentTabDescription.Text = Description
+
+        if IsDefaultSearchbarSize then
+            SearchBox.Size = UDim2.fromScale(0.5, 1)
+        end
+        CurrentTabInfo.Visible = true
+    end
+    function Window:HideTabInfo()
+        CurrentTabInfo.Visible = false
+        if IsDefaultSearchbarSize then
+            SearchBox.Size = UDim2.fromScale(1, 1)
+        end
+    end
+
+    function Window:AddTab(...)
+        local Name = nil
+        local Icon = nil
+        local Description = nil
+
+        if select("#", ...) == 1 and typeof(...) == "table" then
+            local Info = select(1, ...)
+            Name = Info.Name or "Tab"
+            Icon = Info.Icon
+            Description = Info.Description
+        else
+            Name = select(1, ...)
+            Icon = select(2, ...)
+            Description = select(3, ...)
+        end
+
+        local TabButton: TextButton
+        local TabLabel
+        local TabIcon
+
+        local TabContainer
+        local TabLeft
+        local TabRight
+
+        Icon = Library:GetCustomIcon(Icon)
+        do
+            TabButton = New("TextButton", {
+                BackgroundColor3 = "MainColor",
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 40),
+                Text = "",
+                Parent = Tabs,
+            })
+            local ButtonPadding = New("UIPadding", {
+                PaddingBottom = UDim.new(0, IsCompact and 6 or 11),
+                PaddingLeft = UDim.new(0, IsCompact and 6 or 12),
+                PaddingRight = UDim.new(0, IsCompact and 6 or 12),
+                PaddingTop = UDim.new(0, IsCompact and 6 or 11),
+                Parent = TabButton,
+            })
+
+            TabLabel = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Position = UDim2.fromOffset(30, 0),
+                Size = UDim2.new(1, -30, 1, 0),
+                Text = Name,
+                TextSize = 16,
+                TextTransparency = 0.5,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Visible = not IsCompact,
+                Parent = TabButton,
+            })
+
+            if Icon then
+                TabIcon = New("ImageLabel", {
+                    Image = Icon.Url,
+                    ImageColor3 = Icon.Custom and "WhiteColor" or "AccentColor",
+                    ImageRectOffset = Icon.ImageRectOffset,
+                    ImageRectSize = Icon.ImageRectSize,
+                    ImageTransparency = 0.5,
+                    ScaleType = Enum.ScaleType.Fit,
+                    Size = UDim2.fromScale(1, 1),
+                    SizeConstraint = IsCompact and Enum.SizeConstraint.RelativeXY or Enum.SizeConstraint.RelativeYY,
+                    Parent = TabButton,
+                })
+            end
+
+            table.insert(Library.TabButtons, {
+                Label = TabLabel,
+                Padding = ButtonPadding,
+                Icon = TabIcon,
+            })
+
+            --// Tab Container \\--
+            TabContainer = New("Frame", {
+                BackgroundTransparency = 1,
+                Size = UDim2.fromScale(1, 1),
+                Visible = false,
+                Parent = Container,
+            })
+
+            TabLeft = New("ScrollingFrame", {
+                AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                BackgroundTransparency = 1,
+                CanvasSize = UDim2.fromScale(0, 0),
+                ScrollBarImageTransparency = 1,
+                ScrollBarThickness = 0,
+                Size = UDim2.new(0.5, -3, 1, 0),
+                Parent = TabContainer,
+            })
+            New("UIListLayout", {
+                Padding = UDim.new(0, 2),
+                Parent = TabLeft,
+            })
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 2),
+                PaddingLeft = UDim.new(0, 2),
+                PaddingRight = UDim.new(0, 2),
+                PaddingTop = UDim.new(0, 2),
+                Parent = TabLeft,
+            })
+            do
+                New("Frame", {
+                    BackgroundTransparency = 1,
+                    LayoutOrder = -1,
+                    Parent = TabLeft,
+                })
+                New("Frame", {
+                    BackgroundTransparency = 1,
+                    LayoutOrder = 1,
+                    Parent = TabLeft,
+                })
+            end
+
+            TabRight = New("ScrollingFrame", {
+                AnchorPoint = Vector2.new(1, 0),
+                AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                BackgroundTransparency = 1,
+                CanvasSize = UDim2.fromScale(0, 0),
+                Position = UDim2.fromScale(1, 0),
+                ScrollBarImageTransparency = 1,
+                ScrollBarThickness = 0,
+                Size = UDim2.new(0.5, -3, 1, 0),
+                Parent = TabContainer,
+            })
+            New("UIListLayout", {
+                Padding = UDim.new(0, 2),
+                Parent = TabRight,
+            })
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 2),
+                PaddingLeft = UDim.new(0, 2),
+                PaddingRight = UDim.new(0, 2),
+                PaddingTop = UDim.new(0, 2),
+                Parent = TabRight,
+            })
+            do
+                New("Frame", {
+                    BackgroundTransparency = 1,
+                    LayoutOrder = -1,
+                    Parent = TabRight,
+                })
+                New("Frame", {
+                    BackgroundTransparency = 1,
+                    LayoutOrder = 1,
+                    Parent = TabRight,
+                })
+            end
+        end
+
+        --// Warning Box \\--
+        local WarningBoxHolder = New("Frame", {
+            AutomaticSize = Enum.AutomaticSize.Y,
+            BackgroundTransparency = 1,
+            Position = UDim2.fromOffset(0, 7),
+            Size = UDim2.fromScale(1, 0),
+            Visible = false,
+            Parent = TabContainer,
+        })
+
+        local WarningBox
+        local WarningBoxOutline
+        local WarningBoxShadowOutline
+        local WarningBoxScrollingFrame
+        local WarningTitle
+        local WarningStroke
+        local WarningText
+        do
+            WarningBox = New("Frame", {
+                BackgroundColor3 = "BackgroundColor",
+                Position = UDim2.fromOffset(2, 0),
+                Size = UDim2.new(1, -5, 0, 0),
+                Parent = WarningBoxHolder,
+            })
+            New("UICorner", {
+                CornerRadius = UDim.new(0, WindowInfo.CornerRadius),
+                Parent = WarningBox,
+            })
+            WarningBoxOutline, WarningBoxShadowOutline = Library:AddOutline(WarningBox)
+
+            WarningBoxScrollingFrame = New("ScrollingFrame", {
+                BackgroundTransparency = 1,
+                BorderSizePixel = 0,
+                Size = UDim2.fromScale(1, 1),
+                CanvasSize = UDim2.new(0, 0, 0, 0),
+                ScrollBarThickness = 3,
+                ScrollingDirection = Enum.ScrollingDirection.Y,
+                Parent = WarningBox,
+            })
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 4),
+                PaddingLeft = UDim.new(0, 6),
+                PaddingRight = UDim.new(0, 6),
+                PaddingTop = UDim.new(0, 4),
+                Parent = WarningBoxScrollingFrame,
+            })
+
+            WarningTitle = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, -4, 0, 14),
+                Text = "",
+                TextColor3 = Color3.fromRGB(255, 50, 50),
+                TextSize = 14,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Parent = WarningBoxScrollingFrame,
+            })
+
+            WarningStroke = New("UIStroke", {
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+                Color = Color3.fromRGB(169, 0, 0),
+                LineJoinMode = Enum.LineJoinMode.Miter,
+                Parent = WarningTitle,
+            })
+
+            WarningText = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Position = UDim2.fromOffset(0, 16),
+                Size = UDim2.new(1, -4, 0, 0),
+                Text = "",
+                TextSize = 14,
+                TextWrapped = true,
+                Parent = WarningBoxScrollingFrame,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                TextYAlignment = Enum.TextYAlignment.Top,
+            })
+
+            New("UIStroke", {
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
+                Color = "DarkColor",
+                LineJoinMode = Enum.LineJoinMode.Miter,
+                Parent = WarningText,
+            })
+        end
+
+        --// Tab Table \\--
+        local Tab = {
+            Groupboxes = {},
+            Tabboxes = {},
+            DependencyGroupboxes = {},
+            Sides = {
+                TabLeft,
+                TabRight,
+            },
+            WarningBox = {
+                IsNormal = false,
+                LockSize = false,
+                Visible = false,
+                Title = "WARNING",
+                Text = "",
+            },
+        }
+
+        function Tab:UpdateWarningBox(Info)
+            if typeof(Info.IsNormal) == "boolean" then
+                Tab.WarningBox.IsNormal = Info.IsNormal
+            end
+            if typeof(Info.LockSize) == "boolean" then
+                Tab.WarningBox.LockSize = Info.LockSize
+            end
+            if typeof(Info.Visible) == "boolean" then
+                Tab.WarningBox.Visible = Info.Visible
+            end
+            if typeof(Info.Title) == "string" then
+                Tab.WarningBox.Title = Info.Title
+            end
+            if typeof(Info.Text) == "string" then
+                Tab.WarningBox.Text = Info.Text
+            end
+
+            WarningBoxHolder.Visible = Tab.WarningBox.Visible
+            WarningTitle.Text = Tab.WarningBox.Title
+            WarningText.Text = Tab.WarningBox.Text
+            Tab:Resize(true)
+
+            WarningBox.BackgroundColor3 = Tab.WarningBox.IsNormal == true and Library.Scheme.BackgroundColor
+                or Color3.fromRGB(127, 0, 0)
+
+            WarningBoxShadowOutline.Color = Tab.WarningBox.IsNormal == true and Library.Scheme.DarkColor
+                or Color3.fromRGB(85, 0, 0)
+            WarningBoxOutline.Color = Tab.WarningBox.IsNormal == true and Library.Scheme.OutlineColor
+                or Color3.fromRGB(255, 50, 50)
+
+            WarningTitle.TextColor3 = Tab.WarningBox.IsNormal == true and Library.Scheme.FontColor
+                or Color3.fromRGB(255, 50, 50)
+            WarningStroke.Color = Tab.WarningBox.IsNormal == true and Library.Scheme.OutlineColor
+                or Color3.fromRGB(169, 0, 0)
+
+            if not Library.Registry[WarningBox] then
+                Library:AddToRegistry(WarningBox, {})
+            end
+            if not Library.Registry[WarningBoxShadowOutline] then
+                Library:AddToRegistry(WarningBoxShadowOutline, {})
+            end
+            if not Library.Registry[WarningBoxOutline] then
+                Library:AddToRegistry(WarningBoxOutline, {})
+            end
+            if not Library.Registry[WarningTitle] then
+                Library:AddToRegistry(WarningTitle, {})
+            end
+            if not Library.Registry[WarningStroke] then
+                Library:AddToRegistry(WarningStroke, {})
+            end
+
+            Library.Registry[WarningBox].BackgroundColor3 = function()
+                return Tab.WarningBox.IsNormal == true and Library.Scheme.BackgroundColor or Color3.fromRGB(127, 0, 0)
+            end
+
+            Library.Registry[WarningBoxShadowOutline].Color = function()
+                return Tab.WarningBox.IsNormal == true and Library.Scheme.DarkColor or Color3.fromRGB(85, 0, 0)
+            end
+
+            Library.Registry[WarningBoxOutline].Color = function()
+                return Tab.WarningBox.IsNormal == true and Library.Scheme.OutlineColor or Color3.fromRGB(255, 50, 50)
+            end
+
+            Library.Registry[WarningTitle].TextColor3 = function()
+                return Tab.WarningBox.IsNormal == true and Library.Scheme.FontColor or Color3.fromRGB(255, 50, 50)
+            end
+
+            Library.Registry[WarningStroke].Color = function()
+                return Tab.WarningBox.IsNormal == true and Library.Scheme.OutlineColor or Color3.fromRGB(169, 0, 0)
+            end
+        end
+
+        function Tab:RefreshSides()
+            local Offset = WarningBoxHolder.Visible and WarningBox.Size.Y.Offset + 8 or 0
+            for _, Side in Tab.Sides do
+                Side.Position = UDim2.new(Side.Position.X.Scale, 0, 0, Offset)
+                Side.Size = UDim2.new(0.5, -3, 1, -Offset)
+            end
+        end
+
+        function Tab:Resize(ResizeWarningBox: boolean?)
+            if ResizeWarningBox then
+                local MaximumSize = math.floor(TabContainer.AbsoluteSize.Y / 3.25)
+                local _, YText = Library:GetTextBounds(
+                    WarningText.Text,
+                    Library.Scheme.Font,
+                    WarningText.TextSize,
+                    WarningText.AbsoluteSize.X
+                )
+
+                local YBox = 24 + YText
+                if Tab.WarningBox.LockSize == true and YBox >= MaximumSize then
+                    WarningBoxScrollingFrame.CanvasSize = UDim2.fromOffset(0, YBox)
+                    YBox = MaximumSize
+                else
+                    WarningBoxScrollingFrame.CanvasSize = UDim2.fromOffset(0, 0)
+                end
+
+                WarningText.Size = UDim2.new(1, -4, 0, YText)
+                WarningBox.Size = UDim2.new(1, -5, 0, YBox + 4)
+            end
+
+            Tab:RefreshSides()
+        end
+
+        function Tab:AddGroupbox(Info)
+            local BoxHolder = New("Frame", {
+                AutomaticSize = Enum.AutomaticSize.Y,
+                BackgroundTransparency = 1,
+                Size = UDim2.fromScale(1, 0),
+                Parent = Info.Side == 1 and TabLeft or TabRight,
+            })
+            New("UIListLayout", {
+                Padding = UDim.new(0, 6),
+                Parent = BoxHolder,
+            })
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 4),
+                PaddingTop = UDim.new(0, 4),
+                Parent = BoxHolder,
+            })
+
+            local GroupboxHolder
+            local GroupboxLabel
+            local GroupboxContainer
+            local GroupboxList
+            local ChevronIcon
+            local HeaderButton
+
+            do
+                GroupboxHolder = New("Frame", {
+                    BackgroundColor3 = "BackgroundColor",
+                    Size = UDim2.fromScale(1, 0),
+                    Parent = BoxHolder,
+                })
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, WindowInfo.CornerRadius),
+                    Parent = GroupboxHolder,
+                })
+                Library:AddOutline(GroupboxHolder)
+
+                Library:MakeLine(GroupboxHolder, {
+                    Position = UDim2.fromOffset(0, 34),
+                    Size = UDim2.new(1, 0, 0, 1),
+                })
+
+                local BoxIcon = Library:GetCustomIcon(Info.IconName)
+                if BoxIcon then
+                    New("ImageLabel", {
+                        Image = BoxIcon.Url,
+                        ImageColor3 = BoxIcon.Custom and "WhiteColor" or "AccentColor",
+                        ImageRectOffset = BoxIcon.ImageRectOffset,
+                        ImageRectSize = BoxIcon.ImageRectSize,
+                        Position = UDim2.fromOffset(6, 6),
+                        Size = UDim2.fromOffset(22, 22),
+                        Parent = GroupboxHolder,
+                    })
+                end
+
+                -- Chevron icon for collapse indicator
+                local ChevronIconData = Library:GetIcon("chevron-down")
+                ChevronIcon = ChevronIconData and New("ImageLabel", {
+                    Name = "ReplicatedStorage",
+                    Image = ChevronIconData.Url,
+                    ImageColor3 = "FontColor",
+                    ImageRectOffset = ChevronIconData.ImageRectOffset,
+                    ImageRectSize = ChevronIconData.ImageRectSize,
+                    AnchorPoint = Vector2.new(1, 0),
+                    Position = UDim2.new(1, -12, 0, 8),
+                    Size = UDim2.fromOffset(18, 18),
+                    Visible = Library.GroupboxesCollapsible,
+                    Parent = GroupboxHolder,
+                }) or nil
+
+                HeaderButton = New("TextButton", {
+                    Name = "Workspace",
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(1, 0, 0, 34),
+                    Text = "",
+                    Active = Library.GroupboxesCollapsible,
+                    Parent = GroupboxHolder,
+                })
+
+                GroupboxLabel = New("TextLabel", {
+                    BackgroundTransparency = 1,
+                    Position = UDim2.fromOffset(BoxIcon and 24 or 0, 0),
+                    Size = UDim2.new(1, -50, 0, 34),
+                    Text = Info.Name,
+                    TextSize = 15,
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    Parent = GroupboxHolder,
+                })
+                New("UIPadding", {
+                    PaddingLeft = UDim.new(0, 12),
+                    PaddingRight = UDim.new(0, 12),
+                    Parent = GroupboxLabel,
+                })
+
+                GroupboxContainer = New("Frame", {
+                    BackgroundTransparency = 1,
+                    Position = UDim2.fromOffset(0, 35),
+                    Size = UDim2.new(1, 0, 1, -35),
+                    Parent = GroupboxHolder,
+                })
+
+                GroupboxList = New("UIListLayout", {
+                    Padding = UDim.new(0, 8),
+                    Parent = GroupboxContainer,
+                })
+                New("UIPadding", {
+                    PaddingBottom = UDim.new(0, 7),
+                    PaddingLeft = UDim.new(0, 7),
+                    PaddingRight = UDim.new(0, 7),
+                    PaddingTop = UDim.new(0, 7),
+                    Parent = GroupboxContainer,
+                })
+            end
+
+            local Groupbox = {
+                BoxHolder = BoxHolder,
+                Holder = GroupboxHolder,
+                Container = GroupboxContainer,
+                Tab = Tab,
+                DependencyBoxes = {},
+                Elements = {},
+                Collapsed = false,
+                HeaderButton = HeaderButton,
+                Chevron = ChevronIcon,
+            }
+
+            function Groupbox:Resize()
+                GroupboxHolder.Size = UDim2.new(1, 0, 0, (GroupboxList.AbsoluteContentSize.Y / Library.DPIScale) + 34)
+            end
+
+            function Groupbox:SetCollapsed(state: boolean)
+                Groupbox.Collapsed = state
+                Groupbox.Container.Visible = not state
+                if Groupbox.Chevron then
+                    TweenService:Create(Groupbox.Chevron, Library.TweenInfo, {
+                        Rotation = state and 180 or 0,
+                        ImageTransparency = 0.2,
+                    }):Play()
+                end
+                if state then
+                    GroupboxHolder.Size = UDim2.new(1, 0, 0, 34)
+                else
+                    Groupbox:Resize()
+                end
+            end
+
+            HeaderButton.MouseButton1Click:Connect(function()
+                if not Library.GroupboxesCollapsible then
+                    return
+                end
+                if Groupbox.SetCollapsed then
+                    Groupbox:SetCollapsed(not Groupbox.Collapsed)
+                end
+            end)
+
+            setmetatable(Groupbox, BaseGroupbox)
+
+            Groupbox:Resize()
+            Tab.Groupboxes[Info.Name] = Groupbox
+
+            return Groupbox
+        end
+
+        function Tab:AddLeftGroupbox(Name, IconName)
+            local LeftGroupBox = Tab:AddGroupbox({ Side = 1, Name = Name, IconName = IconName })
+            return LeftGroupBox
+        end
+
+        function Tab:AddRightGroupbox(Name, IconName)
+            return Tab:AddGroupbox({ Side = 2, Name = Name, IconName = IconName })
+        end
+
+        function Tab:AddTabbox(Info)
+            local BoxHolder = New("Frame", {
+                AutomaticSize = Enum.AutomaticSize.Y,
+                BackgroundTransparency = 1,
+                Size = UDim2.fromScale(1, 0),
+                Parent = Info.Side == 1 and TabLeft or TabRight,
+            })
+            New("UIListLayout", {
+                Padding = UDim.new(0, 6),
+                Parent = BoxHolder,
+            })
+            New("UIPadding", {
+                PaddingBottom = UDim.new(0, 4),
+                PaddingTop = UDim.new(0, 4),
+                Parent = BoxHolder,
+            })
+
+            local TabboxHolder
+            local TabboxButtons
+
+            do
+                TabboxHolder = New("Frame", {
+                    BackgroundColor3 = "BackgroundColor",
+                    Size = UDim2.fromScale(1, 0),
+                    Parent = BoxHolder,
+                })
+                New("UICorner", {
+                    CornerRadius = UDim.new(0, WindowInfo.CornerRadius),
+                    Parent = TabboxHolder,
+                })
+                Library:AddOutline(TabboxHolder)
+
+                TabboxButtons = New("Frame", {
+                    BackgroundTransparency = 1,
+                    Size = UDim2.new(1, 0, 0, 34),
+                    Parent = TabboxHolder,
+                })
+                New("UIListLayout", {
+                    FillDirection = Enum.FillDirection.Horizontal,
+                    HorizontalFlex = Enum.UIFlexAlignment.Fill,
+                    Parent = TabboxButtons,
+                })
+            end
+
+            local Tabbox = {
+                ActiveTab = nil,
+
+                BoxHolder = BoxHolder,
+                Holder = TabboxHolder,
+                Tabs = {},
+            }
+
+            function Tabbox:AddTab(Name, Icon)
+                local IconObj = Icon and Library:GetCustomIcon(Icon)
+                
+                local Button = New("TextButton", {
+                    BackgroundColor3 = "MainColor",
+                    BackgroundTransparency = 0,
+                    Size = UDim2.fromOffset(0, 34),
+                    Text = Icon and "" or Name,
+                    TextSize = 15,
+                    TextTransparency = 0.5,
+                    Parent = TabboxButtons,
+                })
+
+                local TabIcon
+                if IconObj then
+                    TabIcon = New("ImageLabel", {
+                        BackgroundTransparency = 1,
+                        Image = IconObj.Url,
+                        ImageColor3 = IconObj.Custom and "WhiteColor" or "AccentColor",
+                        ImageRectOffset = IconObj.ImageRectOffset,
+                        ImageRectSize = IconObj.ImageRectSize,
+                        ImageTransparency = 0.5,
+                        ScaleType = Enum.ScaleType.Fit,
+                        Size = UDim2.fromOffset(16, 16),
+                        Position = UDim2.fromOffset(8, 0),
+                        Parent = Button,
+                    })
+                    
+                    if not IconObj.Custom then
+                        New("UIPadding", {
+                            PaddingLeft = UDim.new(0, 28),
+                            Parent = Button,
+                        })
+                    else
+                        New("UIPadding", {
+                            PaddingLeft = UDim.new(0, 32),
+                            Parent = Button,
+                        })
+                    end
+                    
+                    local TabLabel = New("TextLabel", {
+                        BackgroundTransparency = 1,
+                        Position = UDim2.fromOffset(IconObj.Custom and 28 or 24, 0),
+                        Size = UDim2.new(1, -32, 1, 0),
+                        Text = Name,
+                        TextSize = 15,
+                        TextTransparency = 0.5,
+                        TextXAlignment = Enum.TextXAlignment.Left,
+                        Parent = Button,
+                    })
+                end
+
+                local Line = Library:MakeLine(Button, {
+                    AnchorPoint = Vector2.new(0, 1),
+                    Position = UDim2.new(0, 0, 1, 1),
+                    Size = UDim2.new(1, 0, 0, 1),
+                })
+
+                local Container = New("Frame", {
+                    BackgroundTransparency = 1,
+                    Position = UDim2.fromOffset(0, 35),
+                    Size = UDim2.new(1, 0, 1, -35),
+                    Visible = false,
+                    Parent = TabboxHolder,
+                })
+                local List = New("UIListLayout", {
+                    Padding = UDim.new(0, 8),
+                    Parent = Container,
+                })
+                New("UIPadding", {
+                    PaddingBottom = UDim.new(0, 7),
+                    PaddingLeft = UDim.new(0, 7),
+                    PaddingRight = UDim.new(0, 7),
+                    PaddingTop = UDim.new(0, 7),
+                    Parent = Container,
+                })
+
+                local Tab = {
+                    ButtonHolder = Button,
+                    Container = Container,
+
+                    Tab = Tab,
+                    Elements = {},
+                    DependencyBoxes = {},
+                }
+
+                function Tab:Show()
+                    if Tabbox.ActiveTab then
+                        Tabbox.ActiveTab:Hide()
+                    end
+
+                    Button.BackgroundTransparency = 1
+                    Button.TextTransparency = 0
+                    if TabIcon then
+                        TabIcon.ImageTransparency = 0
+                    end
+                    Line.Visible = false
+
+                    Container.Visible = true
+
+                    Tabbox.ActiveTab = Tab
+                    Tab:Resize()
+                end
+
+                function Tab:Hide()
+                    Button.BackgroundTransparency = 0
+                    Button.TextTransparency = 0.5
+                    if TabIcon then
+                        TabIcon.ImageTransparency = 0.5
+                    end
+                    Line.Visible = true
+                    Container.Visible = false
+
+                    Tabbox.ActiveTab = nil
+                end
+
+                function Tab:Resize()
+                    if Tabbox.ActiveTab ~= Tab then
+                        return
+                    end
+
+                    TabboxHolder.Size = UDim2.new(1, 0, 0, (List.AbsoluteContentSize.Y / Library.DPIScale) + 49)
+                end
+
+                --// Execution \\--
+                if not Tabbox.ActiveTab then
+                    Tab:Show()
+                end
+
+                Button.MouseButton1Click:Connect(Tab.Show)
+
+                setmetatable(Tab, BaseGroupbox)
+
+                Tabbox.Tabs[Name] = Tab
+
+                return Tab
+            end
+
+            if Info.Name then
+                Tab.Tabboxes[Info.Name] = Tabbox
+            else
+                table.insert(Tab.Tabboxes, Tabbox)
+            end
+
+            return Tabbox
+        end
+
+        function Tab:AddLeftTabbox(Name)
+            return Tab:AddTabbox({ Side = 1, Name = Name })
+        end
+
+        function Tab:AddRightTabbox(Name)
+            return Tab:AddTabbox({ Side = 2, Name = Name })
+        end
+
+        function Tab:Hover(Hovering)
+            if Library.ActiveTab == Tab then
+                return
+            end
+
+            TweenService:Create(TabLabel, Library.TweenInfo, {
+                TextTransparency = Hovering and 0.25 or 0.5,
+            }):Play()
+            if TabIcon then
+                TweenService:Create(TabIcon, Library.TweenInfo, {
+                    ImageTransparency = Hovering and 0.25 or 0.5,
+                }):Play()
+            end
+        end
+
+        function Tab:Show()
+            if Library.ActiveTab then
+                Library.ActiveTab:Hide()
+            end
+
+            TweenService:Create(TabButton, Library.TweenInfo, {
+                BackgroundTransparency = 0,
+            }):Play()
+            TweenService:Create(TabLabel, Library.TweenInfo, {
+                TextTransparency = 0,
+            }):Play()
+            if TabIcon then
+                TweenService:Create(TabIcon, Library.TweenInfo, {
+                    ImageTransparency = 0,
+                }):Play()
+            end
+
+            if Description then
+                Window:ShowTabInfo(Name, Description)
+            end
+
+            TabContainer.Visible = true
+            Tab:RefreshSides()
+
+            Library.ActiveTab = Tab
+
+            if Library.Searching then
+                Library:UpdateSearch(Library.SearchText)
+            end
+        end
+
+        function Tab:Hide()
+            TweenService:Create(TabButton, Library.TweenInfo, {
+                BackgroundTransparency = 1,
+            }):Play()
+            TweenService:Create(TabLabel, Library.TweenInfo, {
+                TextTransparency = 0.5,
+            }):Play()
+            if TabIcon then
+                TweenService:Create(TabIcon, Library.TweenInfo, {
+                    ImageTransparency = 0.5,
+                }):Play()
+            end
+            TabContainer.Visible = false
+
+            Window:HideTabInfo()
+
+            Library.ActiveTab = nil
+        end
+
+        --// Execution \\--
+        if not Library.ActiveTab then
+            Tab:Show()
+        end
+
+        TabButton.MouseEnter:Connect(function()
+            Tab:Hover(true)
+        end)
+        TabButton.MouseLeave:Connect(function()
+            Tab:Hover(false)
+        end)
+        TabButton.MouseButton1Click:Connect(Tab.Show)
+
+        Library.Tabs[Name] = Tab
+
+        return Tab
+    end
+
+    function Window:AddKeyTab(...)
+        local Name = nil
+        local Icon = nil
+        local Description = nil
+
+        if select("#", ...) == 1 and typeof(...) == "table" then
+            local Info = select(1, ...)
+            Name = Info.Name or "Tab"
+            Icon = Info.Icon
+            Description = Info.Description
+        else
+            Name = select(1, ...) or "Tab"
+            Icon = select(2, ...)
+            Description = select(3, ...)
+        end
+
+        Icon = Icon or "key"
+
+        local TabButton: TextButton
+        local TabLabel
+        local TabIcon
+
+        local TabContainer
+
+        Icon = if Icon == "key" then KeyIcon else Library:GetCustomIcon(Icon)
+        do
+            TabButton = New("TextButton", {
+                BackgroundColor3 = "MainColor",
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1, 0, 0, 40),
+                Text = "",
+                Parent = Tabs,
+            })
+            local ButtonPadding = New("UIPadding", {
+                PaddingBottom = UDim.new(0, IsCompact and 6 or 11),
+                PaddingLeft = UDim.new(0, IsCompact and 6 or 12),
+                PaddingRight = UDim.new(0, IsCompact and 6 or 12),
+                PaddingTop = UDim.new(0, IsCompact and 6 or 11),
+                Parent = TabButton,
+            })
+
+            TabLabel = New("TextLabel", {
+                BackgroundTransparency = 1,
+                Position = UDim2.fromOffset(30, 0),
+                Size = UDim2.new(1, -30, 1, 0),
+                Text = Name,
+                TextSize = 16,
+                TextTransparency = 0.5,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Visible = not IsCompact,
+                Parent = TabButton,
+            })
+
+            if Icon then
+                TabIcon = New("ImageLabel", {
+                    Image = Icon.Url,
+                    ImageColor3 = Icon.Custom and "WhiteColor" or "AccentColor",
+                    ImageRectOffset = Icon.ImageRectOffset,
+                    ImageRectSize = Icon.ImageRectSize,
+                    ImageTransparency = 0.5,
+                    Size = UDim2.fromScale(1, 1),
+                    SizeConstraint = IsCompact and Enum.SizeConstraint.RelativeXY or Enum.SizeConstraint.RelativeYY,
+                    Parent = TabButton,
+                })
+            end
+
+            table.insert(Library.TabButtons, {
+                Label = TabLabel,
+                Padding = ButtonPadding,
+                Icon = TabIcon,
+            })
+
+            --// Tab Container \\--
+            TabContainer = New("ScrollingFrame", {
+                AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                BackgroundTransparency = 1,
+                CanvasSize = UDim2.fromScale(0, 0),
+                ScrollBarThickness = 0,
+                Size = UDim2.fromScale(1, 1),
+                Visible = false,
+                Parent = Container,
+            })
+            New("UIListLayout", {
+                HorizontalAlignment = Enum.HorizontalAlignment.Center,
+                Padding = UDim.new(0, 8),
+                VerticalAlignment = Enum.VerticalAlignment.Center,
+                Parent = TabContainer,
+            })
+            New("UIPadding", {
+                PaddingLeft = UDim.new(0, 1),
+                PaddingRight = UDim.new(0, 1),
+                Parent = TabContainer,
+            })
+        end
+
+        --// Tab Table \\--
+        local Tab = {
+            Elements = {},
+            IsKeyTab = true,
+        }
+
+        function Tab:AddKeyBox(Callback)
+            assert(typeof(Callback) == "function", "Callback must be a function")
+
+            local Holder = New("Frame", {
+                BackgroundTransparency = 1,
+                Size = UDim2.new(0.75, 0, 0, 21),
+                Parent = TabContainer,
+            })
+
+            local Box = New("TextBox", {
+                BackgroundColor3 = "MainColor",
+                BorderColor3 = "OutlineColor",
+                BorderSizePixel = 1,
+                PlaceholderText = "Key",
+                Size = UDim2.new(1, -71, 1, 0),
+                TextSize = 14,
+                TextXAlignment = Enum.TextXAlignment.Left,
+                Parent = Holder,
+            })
+            New("UIPadding", {
+                PaddingLeft = UDim.new(0, 8),
+                PaddingRight = UDim.new(0, 8),
+                Parent = Box,
+            })
+
+            local Button = New("TextButton", {
+                AnchorPoint = Vector2.new(1, 0),
+                BackgroundColor3 = "MainColor",
+                BorderColor3 = "OutlineColor",
+                BorderSizePixel = 1,
+                Position = UDim2.fromScale(1, 0),
+                Size = UDim2.new(0, 63, 1, 0),
+                Text = "Execute",
+                TextSize = 14,
+                Parent = Holder,
+            })
+
+            Button.InputBegan:Connect(function(Input)
+                if not IsClickInput(Input) then
+                    return
+                end
+
+                if not Library:MouseIsOverFrame(Button, Input.Position) then
+                    return
+                end
+
+                Callback(Box.Text)
+            end)
+        end
+
+        function Tab:RefreshSides() end
+        function Tab:Resize() end
+
+        function Tab:Hover(Hovering)
+            if Library.ActiveTab == Tab then
+                return
+            end
+
+            TweenService:Create(TabLabel, Library.TweenInfo, {
+                TextTransparency = Hovering and 0.25 or 0.5,
+            }):Play()
+            if TabIcon then
+                TweenService:Create(TabIcon, Library.TweenInfo, {
+                    ImageTransparency = Hovering and 0.25 or 0.5,
+                }):Play()
+            end
+        end
+
+        function Tab:Show()
+            if Library.ActiveTab then
+                Library.ActiveTab:Hide()
+            end
+
+            TweenService:Create(TabButton, Library.TweenInfo, {
+                BackgroundTransparency = 0,
+            }):Play()
+            TweenService:Create(TabLabel, Library.TweenInfo, {
+                TextTransparency = 0,
+            }):Play()
+            if TabIcon then
+                TweenService:Create(TabIcon, Library.TweenInfo, {
+                    ImageTransparency = 0,
+                }):Play()
+            end
+            TabContainer.Visible = true
+
+            if Description then
+                Window:ShowTabInfo(Name, Description)
+            end
+
+            Tab:RefreshSides()
+
+            Library.ActiveTab = Tab
+
+            if Library.Searching then
+                Library:UpdateSearch(Library.SearchText)
+            end
+        end
+
+        function Tab:Hide()
+            TweenService:Create(TabButton, Library.TweenInfo, {
+                BackgroundTransparency = 1,
+            }):Play()
+            TweenService:Create(TabLabel, Library.TweenInfo, {
+                TextTransparency = 0.5,
+            }):Play()
+            if TabIcon then
+                TweenService:Create(TabIcon, Library.TweenInfo, {
+                    ImageTransparency = 0.5,
+                }):Play()
+            end
+            TabContainer.Visible = false
+
+            Window:HideTabInfo()
+
+            Library.ActiveTab = nil
+        end
+
+        --// Execution \\--
+        if not Library.ActiveTab then
+            Tab:Show()
+        end
+
+        TabButton.MouseEnter:Connect(function()
+            Tab:Hover(true)
+        end)
+        TabButton.MouseLeave:Connect(function()
+            Tab:Hover(false)
+        end)
+        TabButton.MouseButton1Click:Connect(Tab.Show)
+
+        Tab.Container = TabContainer
+        setmetatable(Tab, BaseGroupbox)
+
+        Library.Tabs[Name] = Tab
+
+        return Tab
+    end
+
+    function Library:Toggle(Value: boolean?)
+        if typeof(Value) == "boolean" then
+            Library.Toggled = Value
+        else
+            Library.Toggled = not Library.Toggled
+        end
+
+        MainFrame.Visible = Library.Toggled
+
+        if WindowInfo.UnlockMouseWhileOpen then
+            ModalElement.Modal = Library.Toggled
+        end
+
+        if Library.Toggled and not Library.IsMobile then
+            local OldMouseIconEnabled = UserInputService.MouseIconEnabled
+            pcall(function()
+                RunService:UnbindFromRenderStep("ShowCursor")
+            end)
+            RunService:BindToRenderStep("ShowCursor", Enum.RenderPriority.Last.Value, function()
+                UserInputService.MouseIconEnabled = not Library.ShowCustomCursor
+
+                Cursor.Position = UDim2.fromOffset(Mouse.X, Mouse.Y)
+                Cursor.Visible = Library.ShowCustomCursor
+
+                if not (Library.Toggled and ScreenGui and ScreenGui.Parent) then
+                    UserInputService.MouseIconEnabled = OldMouseIconEnabled
+                    Cursor.Visible = false
+                    RunService:UnbindFromRenderStep("ShowCursor")
+                end
+            end)
+        elseif not Library.Toggled then
+            TooltipLabel.Visible = false
+
+            for _, Option in Library.Options do
+                if Option.Type == "ColorPicker" then
+                    Option.ColorMenu:Close()
+                    Option.ContextMenu:Close()
+                elseif Option.Type == "Dropdown" or Option.Type == "KeyPicker" then
+                    Option.Menu:Close()
+                end
+            end
+        end
+    end
+
+    if WindowInfo.EnableSidebarResize then
+        local Threshold = (WindowInfo.MinSidebarWidth + WindowInfo.SidebarCompactWidth) * WindowInfo.SidebarCollapseThreshold
+        local StartPos, StartWidth
+        local Dragging = false
+        local Changed
+
+        local SidebarGrabber = New("TextButton", {
+            AnchorPoint = Vector2.new(0.5, 0),
+            BackgroundTransparency = 1,
+            Position = UDim2.fromScale(0.5, 0),
+            Size = UDim2.new(0, 8, 1, 0),
+            Text = "",
+            Parent = DividerLine,
+        })
+        SidebarGrabber.MouseEnter:Connect(function()
+            TweenService:Create(DividerLine, Library.TweenInfo, {
+                BackgroundColor3 = Library:GetLighterColor(Library.Scheme.OutlineColor),
+            }):Play()
+        end)
+        SidebarGrabber.MouseLeave:Connect(function()
+            if Dragging then
+                return
+            end
+            TweenService:Create(DividerLine, Library.TweenInfo, {
+                BackgroundColor3 = Library.Scheme.OutlineColor,
+            }):Play()
+        end)
+
+        SidebarGrabber.InputBegan:Connect(function(Input: InputObject)
+            if not IsClickInput(Input) then
+                return
+            end
+
+            Library.CantDragForced = true
+
+            StartPos = Input.Position
+            StartWidth = Window:GetSidebarWidth()
+            Dragging = true
+
+            Changed = Input.Changed:Connect(function()
+                if Input.UserInputState ~= Enum.UserInputState.End then
+                    return
+                end
+
+                Library.CantDragForced = false
+                TweenService:Create(DividerLine, Library.TweenInfo, {
+                    BackgroundColor3 = Library.Scheme.OutlineColor,
+                }):Play()
+
+                Dragging = false
+                if Changed and Changed.Connected then
+                    Changed:Disconnect()
+                    Changed = nil
+                end
+            end)
+        end)
+
+        Library:GiveSignal(UserInputService.InputChanged:Connect(function(Input: InputObject)
+            if not Library.Toggled or not (ScreenGui and ScreenGui.Parent) then
+                Dragging = false
+                if Changed and Changed.Connected then
+                    Changed:Disconnect()
+                    Changed = nil
+                end
+
+                return
+            end
+
+            if Dragging and IsHoverInput(Input) then
+                local Delta = Input.Position - StartPos
+                local Width = StartWidth + Delta.X
+
+                if WindowInfo.DisableCompactingSnap then
+                    Window:SetSidebarWidth(Width)
+                    return
+                end
+
+                if Width > Threshold then
+                    Window:SetSidebarWidth(math.max(Width, WindowInfo.MinSidebarWidth))
+                else
+                    Window:SetSidebarWidth(WindowInfo.SidebarCompactWidth)
+                end
+            end
+        end))
+    end
+    if WindowInfo.EnableCompacting and WindowInfo.SidebarCompacted then
+        Window:SetSidebarWidth(WindowInfo.SidebarCompactWidth)
+    end
+    if WindowInfo.AutoShow then
+        task.spawn(Library.Toggle)
+    end
+
+    if Library.IsMobile then
+        local ToggleButton = Library:AddDraggableButton("Toggle", function()
+            Library:Toggle()
+        end, true)
+
+        local LockButton = Library:AddDraggableButton("Lock", function(self)
+            Library.CantDragForced = not Library.CantDragForced
+            self:SetText(Library.CantDragForced and "Unlock" or "Lock")
+        end, true)
+
+        if WindowInfo.MobileButtonsSide == "Right" then
+            ToggleButton.Button.Position = UDim2.new(1, -6, 0, 6)
+            ToggleButton.Button.AnchorPoint = Vector2.new(1, 0)
+
+            LockButton.Button.Position = UDim2.new(1, -6, 0, 46)
+            LockButton.Button.AnchorPoint = Vector2.new(1, 0)
+        else
+            LockButton.Button.Position = UDim2.fromOffset(6, 46)
+        end
+    end
+
+    --// Execution \\--
+    SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        Library:UpdateSearch(SearchBox.Text)
+    end)
+
+    Library:GiveSignal(UserInputService.InputBegan:Connect(function(Input: InputObject)
+        if Library.Unloaded then
+            return
+        end
+
+        if UserInputService:GetFocusedTextBox() then
+            return
+        end
+
+        if
+            (
+                typeof(Library.ToggleKeybind) == "table"
+                and Library.ToggleKeybind.Type == "KeyPicker"
+                and Input.KeyCode.Name == Library.ToggleKeybind.Value
+            ) or Input.KeyCode == Library.ToggleKeybind
+        then
+            Library.Toggle()
+        end
+    end))
+
+    Library:GiveSignal(UserInputService.WindowFocused:Connect(function()
+        Library.IsRobloxFocused = true
+    end))
+    Library:GiveSignal(UserInputService.WindowFocusReleased:Connect(function()
+        Library.IsRobloxFocused = false
+    end))
+
+    return Window
+end
+
+local function OnPlayerChange()
+    if Library.Unloaded then
+        return
+    end
+
+    local PlayerList, ExcludedPlayerList = GetPlayers(), GetPlayers(true)
+    for _, Dropdown in Options do
+        if Dropdown.Type == "Dropdown" and Dropdown.SpecialType == "Player" then
+            Dropdown:SetValues(Dropdown.ExcludeLocalPlayer and ExcludedPlayerList or PlayerList)
+        end
+    end
+end
+
+local function OnTeamChange()
+    if Library.Unloaded then
+        return
+    end
+
+    local TeamList = GetTeams()
+    for _, Dropdown in Options do
+        if Dropdown.Type == "Dropdown" and Dropdown.SpecialType == "Team" then
+            Dropdown:SetValues(TeamList)
+        end
+    end
+end
+
+Library:GiveSignal(Players.PlayerAdded:Connect(OnPlayerChange))
+
+Library:GiveSignal(Teams.ChildAdded:Connect(OnTeamChange))
+Library:GiveSignal(Teams.ChildRemoved:Connect(OnTeamChange))
+
+function Library:SetGroupboxesCollapsible(state)
+    Library.GroupboxesCollapsible = state
+    for _, Tab in pairs(Library.Tabs) do
+        if Tab.Groupboxes then
+            for _, gb in pairs(Tab.Groupboxes) do
+                if gb.HeaderButton then
+                    gb.HeaderButton.Active = state
+                end
+                if gb.Chevron then
+                    gb.Chevron.Visible = state
+                end
+                if not state and gb.Collapsed and type(gb.SetCollapsed) == "function" then
+                    gb:SetCollapsed(false)
+                end
+            end
+        end
+    end
+end 
+
+getgenv().Library = Library
+return Library
