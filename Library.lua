@@ -6724,8 +6724,9 @@ function Library:CreateWindow(WindowInfo)
                 })
                 local ChevronIcon = Library:GetIcon("chevron-down")
                 local ChevronUpIcon = Library:GetIcon("chevron-up")
+                local ChevronImage
                 if ChevronIcon then
-                    local ChevronImage = New("ImageLabel", {
+                    ChevronImage = New("ImageLabel", {
                         Image = ChevronIcon.Url,
                         ImageColor3 = "FontColor",
                         ImageRectOffset = ChevronIcon.ImageRectOffset,
@@ -6735,25 +6736,6 @@ function Library:CreateWindow(WindowInfo)
                         SizeConstraint = Enum.SizeConstraint.RelativeYY,
                         Parent = ChevronButton,
                     })
-                    
-                    -- Update chevron icon when minimize state changes
-                    local function UpdateChevronIcon()
-                        if Groupbox.Minimized then
-                            ChevronImage.Image = ChevronUpIcon and ChevronUpIcon.Url or ChevronIcon.Url
-                        else
-                            ChevronImage.Image = ChevronIcon.Url
-                        end
-                    end
-                    
-                    -- Override the ToggleMinimize function to update chevron
-                    local OriginalToggleMinimize = Groupbox.ToggleMinimize
-                    Groupbox.ToggleMinimize = function()
-                        OriginalToggleMinimize()
-                        UpdateChevronIcon()
-                    end
-                    
-                    -- Connect chevron button to minimize functionality
-                    ChevronButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
                 end
 
                 GroupboxLabel = New("TextLabel", {
@@ -6848,6 +6830,30 @@ function Library:CreateWindow(WindowInfo)
             end
 
             MinimizeButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
+
+            -- Connect chevron button to minimize functionality and add icon updates
+            if ChevronButton then
+                -- Update chevron icon when minimize state changes
+                local function UpdateChevronIcon()
+                    if ChevronImage then
+                        if Groupbox.Minimized then
+                            ChevronImage.Image = ChevronUpIcon and ChevronUpIcon.Url or ChevronIcon.Url
+                        else
+                            ChevronImage.Image = ChevronIcon.Url
+                        end
+                    end
+                end
+                
+                -- Override the ToggleMinimize function to update chevron
+                local OriginalToggleMinimize = Groupbox.ToggleMinimize
+                Groupbox.ToggleMinimize = function()
+                    OriginalToggleMinimize()
+                    UpdateChevronIcon()
+                end
+                
+                -- Connect chevron button to minimize functionality
+                ChevronButton.MouseButton1Click:Connect(Groupbox.ToggleMinimize)
+            end
 
             setmetatable(Groupbox, BaseGroupbox)
 
