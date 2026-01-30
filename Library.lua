@@ -6796,7 +6796,7 @@ function Library:CreateWindow(WindowInfo)
                 if Groupbox.Chevron then
                     TweenService:Create(Groupbox.Chevron, Library.TweenInfo, {
                         Rotation = state and 180 or 0,
-                        ImageTransparency = 0.2,
+                        ImageTransparency = state and 0.2 or 0.5,
                     }):Play()
                 end
                 if state then
